@@ -15,7 +15,6 @@
             --warning: #f59e0b;
             --bg: #f8fafc;
             --card-bg: #ffffff;
-            --radius: 16px;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,35 +23,26 @@
             margin: 0;
             padding: 0;
             padding-bottom: 60px;
-            overflow-x: hidden;
         }
-        
-        /* حركة الخلفية الممتدة في الهيدر */
         header {
             background: linear-gradient(135deg, var(--secondary) 0%, #1e293b 100%);
             color: #ffffff;
             text-align: center;
-            padding: 40px 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            position: relative;
+            padding: 30px 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         header h1 {
             margin: 0;
-            font-size: 2.8rem;
+            font-size: 2.6rem;
             letter-spacing: 1px;
-            animation: fadeInDown 0.8s ease;
         }
         header p {
-            margin: 8px 0 0 0;
+            margin: 5px 0 0 0;
             opacity: 0.8;
-            font-size: 1.1rem;
-            animation: fadeInUp 0.8s ease 0.2s both;
         }
-
-        /* شريط التحكم */
         .action-bar {
             background-color: #1e293b;
-            padding: 14px 20px;
+            padding: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -63,34 +53,25 @@
         .user-status {
             color: #f8fafc;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
         .auth-buttons button {
-            background: rgba(255, 255, 255, 0.08);
+            background-color: var(--primary);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 8px;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s ease;
+            margin-right: 5px;
         }
-        .auth-buttons button:hover {
-            background-color: var(--primary);
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-        .auth-buttons button.admin-btn { background-color: var(--warning); color: #000; border: none; }
-        .auth-buttons button.logout-btn { background-color: var(--danger); color: white; border: none; }
+        .auth-buttons button.admin-btn { background-color: var(--warning); color: #000; }
+        .auth-buttons button.logout-btn { background-color: var(--danger); color: white; }
         
-        /* أزرار التواصل العائمة والتفاعلية */
         .social-connect {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin: 25px auto;
+            margin: 20px auto;
             max-width: 600px;
             padding: 0 15px;
         }
@@ -99,21 +80,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 14px;
+            padding: 12px;
             color: white;
             text-decoration: none;
-            border-radius: 12px;
+            border-radius: 8px;
             font-weight: bold;
             font-size: 1rem;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
         }
-        .social-btn:hover { 
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
-        }
-        .whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
-        .telegram { background: linear-gradient(135deg, #0088cc, #0077b5); }
+        .social-btn:hover { transform: translateY(-3px); }
+        .whatsapp { background-color: #25d366; }
+        .telegram { background-color: #0088cc; }
 
         .container {
             max-width: 1200px;
@@ -121,120 +99,92 @@
             padding: 0 15px;
         }
 
-        /* أزرار الفلترة التفاعلية مع تأثير خط سفلي متحرك */
         .category-scroll {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             overflow-x: auto;
             padding: 10px 5px;
             scrollbar-width: none;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .category-scroll::-webkit-scrollbar { display: none; }
         .cat-chip {
             background-color: #e2e8f0;
             color: #334155;
-            padding: 10px 22px;
-            border-radius: 30px;
+            padding: 10px 20px;
+            border-radius: 25px;
             white-space: nowrap;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        .cat-chip:hover {
-            background-color: #cbd5e1;
-            transform: scale(1.03);
+            transition: all 0.2s;
+            border: none;
         }
         .cat-chip.active {
             background-color: var(--primary);
             color: white;
-            box-shadow: 0 8px 16px rgba(37,99,235,0.25);
-            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(37,99,235,0.3);
         }
 
-        /* اللوحات والنماذج التفاعلية */
         .panel {
             background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
-            margin-bottom: 35px;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
             border: 1px solid #e2e8f0;
-            animation: slideInUp 0.5s ease;
         }
         .hidden { display: none !important; }
         
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.95rem; }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #cbd5e1;
-            border-radius: 8px;
+            border-radius: 6px;
             box-sizing: border-box;
-            transition: all 0.3s ease;
-            background-color: #f8fafc;
         }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+        .form-group input[type="file"] {
+            padding: 7px;
+            background: #f8fafc;
         }
 
-        /* شبكة وبطاقات العرض الرائجة المتفاعلة */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
         }
         .card {
             background: var(--card-bg);
-            border-radius: var(--radius);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.04);
             border: 1px solid #e2e8f0;
             display: flex;
             flex-direction: column;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            position: relative;
-            opacity: 0;
-            animation: scaleIn 0.4s ease forwards;
+            transition: transform 0.2s;
         }
-        
-        /* حركة حية عند تحريك الماوس أو لمس المنتج */
-        .card:hover { 
-            transform: translateY(-8px);
-            box-shadow: 0 20px 30px rgba(15,23,42,0.08);
-            border-color: rgba(37,99,235,0.2);
-        }
-        .card-img-container {
-            width: 100%;
-            height: 220px;
-            overflow: hidden;
-            position: relative;
-            background-color: #e2e8f0;
-        }
+        .card:hover { transform: translateY(-5px); }
         .card-img {
             width: 100%;
-            height: 100%;
+            height: 200px;
+            background-color: #e2e8f0;
             object-fit: cover;
-            transition: transform 0.6s ease;
         }
-        .card:hover .card-img {
-            transform: scale(1.08);
-        }
-        
         .card-content {
-            padding: 22px;
+            padding: 20px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
-        .card h3 { margin: 0 0 10px 0; color: var(--secondary); font-size: 1.3rem; transition: color 0.3s; }
-        .card:hover h3 { color: var(--primary); }
-        .card p { margin: 0 0 20px 0; color: #64748b; font-size: 0.95rem; line-height: 1.5; }
+        .card h3 { margin: 0 0 10px 0; color: var(--secondary); font-size: 1.3rem; }
+        .card p { margin: 0 0 15px 0; color: #64748b; font-size: 0.95rem; line-height: 1.4; }
         
         .card-meta {
             margin-top: auto;
@@ -242,84 +192,48 @@
             justify-content: space-between;
             align-items: center;
         }
-        .price { font-size: 1.4rem; color: var(--primary); font-weight: 800; }
+        .price { font-size: 1.3rem; color: var(--primary); font-weight: bold; }
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        .badge.pending { background-color: var(--warning); color: #000; }
         
-        /* أزرار تفاعلية نابضة */
+        .admin-actions {
+            background: #f1f5f9;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .admin-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .approve-btn { background-color: var(--accent); color: white; }
+        .reject-btn { background-color: var(--danger); color: white; }
+
         .submit-btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background-color: var(--primary);
             color: white;
             border: none;
-            padding: 14px 20px;
-            border-radius: 10px;
+            padding: 12px 20px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
             width: 100%;
             font-size: 1rem;
-            box-shadow: 0 4px 12px rgba(37,99,235,0.2);
-            transition: all 0.3s ease;
         }
-        .submit-btn:hover {
-            box-shadow: 0 6px 18px rgba(37,99,235,0.35);
-            opacity: 0.95;
-        }
-        .buy-btn {
-            text-align: center;
-            text-decoration: none;
-            padding: 8px 18px;
-            font-size: 0.9rem;
-            width: auto;
-        }
-
-        /* هيكل تحميل المربعات الذكية (Skeleton Loading) */
-        .skeleton-card {
-            background: #fff;
-            border-radius: var(--radius);
-            height: 380px;
-            border: 1px solid #e2e8f0;
-            overflow: hidden;
-        }
-        .skeleton-img { width: 100%; height: 220px; background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
-        .skeleton-text { height: 20px; margin: 15px; background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: loading 1.5s infinite; border-radius: 4px; }
-        .skeleton-text.short { width: 60%; }
-
-        /* نظام الإشعارات المنبثقة التفاعلية الحديثة */
-        #toast-container {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .toast {
-            background: #0f172a;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: bold;
-            animation: slideInLeft 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.25) forwards;
-            border-right: 5px solid var(--primary);
-        }
-        .toast.success { border-right-color: var(--accent); }
-        .toast.danger { border-right-color: var(--danger); }
-
-        /* الأنيميشن والحركات التفاعلية */
-        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        @keyframes fadeInDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: translateY(0); } }
-        @keyframes fadeInUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
-        @keyframes slideInUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
-        @keyframes slideInLeft { from { opacity:0; transform: translateX(-40px); } to { opacity:1; transform: translateX(0); } }
-        @keyframes scaleIn { from { opacity:0; transform: scale(0.95); } to { opacity:1; transform: scale(1); } }
     </style>
 </head>
 <body>
-
-    <div id="toast-container"></div>
 
     <header>
         <h1>Mobitech</h1>
@@ -327,31 +241,37 @@
     </header>
 
     <div class="action-bar">
-        <div class="user-status" id="userStatus">🌐 تصفح ضيف (عرض تفاعلي حيي)</div>
+        <div class="user-status" id="userStatus">الحساب الحالي: زائر (عرض فقط)</div>
         <div class="auth-buttons" id="authBox">
-            <button onclick="loginAs('customer')">👤 دخول كزبون</button>
-            <button class="admin-btn" onclick="loginAsAdmin()">👑 لوحة المسؤول</button>
+            <button onclick="loginAs('customer')">دخول كزبون</button>
+            <button class="admin-btn" onclick="loginAsAdmin()">لوحة المسؤول 👑</button>
         </div>
     </div>
 
     <div class="social-connect">
-        <a href="https://wa.me/96181157961?text=مرحباً%20موبيتك" class="social-btn whatsapp" target="_blank">💬 واتساب سريع</a>
-        <a href="https://t.me/+96181157961" class="social-btn telegram" target="_blank">✈️ تيليجرام مباشر</a>
+        <a href="https://wa.me/96181157961?text=مرحباً%20موبيتك%20أود%20الاستفسار%20عن%20الخدمات" class="social-btn whatsapp" target="_blank">
+            💬 تواصل عبر واتساب
+        </a>
+        <a href="https://t.me/+96181157961" class="social-btn telegram" target="_blank">
+            ✈️ تواصل عبر تيليجرام
+        </a>
     </div>
 
     <div class="container">
 
         <div id="adminPanel" class="panel hidden">
-            <h2 style="margin-top:0; color: var(--warning);">👑 إدارة المبيعات والمراجعة الحية</h2>
+            <h2 style="margin-top:0; color: var(--warning);">👑 لوحة تحكم المسؤول (المراجعة والموافقة الحية)</h2>
+            <p>القطع التالية بانتظار موافقتك لتظهر للجميع في الموقع ومخزنة في السحاب.</p>
             <div id="adminGrid" class="grid"></div>
         </div>
 
         <div id="customerPanel" class="panel hidden">
-            <h2>➕ اعرض قطعة جديدة أو هاتف للبيع 📸</h2>
+            <h2>➕ عرض قطعة جديدة للبيع (إرسال مباشر لقاعدة البيانات)</h2>
+            <p>املأ النموذج أدناه وارفع صورة من هاتفك. لن تظهر القطعة في الموقع حتى يوافق عليها المسؤول.</p>
             <form id="addItemForm" onsubmit="handleItemSubmit(event)">
                 <div class="form-group">
                     <label>اسم القطعة أو الهاتف:</label>
-                    <input type="text" id="itemName" required placeholder="مثال: شاشة سامسونج S24 Ultra فك">
+                    <input type="text" id="itemName" required placeholder="مثال: شاشة iPhone 14 Pro Max أصلية">
                 </div>
                 <div class="form-group">
                     <label>التصنيف:</label>
@@ -359,68 +279,55 @@
                         <option value="screens">شاشات</option>
                         <option value="speakers">سبيكرات وسماعات</option>
                         <option value="accessories">إكسسوارات</option>
-                        <option value="phones">أجهزة كاملة</option>
+                        <option value="phones">هواتف مستعملة</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>السعر بالدولار ($):</label>
-                    <input type="number" id="itemPrice" required placeholder="مثال: 120">
+                    <label>السعر ($):</label>
+                    <input type="number" id="itemPrice" required placeholder="مثال: 75">
                 </div>
                 <div class="form-group">
-                    <label>التقط أو اختر صورة من هاتفك 📸:</label>
+                    <label>تحميل صورة القطعة من الهاتف 📸:</label>
                     <input type="file" id="itemFile" accept="image/*" required>
                 </div>
                 <div class="form-group">
-                    <label>تفاصيل ووصف السلعة:</label>
-                    <textarea id="itemDesc" rows="3" required placeholder="اكتب حالة القطعة أو الضمان هنا..."></textarea>
+                    <label>الوصف والتفاصيل:</label>
+                    <textarea id="itemDesc" rows="3" required placeholder="اكتب حالة القطعة أو تفاصيل الصيانة هنا..."></textarea>
                 </div>
-                <button type="submit" class="submit-btn" id="submitBtn">🚀 إرسال القطعة فوراً للسيرفر</button>
+                <button type="submit" class="submit-btn" id="submitBtn">إرسال القطعة للمراجعة</button>
             </form>
         </div>
 
-        <h2>📦 تصفح معروضات المتجر المتوفرة حياً</h2>
+        <h2>📦 تصفح معروضات المتجر والقطع المتوفرة</h2>
         <div class="category-scroll">
             <button class="cat-chip active" onclick="filterCategory('all', this)">⚡ الكل</button>
             <button class="cat-chip" onclick="filterCategory('screens', this)">📱 شاشات</button>
             <button class="cat-chip" onclick="filterCategory('speakers', this)">🔊 سبيكرات</button>
             <button class="cat-chip" onclick="filterCategory('accessories', this)">🔌 إكسسوارات</button>
-            <button class="cat-chip" onclick="filterCategory('phones', this)">📲 أجهزة</button>
+            <button class="cat-chip" onclick="filterCategory('phones', this)">📲 أجهزة مستعملة</button>
         </div>
 
-        <div id="productsGrid" class="grid">
-            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
-            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
-            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
-        </div>
+        <div id="productsGrid" class="grid"></div>
 
     </div>
 
     <script>
+        // إعداد ربط قاعدة البيانات بمشروعك الفريد في Supabase
         const SUPABASE_URL = "https://ntefjbojogcpyjflwrbc.supabase.co";
         const SUPABASE_ANON_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlYWZtc2FvbGdtb2RuaHhkanF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNDMxMDEsImV4cCI6MjA5NTgxOTEwMX0.Yf7fuY4KZXPZFX0V6YuRViz5cnkZI05bS38ja_NoULg";
         
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const ADMIN_PASSWORD = "Mobitech2026"; 
+
+        const ADMIN_PASSWORD = "Mobitech2026"; // كلمة السر الخاصة بك كمسؤول لفتح لوحة التحكم
         let currentUserRole = 'guest'; 
         let currentFilter = 'all';
 
-        // نظام إشعارات توست (Toast) التفاعلي الحديث بديل الـ Alert
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerText = message;
-            container.appendChild(toast);
-            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3500);
-        }
-
         function loginAsAdmin() {
-            const passwordInput = prompt("أدخل كلمة سر المسؤول المخصصة لك:");
+            const passwordInput = prompt("الرجاء إدخال كلمة سر المسؤول للدخول لـ لوحة التحكم:");
             if (passwordInput === ADMIN_PASSWORD) {
                 loginAs('admin');
-                showToast("👑 أهلاً بك يا مدير! تم فتح لوحة التحكم بنجاح.");
             } else if (passwordInput !== null) {
-                showToast("❌ عذراً! كلمة السر التي أدخلتها خاطئة.", 'danger');
+                alert("❌ كلمة السر غير صحيحة!");
             }
         }
 
@@ -432,37 +339,36 @@
             currentUserRole = role;
 
             if (role === 'admin') {
-                statusText.innerHTML = "👑 حساب المسؤول (صاحب المتجر)";
-                authBox.innerHTML = `<button class="logout-btn" onclick="logout()">🏃 خروج</button>`;
+                statusText.innerHTML = "👑 الحساب الحالي: المسؤول صاحب الموقع";
+                authBox.innerHTML = `<button class="logout-btn" onclick="logout()">تسجيل الخروج</button>`;
                 adminPanel.classList.remove('hidden');
                 customerPanel.classList.remove('hidden'); 
             } else if (role === 'customer') {
-                statusText.innerHTML = "👤 وضع الزبون (إضافة معروضات تفاعلية)";
-                authBox.innerHTML = `<button class="logout-btn" onclick="logout()">🏃 خروج</button>`;
+                statusText.innerHTML = "👤 الحساب الحالي: زبون (صلاحية تقديم طلبات)";
+                authBox.innerHTML = `<button class="logout-btn" onclick="logout()">تسجيل الخروج</button>`;
                 adminPanel.classList.add('hidden');
                 customerPanel.classList.remove('hidden');
-                showToast("👤 تم تفعيل وضع الزبون. يمكنك الآن رفع القطع.");
             }
             fetchAndRender();
         }
 
         function logout() {
             currentUserRole = 'guest';
-            document.getElementById('userStatus').innerHTML = "🌐 تصفح ضيف (عرض تفاعلي حيي)";
+            document.getElementById('userStatus').innerHTML = "الحساب الحالي: زائر (عرض فقط)";
             document.getElementById('authBox').innerHTML = `
-                <button onclick="loginAs('customer')">👤 دخول كزبون</button>
-                <button class="admin-btn" onclick="loginAsAdmin()">👑 لوحة المسؤول</button>
+                <button onclick="loginAs('customer')">دخول كزبون</button>
+                <button class="admin-btn" onclick="loginAsAdmin()">لوحة المسؤول 👑</button>
             `;
             document.getElementById('adminPanel').classList.add('hidden');
             document.getElementById('customerPanel').classList.add('hidden');
-            showToast("🔒 تم تسجيل الخروج بنجاح.");
             fetchAndRender();
         }
 
+        // معالجة ورفع الصورة والبيانات مباشرة إلى سيرفر السحاب Supabase
         async function handleItemSubmit(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerText = "جاري معالجة الصورة السحابية... ⏳";
+            submitBtn.innerText = "جاري رفع الصورة والبيانات... ⏳";
             submitBtn.disabled = true;
 
             const name = document.getElementById('itemName').value;
@@ -476,18 +382,19 @@
                 reader.onload = async function(event) {
                     const base64Image = event.target.result; 
                     
+                    // إرسال البيانات فوراً إلى جدول السيرفر الحقيقي عبر الإنترنت
                     const { error } = await _supabase
                         .from('items')
                         .insert([{ name, category, price, description, image_url: base64Image, status: 'pending' }]);
 
                     if (error) {
-                        showToast("❌ فشل الرفع: " + error.message, 'danger');
+                        alert("حدث خطأ أثناء الإرسال: " + error.message);
                     } else {
-                        showToast("🎉 مذهل! رُفعت القطعة حياً وتنتظر قبولك إياها في لوحة التحكم!");
+                        alert("🎉 رائع! تم رفع القطعة بنجاح ووصلت إلى قاعدة البيانات الحية. بانتظار مراجعة المسؤول.");
                         document.getElementById('addItemForm').reset();
                     }
                     
-                    submitBtn.innerText = "🚀 إرسال القطعة فوراً للسيرفر";
+                    submitBtn.innerText = "إرسال القطعة للمراجعة";
                     submitBtn.disabled = false;
                     fetchAndRender();
                 };
@@ -502,87 +409,87 @@
             fetchAndRender();
         }
 
+        // أزرار المسؤول الحية لتحديث البيانات في السيرفر (قبول أو حذف)
         async function updateStatus(id, newStatus) {
             if (newStatus === 'deleted') {
-                if(confirm("هل تود مسح قطعة الغيار هذه نهائياً من السيرفر؟")) {
+                if(confirm("هل أنت متأكد من رغبتك في حذف هذه القطعة نهائياً؟")) {
                     await _supabase.from('items').delete().eq('id', id);
-                    showToast("🗑️ تم حذف السلعة من قاعدة البيانات.");
                 }
             } else {
                 await _supabase.from('items').update({ status: newStatus }).eq('id', id);
-                showToast("✅ تمت الموافقة على السلعة ونشرها للعلن في المتجر!");
             }
             fetchAndRender();
         }
 
+        // سحب البيانات حياً ومباشرة من جدول السيرفر وعرضها على الشاشات
         async function fetchAndRender() {
             const productsGrid = document.getElementById('productsGrid');
             const adminGrid = document.getElementById('adminGrid');
             
+            productsGrid.innerHTML = '';
+            adminGrid.innerHTML = '';
+
+            // جلب البيانات الحية من السيرفر مرتبة من الأحدث للأقدم
             const { data: serverItems, error } = await _supabase
                 .from('items')
                 .select('*')
                 .order('id', { ascending: false });
 
             if (error) {
-                showToast("خطأ في جلب البيانات المباشرة", 'danger');
+                console.error("خطأ في جلب البيانات:", error);
                 return;
             }
 
-            productsGrid.innerHTML = '';
-            adminGrid.innerHTML = '';
             let adminHasItems = false;
 
-            serverItems.forEach((item, index) => {
-                // تأثير تأخير ظهوري حركي متصاعد (Staggered animation delay)
-                const delay = (index % 6) * 0.05;
-
+            serverItems.forEach(item => {
+                // 1. لوحة المسؤول تظهر القطع المنتظرة للمراجعة
                 if (item.status === 'pending') {
                     adminHasItems = true;
                     const adminCard = document.createElement('div');
                     adminCard.className = 'card';
-                    adminCard.style.animationDelay = `${delay}s`;
                     adminCard.innerHTML = `
-                        <div class="card-img-container"><img src="${item.image_url}" class="card-img" alt="${item.name}"></div>
+                        <img src="${item.image_url}" class="card-img" alt="${item.name}">
                         <div class="card-content">
-                            <span class="badge pending" style="align-self:flex-start; margin-bottom:10px;">انتظار موافقتك</span>
+                            <span class="badge pending">انتظار المراجعة</span>
                             <h3>${item.name}</h3>
                             <p>${item.description}</p>
                             <div class="card-meta">
                                 <span class="price">$${item.price}</span>
+                                <span style="font-size:0.85rem;">النوع: ${item.category}</span>
                             </div>
                         </div>
                         <div class="admin-actions">
-                            <button class="approve-btn" onclick="updateStatus(${item.id}, 'approved')">✅ نشر حيي</button>
+                            <button class="approve-btn" onclick="updateStatus(${item.id}, 'approved')">✅ قبول ونشر</button>
                             <button class="reject-btn" onclick="updateStatus(${item.id}, 'deleted')">❌ رفض وحذف</button>
                         </div>
                     `;
                     adminGrid.appendChild(adminCard);
                 }
 
+                // 2. معروضات المتجر العامة (القطع المقبولة فقط للجمهور)
                 if (item.status === 'approved') {
                     if (currentFilter === 'all' || item.category === currentFilter) {
                         const productCard = document.createElement('div');
                         productCard.className = 'card';
-                        productCard.style.animationDelay = `${delay}s`;
                         
                         let deleteBtnHTML = '';
                         if (currentUserRole === 'admin') {
                             deleteBtnHTML = `
                                 <div class="admin-actions">
-                                    <button class="reject-btn" onclick="updateStatus(${item.id}, 'deleted')">🗑️ حذف وإزالة</button>
+                                    <button class="reject-btn" onclick="updateStatus(${item.id}, 'deleted')">🗑️ إزالة وحذف من السيرفر</button>
                                 </div>
                             `;
                         }
 
                         productCard.innerHTML = `
-                            <div class="card-img-container"><img src="${item.image_url}" class="card-img" alt="${item.name}"></div>
+                            <img src="${item.image_url}" class="card-img" alt="${item.name}">
                             <div class="card-content">
                                 <h3>${item.name}</h3>
                                 <p>${item.description}</p>
                                 <div class="card-meta">
                                     <span class="price">$${item.price}</span>
-                                    <a href="https://wa.me/96181157961?text=مرحباً%20موبيتك،%20أريد%20شراء:%20${encodeURIComponent(item.name)}" class="submit-btn buy-btn" target="_blank">🛒 طلب شراء</a>
+                                    <a href="https://wa.me/96181157961?text=أنا%20مهتم%20بشراء:%20${encodeURIComponent(item.name)}" class="submit-btn" style="text-align:center; text-decoration:none; padding:6px 12px; font-size:0.85rem;" target="_blank">طلب شراء</a>
                                 </div>
                             </div>
                             ${deleteBtnHTML}
@@ -593,14 +500,14 @@
             });
 
             if (!adminHasItems) {
-                adminGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding:20px;">لا توجد قطع معلقة حالياً في السيرفر.</p>`;
+                adminGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b;">لا توجد قطع معلقة بانتظار المراجعة حالياً.</p>`;
             }
             if (productsGrid.innerHTML === '') {
-                productsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding:20px;">لا توجد قطع متوفرة في هذا القسم حالياً.</p>`;
+                productsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b;">لا توجد معروضات متاحة في هذا التصنيف حالياً.</p>`;
             }
         }
 
-        // تشغيل أولي وسحب البيانات
+        // تشغيل التطبيق وجلب البيانات لأول مرة
         fetchAndRender();
     </script>
 </body>
