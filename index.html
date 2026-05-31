@@ -1,123 +1,85 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobitech Hub - Integrated Platform for Phones and Parts</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #0f172a;
-            --accent: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --radius: 16px;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: #334155;
-            margin: 0;
-            padding: 0;
-            padding-bottom: 60px;
-            overflow-x: hidden;
-        }
-        
-        header {
-            background: linear-gradient(135deg, var(--secondary) 0%, #1e293b 100%);
-            color: #ffffff;
-            text-align: center;
-            padding: 40px 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            position: relative;
-        }
-        .header-content h1 {
-            font-size: 2.5rem;
-            margin: 0 0 10px 0;
-            letter-spacing: 1px;
-        }
-        .header-content p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin: 0;
-        }
+// api/index.js
+const { createClient } = require('@supabase/supabase-supabase'); // أو 'supabase' حسب الحزمة المستخدمة لديك
+const express = require('express');
+const cors = require('cors');
 
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 15px;
-        }
-        .toast-error {
-            background-color: #0f172a;
-            color: #ffffff;
-            padding: 15px;
-            border-radius: 8px;
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: none;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-        }
-        .toast-error.show {
-            display: block;
-            animation: fadeInUp 0.3s ease;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translate(-50%, 20px); }
-            to { opacity: 1; transform: translate(-50%, 0); }
-        }
-    </style>
-</head>
-<body>
+const app = express();
 
-    <header>
-        <div class="header-content">
-            <h1>Mobitech</h1>
-            <p>Smart platform for maintenance and phone parts</p>
-        </div>
-    </header>
+// تفعيل CORS لضمان اتصال التطبيق والموقع بدون مشاكل صلاحيات
+app.use(cors());
+app.use(express.json());
 
-    <div class="container">
-        <div id="products-container"></div>
-    </div>
+// إعداد بيئة الاتصال بـ Supabase 
+// تأكد من إضافة هذه المتغيرات في إعدادات (Environment Variables) على Vercel
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
-    <div id="error-toast" class="toast-error">
-        Error fetching live data or RLS policies are disabled.
-    </div>
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    <script>
-        const SUPABASE_URL = "https://peafmsaolgmodnhxdjqz.supabase.co";
-        const SUPABASE_ANON_KEY = "Sb_publishable_z1Ht9LUUMOHWmyOBVNDq6g_6VGbXB5Q";
+// 1. نقطة فحص تشغيل السيرفر
+app.get('/api', (req, res) => {
+    res.status(200).json({ 
+        success: true, 
+        message: "API تطبيق Mobitech يعمل بنجاح ونظامي 100%" 
+    });
+});
 
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// 2. جلب الشاشات وقطع الغيار (جداول Shashatkom / Products)
+// تم ضبط الـ RLS لها لتسمح بالقراءة للجميع بنجاح
+app.get('/api/products', async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('products') // تأكد من اسم الجدول لديك (مثلاً products أو screens)
+            .select('*');
 
-        async function fetchProducts() {
-            try {
-                const { data, error } = await _supabase
-                    .from('products')
-                    .select('*');
+        if (error) throw error;
 
-                if (error) throw error;
-                
-                console.log("Data fetched successfully:", data);
-                
-            } catch (error) {
-                console.error("Connection error with Supabase:", error.message);
-                const toast = document.getElementById('error-toast');
-                if(toast) toast.classList.add('show');
-            }
-        }
+        res.status(200).json({
+            success: true,
+            count: data.length,
+            data: data
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "فشل في جلب البيانات من قاعدة البيانات",
+            error: error.message
+        });
+    }
+});
 
-        document.addEventListener('DOMContentLoaded', fetchProducts);
-    </script>
-</body>
-</html>
+// 3. إضافة طلب صيانة جديد أو شراء (إذا كنت تحتاج عمليات الكتابة مستقبلاً)
+app.post('/api/orders', async (req, res) => {
+    const { product_id, client_name, client_phone, details } = req.body;
+
+    if (!client_name || !client_phone) {
+        return res.status(400).json({
+            success: false,
+            message: "يرجى تقديم اسم العميل ورقم الهاتف"
+        });
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from('orders')
+            .insert([{ product_id, client_name, client_phone, details, status: 'pending' }])
+            .select();
+
+        if (error) throw error;
+
+        res.status(201).json({
+            success: true,
+            message: "تم تسجيل طلبك بنجاح، سيتواصل معك الفني قريباً",
+            data: data
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "حدث خطأ أثناء إرسال الطلب",
+            error: error.message
+        });
+    }
+});
+
+// تصدير التطبيق ليعمل كـ Serverless Function على Vercel
+module.exports = app;
