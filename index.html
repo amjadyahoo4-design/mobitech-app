@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobitech Hub - المنصة المتكاملة للهواتف والقطع</title>
+    <title>Mobitech Hub - Integrated Platform for Phones and Parts</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
@@ -46,7 +46,6 @@
             margin: 0;
         }
 
-        /* تنسيقات إضافية لضمان عمل الواجهة بشكل رائع ومستقر */
         .container {
             max-width: 1200px;
             margin: 30px auto;
@@ -83,7 +82,7 @@
     <header>
         <div class="header-content">
             <h1>Mobitech</h1>
-            <p>المنصة الذكية للميانة وقطع الهواتف</p>
+            <p>Smart platform for maintenance and phone parts</p>
         </div>
     </header>
 
@@ -92,38 +91,32 @@
     </div>
 
     <div id="error-toast" class="toast-error">
-        خطأ في جلب البيانات المباشرة أو صلاحيات الـ RLS معطلة
+        Error fetching live data or RLS policies are disabled.
     </div>
 
     <script>
-        // تم تحديث الإعدادات وبيانات الاتصال تلقائياً وبأمان هنا 👇
         const SUPABASE_URL = "https://peafmsaolgmodnhxdjqz.supabase.co";
         const SUPABASE_ANON_KEY = "Sb_publishable_z1Ht9LUUMOHWmyOBVNDq6g_6VGbXB5Q";
 
-        // إنشاء اتصال العميل بقاعدة البيانات
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // دالة فحص وجلب البيانات للتأكد من عمل الرابط بشكل سليم
         async function fetchProducts() {
             try {
                 const { data, error } = await _supabase
-                    .from('products') // تأكد من مطابقة اسم الجدول في قاعدة بياناتك
+                    .from('products')
                     .select('*');
 
                 if (error) throw error;
                 
-                console.log("تم جلب البيانات بنجاح:", data);
-                // هنا يتم بناء وعرض القطع داخل الموقع
+                console.log("Data fetched successfully:", data);
                 
             } catch (error) {
-                console.error("حدث خطأ أثناء الاتصال بـ Supabase:", error.message);
-                // إظهار الرسالة السوداء التنبيهية في حال وجود خلل بالجدول أو الصلاحيات
+                console.error("Connection error with Supabase:", error.message);
                 const toast = document.getElementById('error-toast');
                 if(toast) toast.classList.add('show');
             }
         }
 
-        // تشغيل الدالة فور تحميل الصفحة
         document.addEventListener('DOMContentLoaded', fetchProducts);
     </script>
 </body>
