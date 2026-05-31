@@ -312,3 +312,296 @@
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         @keyframes fadeInDown { from { opacity:0; transform: translateY(-20px); } to { opacity:1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+        @keyframes slideInUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
+        @keyframes slideInLeft { from { opacity:0; transform: translateX(-40px); } to { opacity:1; transform: translateX(0); } }
+        @keyframes scaleIn { from { opacity:0; transform: scale(0.95); } to { opacity:1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <header>
+        <h1>Mobitech</h1>
+        <p>المنصة الذكية المتكاملة للصيانة وقطع الهواتف</p>
+    </header>
+
+    <div class="action-bar">
+        <div class="user-status" id="userStatus">🌐 تصفح ضيف (عرض تفاعلي حيي)</div>
+        <div class="auth-buttons" id="authBox">
+            <button onclick="loginAs('customer')">👤 دخول كزبون</button>
+            <button class="admin-btn" onclick="loginAsAdmin()">👑 لوحة المسؤول</button>
+        </div>
+    </div>
+
+    <div class="social-connect">
+        <a href="https://wa.me/96181157961?text=مرحباً%20موبيتك" class="social-btn whatsapp" target="_blank">💬 واتساب سريع</a>
+        <a href="https://t.me/+96181157961" class="social-btn telegram" target="_blank">✈️ تيليجرام مباشر</a>
+    </div>
+
+    <div class="container">
+
+        <div id="adminPanel" class="panel hidden">
+            <h2 style="margin-top:0; color: var(--warning);">👑 إدارة المبيعات والمراجعة الحية</h2>
+            <div id="adminGrid" class="grid"></div>
+        </div>
+
+        <div id="customerPanel" class="panel hidden">
+            <h2>➕ اعرض قطعة جديدة أو هاتف للبيع 📸</h2>
+            <form id="addItemForm" onsubmit="handleItemSubmit(event)">
+                <div class="form-group">
+                    <label>اسم القطعة أو الهاتف:</label>
+                    <input type="text" id="itemName" required placeholder="مثال: شاشة سامسونج S24 Ultra فك">
+                </div>
+                <div class="form-group">
+                    <label>التصنيف:</label>
+                    <select id="itemCategory">
+                        <option value="screens">شاشات</option>
+                        <option value="speakers">سبيكرات وسماعات</option>
+                        <option value="accessories">إكسسوارات</option>
+                        <option value="phones">أجهزة كاملة</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>السعر بالدولار ($):</label>
+                    <input type="number" id="itemPrice" required placeholder="مثال: 120">
+                </div>
+                <div class="form-group">
+                    <label>التقط أو اختر صورة من هاتفك 📸:</label>
+                    <input type="file" id="itemFile" accept="image/*" required>
+                </div>
+                <div class="form-group">
+                    <label>تفاصيل ووصف السلعة:</label>
+                    <textarea id="itemDesc" rows="3" required placeholder="اكتب حالة القطعة أو الضمان هنا..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">🚀 إرسال القطعة فوراً للسيرفر</button>
+            </form>
+        </div>
+
+        <h2>📦 تصفح معروضات المتجر المتوفرة حياً</h2>
+        <div class="category-scroll">
+            <button class="cat-chip active" onclick="filterCategory('all', this)">⚡ الكل</button>
+            <button class="cat-chip" onclick="filterCategory('screens', this)">📱 شاشات</button>
+            <button class="cat-chip" onclick="filterCategory('speakers', this)">🔊 سبيكرات</button>
+            <button class="cat-chip" onclick="filterCategory('accessories', this)">🔌 إكسسوارات</button>
+            <button class="cat-chip" onclick="filterCategory('phones', this)">📲 أجهزة</button>
+        </div>
+
+        <div id="productsGrid" class="grid">
+            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+            <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-text"></div><div class="skeleton-text short"></div></div>
+        </div>
+
+    </div>
+
+    <script>
+        const SUPABASE_URL = "https://ntefjbojogcpyjflwrbc.supabase.co";
+        const SUPABASE_ANON_KEY = "EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlYWZtc2FvbGdtb2RuaHhkanF6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNDMxMDEsImV4cCI6MjA5NTgxOTEwMX0.Yf7fuY4KZXPZFX0V6YuRViz5cnkZI05bS38ja_NoULg";
+        
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const ADMIN_PASSWORD = "Mobitech2026"; 
+        let currentUserRole = 'guest'; 
+        let currentFilter = 'all';
+
+        // نظام إشعارات توست (Toast) التفاعلي الحديث بديل الـ Alert
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3500);
+        }
+
+        function loginAsAdmin() {
+            const passwordInput = prompt("أدخل كلمة سر المسؤول المخصصة لك:");
+            if (passwordInput === ADMIN_PASSWORD) {
+                loginAs('admin');
+                showToast("👑 أهلاً بك يا مدير! تم فتح لوحة التحكم بنجاح.");
+            } else if (passwordInput !== null) {
+                showToast("❌ عذراً! كلمة السر التي أدخلتها خاطئة.", 'danger');
+            }
+        }
+
+        function loginAs(role) {
+            const statusText = document.getElementById('userStatus');
+            const authBox = document.getElementById('authBox');
+            const adminPanel = document.getElementById('adminPanel');
+            const customerPanel = document.getElementById('customerPanel');
+            currentUserRole = role;
+
+            if (role === 'admin') {
+                statusText.innerHTML = "👑 حساب المسؤول (صاحب المتجر)";
+                authBox.innerHTML = `<button class="logout-btn" onclick="logout()">🏃 خروج</button>`;
+                adminPanel.classList.remove('hidden');
+                customerPanel.classList.remove('hidden'); 
+            } else if (role === 'customer') {
+                statusText.innerHTML = "👤 وضع الزبون (إضافة معروضات تفاعلية)";
+                authBox.innerHTML = `<button class="logout-btn" onclick="logout()">🏃 خروج</button>`;
+                adminPanel.classList.add('hidden');
+                customerPanel.classList.remove('hidden');
+                showToast("👤 تم تفعيل وضع الزبون. يمكنك الآن رفع القطع.");
+            }
+            fetchAndRender();
+        }
+
+        function logout() {
+            currentUserRole = 'guest';
+            document.getElementById('userStatus').innerHTML = "🌐 تصفح ضيف (عرض تفاعلي حيي)";
+            document.getElementById('authBox').innerHTML = `
+                <button onclick="loginAs('customer')">👤 دخول كزبون</button>
+                <button class="admin-btn" onclick="loginAsAdmin()">👑 لوحة المسؤول</button>
+            `;
+            document.getElementById('adminPanel').classList.add('hidden');
+            document.getElementById('customerPanel').classList.add('hidden');
+            showToast("🔒 تم تسجيل الخروج بنجاح.");
+            fetchAndRender();
+        }
+
+        async function handleItemSubmit(e) {
+            e.preventDefault();
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerText = "جاري معالجة الصورة السحابية... ⏳";
+            submitBtn.disabled = true;
+
+            const name = document.getElementById('itemName').value;
+            const category = document.getElementById('itemCategory').value;
+            const price = document.getElementById('itemPrice').value;
+            const description = document.getElementById('itemDesc').value;
+            const fileInput = document.getElementById('itemFile');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = async function(event) {
+                    const base64Image = event.target.result; 
+                    
+                    const { error } = await _supabase
+                        .from('items')
+                        .insert([{ name, category, price, description, image_url: base64Image, status: 'pending' }]);
+
+                    if (error) {
+                        showToast("❌ فشل الرفع: " + error.message, 'danger');
+                    } else {
+                        showToast("🎉 مذهل! رُفعت القطعة حياً وتنتظر قبولك إياها في لوحة التحكم!");
+                        document.getElementById('addItemForm').reset();
+                    }
+                    
+                    submitBtn.innerText = "🚀 إرسال القطعة فوراً للسيرفر";
+                    submitBtn.disabled = false;
+                    fetchAndRender();
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+
+        function filterCategory(cat, element) {
+            currentFilter = cat;
+            document.querySelectorAll('.cat-chip').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            fetchAndRender();
+        }
+
+        async function updateStatus(id, newStatus) {
+            if (newStatus === 'deleted') {
+                if(confirm("هل تود مسح قطعة الغيار هذه نهائياً من السيرفر؟")) {
+                    await _supabase.from('items').delete().eq('id', id);
+                    showToast("🗑️ تم حذف السلعة من قاعدة البيانات.");
+                }
+            } else {
+                await _supabase.from('items').update({ status: newStatus }).eq('id', id);
+                showToast("✅ تمت الموافقة على السلعة ونشرها للعلن في المتجر!");
+            }
+            fetchAndRender();
+        }
+
+        async function fetchAndRender() {
+            const productsGrid = document.getElementById('productsGrid');
+            const adminGrid = document.getElementById('adminGrid');
+            
+            const { data: serverItems, error } = await _supabase
+                .from('items')
+                .select('*')
+                .order('id', { ascending: false });
+
+            if (error) {
+                showToast("خطأ في جلب البيانات المباشرة", 'danger');
+                return;
+            }
+
+            productsGrid.innerHTML = '';
+            adminGrid.innerHTML = '';
+            let adminHasItems = false;
+
+            serverItems.forEach((item, index) => {
+                // تأثير تأخير ظهوري حركي متصاعد (Staggered animation delay)
+                const delay = (index % 6) * 0.05;
+
+                if (item.status === 'pending') {
+                    adminHasItems = true;
+                    const adminCard = document.createElement('div');
+                    adminCard.className = 'card';
+                    adminCard.style.animationDelay = `${delay}s`;
+                    adminCard.innerHTML = `
+                        <div class="card-img-container"><img src="${item.image_url}" class="card-img" alt="${item.name}"></div>
+                        <div class="card-content">
+                            <span class="badge pending" style="align-self:flex-start; margin-bottom:10px;">انتظار موافقتك</span>
+                            <h3>${item.name}</h3>
+                            <p>${item.description}</p>
+                            <div class="card-meta">
+                                <span class="price">$${item.price}</span>
+                            </div>
+                        </div>
+                        <div class="admin-actions">
+                            <button class="approve-btn" onclick="updateStatus(${item.id}, 'approved')">✅ نشر حيي</button>
+                            <button class="reject-btn" onclick="updateStatus(${item.id}, 'deleted')">❌ رفض وحذف</button>
+                        </div>
+                    `;
+                    adminGrid.appendChild(adminCard);
+                }
+
+                if (item.status === 'approved') {
+                    if (currentFilter === 'all' || item.category === currentFilter) {
+                        const productCard = document.createElement('div');
+                        productCard.className = 'card';
+                        productCard.style.animationDelay = `${delay}s`;
+                        
+                        let deleteBtnHTML = '';
+                        if (currentUserRole === 'admin') {
+                            deleteBtnHTML = `
+                                <div class="admin-actions">
+                                    <button class="reject-btn" onclick="updateStatus(${item.id}, 'deleted')">🗑️ حذف وإزالة</button>
+                                </div>
+                            `;
+                        }
+
+                        productCard.innerHTML = `
+                            <div class="card-img-container"><img src="${item.image_url}" class="card-img" alt="${item.name}"></div>
+                            <div class="card-content">
+                                <h3>${item.name}</h3>
+                                <p>${item.description}</p>
+                                <div class="card-meta">
+                                    <span class="price">$${item.price}</span>
+                                    <a href="https://wa.me/96181157961?text=مرحباً%20موبيتك،%20أريد%20شراء:%20${encodeURIComponent(item.name)}" class="submit-btn buy-btn" target="_blank">🛒 طلب شراء</a>
+                                </div>
+                            </div>
+                            ${deleteBtnHTML}
+                        `;
+                        productsGrid.appendChild(productCard);
+                    }
+                }
+            });
+
+            if (!adminHasItems) {
+                adminGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding:20px;">لا توجد قطع معلقة حالياً في السيرفر.</p>`;
+            }
+            if (productsGrid.innerHTML === '') {
+                productsGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding:20px;">لا توجد قطع متوفرة في هذا القسم حالياً.</p>`;
+            }
+        }
+
+        // تشغيل أولي وسحب البيانات
+        fetchAndRender();
+    </script>
+</body>
+</html>
