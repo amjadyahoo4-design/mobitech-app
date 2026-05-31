@@ -1,5 +1,5 @@
 // api/index.js
-const { createClient } = require('@supabase/supabase-supabase'); // أو 'supabase' حسب الحزمة المستخدمة لديك
+const { createClient } = require('@supabase/supabase-js'); 
 const express = require('express');
 const cors = require('cors');
 
@@ -48,7 +48,7 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-// 3. إضافة طلب صيانة جديد أو شراء (إذا كنت تحتاج عمليات الكتابة مستقبلاً)
+// 3. إضافة طلب صيانة جديد أو شراء
 app.post('/api/orders', async (req, res) => {
     const { product_id, client_name, client_phone, details } = req.body;
 
