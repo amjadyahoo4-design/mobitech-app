@@ -247,10 +247,10 @@
     </div>
 
     <div class="social-connect">
-        <a href="https://wa.me/96170000000?text=مرحباً%20موبيتك%20أود%20الاستفسار%20عن%20الخدمات" class="social-btn whatsapp" target="_blank">
+        <a href="https://wa.me/96181157961?text=مرحباً%20موبيتك%20أود%20الاستفسار%20عن%20الخدمات" class="social-btn whatsapp" target="_blank">
             💬 تواصل عبر واتساب
         </a>
-        <a href="https://t.me/YourTelegramUsername" class="social-btn telegram" target="_blank">
+        <a href="https://t.me/+96181157961" class="social-btn telegram" target="_blank">
             ✈️ تواصل عبر تيليجرام
         </a>
     </div>
@@ -326,17 +326,17 @@
 
         // دالة تبديل صلاحيات تسجيل الدخول
         function loginAs(role) {
-            currentUserRole = role;
             const statusText = document.getElementById('userStatus');
             const authBox = document.getElementById('authBox');
             const adminPanel = document.getElementById('adminPanel');
             const customerPanel = document.getElementById('customerPanel');
+            currentUserRole = role;
 
             if (role === 'admin') {
                 statusText.innerHTML = "👑 الحساب الحالي: المسؤول صاحب الموقع";
                 authBox.innerHTML = `<button class="logout-btn" onclick="logout()">تسجيل الخروج</button>`;
                 adminPanel.classList.remove('hidden');
-                customerPanel.classList.remove('hidden'); // المسؤول يستطيع الإضافة أيضاً
+                customerPanel.classList.remove('hidden'); 
             } else if (role === 'customer') {
                 statusText.innerHTML = "👤 الحساب الحالي: زبون (صلاحية تقديم طلبات)";
                 authBox.innerHTML = `<button class="logout-btn" onclick="logout()">تسجيل الخروج</button>`;
@@ -368,7 +368,7 @@
             const desc = document.getElementById('itemDesc').value;
 
             if(!image) {
-                image = "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500"; // صورة افتراضية ذكية
+                image = "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500"; 
             }
 
             const newItem = {
@@ -378,7 +378,7 @@
                 price,
                 image,
                 desc,
-                status: 'pending' // تبدأ دائماً قيد المراجعة للزبون
+                status: 'pending' 
             };
 
             items.push(newItem);
@@ -425,7 +425,7 @@
             let adminHasItems = false;
 
             items.forEach(item => {
-                // 1. التعبئة في لوحة تحكم المسؤول (يعرض كل شيء معلق للمراجعة)
+                // 1. لوحة تحكم المسؤول (يعرض كل شيء معلق للمراجعة)
                 if (item.status === 'pending') {
                     adminHasItems = true;
                     const adminCard = document.createElement('div');
@@ -449,13 +449,12 @@
                     adminGrid.appendChild(adminCard);
                 }
 
-                // 2. التعبئة في المعرض العام للجمهور (يعرض القطع المقبولة والمتوافقة مع التصنيف المحدد فقط)
+                // 2. المعرض العام للجمهور
                 if (item.status === 'approved') {
                     if (currentFilter === 'all' || item.category === currentFilter) {
                         const productCard = document.createElement('div');
                         productCard.className = 'card';
                         
-                        // زر حذف إضافي يظهر للمسؤول مباشرة على المنتجات المعروضة
                         let deleteBtnHTML = '';
                         if (currentUserRole === 'admin') {
                             deleteBtnHTML = `
@@ -472,7 +471,7 @@
                                 <p>${item.desc}</p>
                                 <div class="card-meta">
                                     <span class="price">$${item.price}</span>
-                                    <a href="https://wa.me/96170000000?text=أنا%20مهتم%20بشراء:%20${encodeURIComponent(item.name)}" class="submit-btn" style="text-align:center; text-decoration:none; padding:6px 12px; font-size:0.85rem;" target="_blank">طلب شراء</a>
+                                    <a href="https://wa.me/96181157961?text=أنا%20مهتم%20بشراء:%20${encodeURIComponent(item.name)}" class="submit-btn" style="text-align:center; text-decoration:none; padding:6px 12px; font-size:0.85rem;" target="_blank">طلب شراء</a>
                                 </div>
                             </div>
                             ${deleteBtnHTML}
