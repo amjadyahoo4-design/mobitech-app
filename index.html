@@ -64,7 +64,7 @@
             margin-right: 5px;
         }
         .auth-buttons button.admin-btn { background-color: var(--warning); color: #000; }
-        .auth-buttons button.logout-btn { background-color: var(--danger); }
+        .auth-buttons button.logout-btn { background-color: var(--danger); color: white; }
         
         .social-connect {
             display: flex;
@@ -98,7 +98,6 @@
             padding: 0 15px;
         }
 
-        /* شريط التصنيفات العصري */
         .category-scroll {
             display: flex;
             gap: 10px;
@@ -125,7 +124,6 @@
             box-shadow: 0 4px 10px rgba(37,99,235,0.3);
         }
 
-        /* الأقسام والنماذج */
         .panel {
             background: var(--card-bg);
             border-radius: 12px;
@@ -150,6 +148,10 @@
             border: 1px solid #cbd5e1;
             border-radius: 6px;
             box-sizing: border-box;
+        }
+        .form-group input[type="file"] {
+            padding: 7px;
+            background: #f8fafc;
         }
 
         .grid {
@@ -198,7 +200,6 @@
             color: white;
         }
         .badge.pending { background-color: var(--warning); color: #000; }
-        .badge.approved { background-color: var(--accent); }
         
         .admin-actions {
             background: #f1f5f9;
@@ -242,7 +243,7 @@
         <div class="user-status" id="userStatus">الحساب الحالي: زائر (عرض فقط)</div>
         <div class="auth-buttons" id="authBox">
             <button onclick="loginAs('customer')">دخول كزبون</button>
-            <button class="admin-btn" onclick="loginAs('admin')">لوحة المسؤول</button>
+            <button class="admin-btn" onclick="loginAsAdmin()">لوحة المسؤول 👑</button>
         </div>
     </div>
 
@@ -265,7 +266,7 @@
 
         <div id="customerPanel" class="panel hidden">
             <h2>➕ عرض قطعة جديدة للبيع (طلب إضافة سلعة)</h2>
-            <p>املأ النموذج أدناه. لن تظهر القطعة في الموقع حتى يوافق عليها صاحب الموقع.</p>
+            <p>املأ النموذج أدناه وارفع صورة من هاتفك. لن تظهر القطعة في الموقع حتى يوافق عليها المسؤول.</p>
             <form id="addItemForm" onsubmit="handleItemSubmit(event)">
                 <div class="form-group">
                     <label>اسم القطعة أو الهاتف:</label>
@@ -285,8 +286,8 @@
                     <input type="number" id="itemPrice" required placeholder="مثال: 75">
                 </div>
                 <div class="form-group">
-                    <label>رابط صورة القطعة (رابط URL):</label>
-                    <input type="url" id="itemImage" placeholder="أدخل رابط الصورة أو اتركها فارغة للصورة الافتراضية">
+                    <label>تحميل صورة القطعة من الهاتف 📸:</label>
+                    <input type="file" id="itemFile" accept="image/*" required>
                 </div>
                 <div class="form-group">
                     <label>الوصف والتفاصيل:</label>
@@ -305,13 +306,14 @@
             <button class="cat-chip" onclick="filterCategory('phones', this)">📲 أجهزة مستعملة</button>
         </div>
 
-        <div id="productsGrid" class="grid">
-            </div>
+        <div id="productsGrid" class="grid"></div>
 
     </div>
 
     <script>
-        // قاعدة البيانات الافتراضية الأولية للموقع في حال كانت فارغة
+        // كلمة السر الخاصة بك كمسؤول للموقع
+        const ADMIN_PASSWORD = "AmjadAacchh11"; 
+
         const defaultItems = [
             { id: 1, name: "شاشة iPhone 15 Pro Max (OLED)", category: "screens", price: "180", desc: "شاشة أصلية فك من جهاز، كفالة سنة كاملة ضد العيوب المصنعية وجاهزة للتركيب الفوري.", image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500", status: "approved" },
             { id: 2, name: "سبيكر داخلي أسفل لـ Galaxy S24", category: "speakers", price: "25", desc: "قطعة غيار أصلية لعودة الصوت النقي والواضح لجهازك بنفس جودة المصنع تماماً.", image: "https://images.unsplash.com/photo-1612444530582-fc66183b16f7?w=500", status: "approved" },
@@ -319,12 +321,20 @@
             { id: 4, name: "iPhone 13 مستعمل نظيف جداً", category: "phones", price: "420", desc: "المساحة 128 جيجابايت، لون أزرق، نسبة البطارية 85%، لم يسبق صيانته أو فكه.", image: "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=500", status: "approved" }
         ];
 
-        // تحميل البيانات الحالية من التخزين المحلي للمتصفح لتظل البيانات محفوظة
         let items = JSON.parse(localStorage.getItem('mobitech_items')) || defaultItems;
         let currentUserRole = 'guest'; 
         let currentFilter = 'all';
 
-        // دالة تبديل صلاحيات تسجيل الدخول
+        // دالة الدخول للمسؤول بكلمة سر
+        function loginAsAdmin() {
+            const passwordInput = prompt("الرجاء إدخال كلمة سر المسؤول للدخول لـ لوحة التحكم:");
+            if (passwordInput === ADMIN_PASSWORD) {
+                loginAs('admin');
+            } else if (passwordInput !== null) {
+                alert("❌ كلمة السر غير صحيحة! لا تملك صلاحية الوصول.");
+            }
+        }
+
         function loginAs(role) {
             const statusText = document.getElementById('userStatus');
             const authBox = document.getElementById('authBox');
@@ -351,44 +361,47 @@
             document.getElementById('userStatus').innerHTML = "الحساب الحالي: زائر (عرض فقط)";
             document.getElementById('authBox').innerHTML = `
                 <button onclick="loginAs('customer')">دخول كزبون</button>
-                <button class="admin-btn" onclick="loginAs('admin')">لوحة المسؤول</button>
+                <button class="admin-btn" onclick="loginAsAdmin()">لوحة المسؤول 👑</button>
             `;
             document.getElementById('adminPanel').classList.add('hidden');
             document.getElementById('customerPanel').classList.add('hidden');
             renderSite();
         }
 
-        // معالجة إرسال الزبون لقطعة جديدة
+        // قراءة ومعالجة الملف المرفوع وتحويله لصورة
         function handleItemSubmit(e) {
             e.preventDefault();
             const name = document.getElementById('itemName').value;
             const category = document.getElementById('itemCategory').value;
             const price = document.getElementById('itemPrice').value;
-            let image = document.getElementById('itemImage').value;
             const desc = document.getElementById('itemDesc').value;
+            const fileInput = document.getElementById('itemFile');
 
-            if(!image) {
-                image = "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500"; 
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const base64Image = event.target.result; // الصورة بصيغة كود قابل للتخزين والتحميل من الهاتف
+                    
+                    const newItem = {
+                        id: Date.now(),
+                        name,
+                        category,
+                        price,
+                        image: base64Image,
+                        desc,
+                        status: 'pending' 
+                    };
+
+                    items.push(newItem);
+                    saveData();
+                    alert("تم إرسال القطعة بنجاح مع صورتها! ستظهر في المتجر فور موافقتك عليها كمسؤول.");
+                    document.getElementById('addItemForm').reset();
+                    renderSite();
+                };
+                reader.readAsDataURL(fileInput.files[0]);
             }
-
-            const newItem = {
-                id: Date.now(),
-                name,
-                category,
-                price,
-                image,
-                desc,
-                status: 'pending' 
-            };
-
-            items.push(newItem);
-            saveData();
-            alert("تم إرسال القطعة بنجاح! ستظهر للعلن فور موافقة صاحب الموقع عليها.");
-            document.getElementById('addItemForm').reset();
-            renderSite();
         }
 
-        // دالة تغيير التصنيفات من الشريط العلوي
         function filterCategory(cat, element) {
             currentFilter = cat;
             document.querySelectorAll('.cat-chip').forEach(btn => btn.classList.remove('active'));
@@ -396,7 +409,6 @@
             renderSite();
         }
 
-        // أزرار التحكم الخاصة بالمسؤول (قبول / رفض / حذف)
         function updateStatus(id, newStatus) {
             const index = items.findIndex(item => item.id === id);
             if (index !== -1) {
@@ -414,7 +426,6 @@
             localStorage.setItem('mobitech_items', JSON.stringify(items));
         }
 
-        // بناء وعرض عناصر الموقع بناءً على الصلاحيات والتصفية
         function renderSite() {
             const productsGrid = document.getElementById('productsGrid');
             const adminGrid = document.getElementById('adminGrid');
@@ -425,7 +436,6 @@
             let adminHasItems = false;
 
             items.forEach(item => {
-                // 1. لوحة تحكم المسؤول (يعرض كل شيء معلق للمراجعة)
                 if (item.status === 'pending') {
                     adminHasItems = true;
                     const adminCard = document.createElement('div');
@@ -449,7 +459,6 @@
                     adminGrid.appendChild(adminCard);
                 }
 
-                // 2. المعرض العام للجمهور
                 if (item.status === 'approved') {
                     if (currentFilter === 'all' || item.category === currentFilter) {
                         const productCard = document.createElement('div');
@@ -489,7 +498,6 @@
             }
         }
 
-        // تشغيل الموقع للمرة الأولى
         renderSite();
     </script>
 </body>
