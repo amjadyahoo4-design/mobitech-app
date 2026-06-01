@@ -1,13 +1,15 @@
 const express = require('express');
 const app = express();
 
-app.use(express.json());
+// زيادة حجم الاستيعاب للـ JSON لكي يسمح برفع الصور بصيغة Base64 من هواتف الزبائن دون مشاكل
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // مصفوفة المنتجات الأساسية مخزنة على السيرفر لضمان ظهورها لجميع الزوار دائماً
 let serverProducts = [
     { id: "d1", title: "شاشات بديلة مفحوصة (OLED & LCD)", category: "شاشات", desc: "شاشات وبطاريات عالية الجودة مع الضمان الكامل للأداء واللمس المتعدد.", img: "https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?auto=format&fit=crop&w=500&q=80", status: "approved" },
-    { id: "d2", title: "سبيكر مضخم صوت نقي للأجهزة الذكية", category: "سبيكرات", desc: "سبيكرات صيانة داخلية وخارجية أصلية لجميع فئات الهواتف المحمولة.", img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=500&q=80", status: "approved" },
-    { id: "d3", title: "كفرات حماية حرارية ومقاومة للصدمات", category: "كفرات", desc: "تشكيلة كفرات متكاملة ذات مظهر عصري أنيق وحماية قصوى لهاتفك.", img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=500&q=80", status: "approved" }
+    { id: "d2", title: "شاحن سريع أصلي بقوة 45 واط", category: "أكسسوارات", desc: "شواحن وكابلات معتمدة تدعم الشحن السريع الآمن لكافة الهواتف.", img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=500&q=80", status: "approved" },
+    { id: "d3", title: "iPhone 13 Pro Max مستعمل - كفالة شهرين", category: "هواتف مستعملة", desc: "جهاز نظيف بنسبة 90% مع العلبة وكافة الملحقات الأصلية بسعر مميز.", img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=500&q=80", status: "approved" }
 ];
 
 // واجهة الموقع الكاملة والمتكاملة لمنصة Mobitech المحدثة
@@ -105,6 +107,10 @@ app.get('/', (req, res) => {
         footer { background-color: #070a10; padding: 25px 5%; text-align: center; margin-top: 50px; border-top: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-muted); font-size: 0.9rem; }
         .image-preview { margin-top: 10px; text-align: center; display: none; }
         .image-preview img { max-width: 100%; max-height: 150px; border-radius: 8px; border: 1px solid #38bdf8; }
+        
+        /* مودال التحقق المخصص للمسؤول */
+        .admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 3000; }
+        .admin-modal-content { background: var(--card-bg); border: 1px solid var(--accent-color); padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; }
     </style>
 </head>
 <body>
@@ -115,7 +121,7 @@ app.get('/', (req, res) => {
             <li><a onclick="showAllStore()">المتجر</a></li>
             <li><a onclick="toggleSection('frp-section')">خدمة FRP</a></li>
             <li><a onclick="toggleSection('client-section')">إضافة سلعة</a></li>
-            <li><a onclick="toggleSection('admin-panel')">لوحة المسؤول</a></li>
+            <li><a onclick="verifyAdminAccess('admin-panel')">لوحة المسؤول</a></li>
         </ul>
     </nav>
 
@@ -125,10 +131,10 @@ app.get('/', (req, res) => {
         
         <div class="interactive-modes">
             <div style="width:100%">
-                <span class="mode-title">🌐 تصفح ضيف (عرض تفاعلي حي)</span>
+                <span class="mode-title">🌐 تصفح الحسابات والصلاحيات</span>
                 <div style="display:flex; gap:10px; justify-content:center;">
-                    <button class="btn btn-client" onclick="toggleSection('client-section')"><i class="fas fa-user"></i> دخول كزبون</button>
-                    <button class="btn btn-admin" onclick="toggleSection('admin-panel')"><i class="fas fa-crown"></i> لوحة المسؤول</button>
+                    <button class="btn btn-client" onclick="toggleSection('client-section')"><i class="fas fa-user"></i> دخول كزبون (إضافة مواد)</button>
+                    <button class="btn btn-admin" onclick="verifyAdminAccess('admin-panel')"><i class="fas fa-crown"></i> لوحة المسؤول</button>
                 </div>
             </div>
         </div>
@@ -142,6 +148,20 @@ app.get('/', (req, res) => {
             </a>
         </div>
     </section>
+
+    <div id="adminAuthModal" class="admin-modal">
+        <div class="admin-modal-content">
+            <h3 style="margin-bottom: 15px; color: #f59e0b;"><i class="fas fa-lock"></i> تسجيل دخول المسؤول</h3>
+            <div class="form-group">
+                <label>أدخل كلمة مرور الإدارة:</label>
+                <input type="password" id="adminPasswordInput" placeholder="••••••••" style="text-align: center;">
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+                <button onclick="submitAdminPassword()" class="btn btn-success" style="padding: 10px 20px;">دخول</button>
+                <button onclick="closeAdminModal()" class="btn btn-danger" style="padding: 10px 20px;">إلغاء</button>
+            </div>
+        </div>
+    </div>
 
     <section id="frp-section" class="dynamic-section">
         <div class="frp-box">
@@ -165,8 +185,9 @@ app.get('/', (req, res) => {
     <div class="categories-bar">
         <button id="btn-all" class="cat-btn active" onclick="filterCat('الكل', event)">⚡ الكل</button>
         <button class="cat-btn" onclick="filterCat('شاشات', event)">📱 شاشات</button>
-        <button class="cat-btn" onclick="filterCat('سبيكرات', event)">🔊 سبيكرات</button>
-        <button class="cat-btn" onclick="filterCat('كفرات', event)">🛡️ كفرات</button>
+        <button class="cat-btn" onclick="filterCat('أكسسوارات', event)">🔌 أكسسوارات</button>
+        <button class="cat-btn" onclick="filterCat('قطع', event)">⚙️ قطع</button>
+        <button class="cat-btn" onclick="filterCat('هواتف مستعملة', event)">📱 هواتف مستعملة</button>
     </div>
 
     <div class="stats-row" id="statsRow"></div>
@@ -177,47 +198,48 @@ app.get('/', (req, res) => {
 
     <section id="client-section" class="dynamic-section">
         <h2 style="text-align: center; margin-bottom: 15px; color: var(--accent-color);">
-            <i class="fas fa-plus-circle"></i> إضافة سلعة للبيع (زبون)
+            <i class="fas fa-plus-circle"></i> إضافة مادة وعرضها للبيع (زبون)
         </h2>
         <form id="productForm" onsubmit="clientSubmitProduct(event)">
             <div class="form-group">
                 <label>اسم ومواصفات السلعة بالكامل:</label>
-                <input type="text" id="pTitle" placeholder="مثال: شاشة Samsung A56 الأصلية" required>
+                <input type="text" id="pTitle" placeholder="مثال: شاشة Samsung S24 Ultra الأصلية" required>
             </div>
             <div class="form-group">
                 <label>تصنيف القسم التابع له:</label>
                 <select id="pCategory">
                     <option value="شاشات">شاشات</option>
-                    <option value="سبيكرات">سبيكرات</option>
-                    <option value="كفرات">كفرات</option>
+                    <option value="أكسسوارات">أكسسوارات</option>
+                    <option value="قطع">قطع</option>
+                    <option value="هواتف مستعملة">هواتف مستعملة</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>المواصفات الفنية أو السعر المعروض للبيع:</label>
-                <textarea id="pDesc" rows="3" placeholder="اكتب حالة القطعة والسعر..." required></textarea>
+                <label>المواصفات الفنية والسعر المطلوب:</label>
+                <textarea id="pDesc" rows="3" placeholder="اكتب حالة السلعة والسعر المطلوب بوضوح..." required></textarea>
             </div>
             <div class="form-group">
-                <label>رابط الصورة المباشر للسلعة:</label>
-                <input type="url" id="pImg" placeholder="مثال: https://site.com/image.jpg" required>
+                <label>تحميل صورة السلعة مباشرة (من ملفات هاتفك):</label>
+                <input type="file" id="pImgFile" accept="image/*" required>
                 <div class="image-preview" id="imagePreviewDiv">
-                    <img id="previewImg" alt="معاينة الصورة">
+                    <img id="previewImg" alt="معاينة الصورة المرفوعة">
                 </div>
             </div>
-            <button type="submit" class="btn btn-submit">تحميل السلعة وإرسالها للمراجعة</button>
+            <button type="submit" class="btn btn-submit">تحميل المادة وإرسالها لمراجعة المسؤول</button>
         </form>
     </section>
 
     <section id="admin-panel" class="dynamic-section" style="max-width:1100px;">
         <h2 style="text-align: center; margin-bottom: 20px; color: #f59e0b;">
-            <i class="fas fa-user-shield"></i> لوحة تحكم المسؤول
+            <i class="fas fa-user-shield"></i> لوحة تحكم المسؤول (الإدارة النشطة)
         </h2>
-        <div style="margin-bottom: 20px;">
-            <h3>⏳ طلبات معلقة</h3>
-            <div class="grid-container" id="admin-pending-grid" style="padding:0;"></div>
+        <div style="margin-bottom: 30px;">
+            <h3 style="border-bottom: 1px solid rgba(245, 158, 11, 0.3); padding-bottom: 5px; color: #f59e0b;">⏳ طلبات زبائن معلقة بانتظار موافقتك</h3>
+            <div class="grid-container" id="admin-pending-grid" style="padding:15px 0 0 0;"></div>
         </div>
         <div>
-            <h3>✅ المنتجات المقبولة (معروضة في المتجر)</h3>
-            <div class="grid-container" id="admin-approved-grid" style="padding:0;"></div>
+            <h3 style="border-bottom: 1px solid rgba(16, 185, 129, 0.3); padding-bottom: 5px; color: var(--success-color);">Hex ✅ المنتجات النشطة على الموقع حالياً</h3>
+            <div class="grid-container" id="admin-approved-grid" style="padding:15px 0 0 0;"></div>
         </div>
     </section>
 
@@ -231,6 +253,9 @@ app.get('/', (req, res) => {
         var allItems = [];
         var currentFilter = 'الكل';
         var searchQuery = '';
+        var isAdminVerified = false; 
+        var targetSectionId = ''; 
+        var uploadedImageBase64 = '';
 
         function showToast(msg, isError) {
             var toast = document.getElementById('toastMsg');
@@ -240,7 +265,6 @@ app.get('/', (req, res) => {
             setTimeout(function() { toast.classList.remove('show'); }, 2500);
         }
 
-        // دالة جلب المنتجات الحية من السيرفر مباشرة
         async function fetchProductsFromServer() {
             try {
                 const res = await fetch('/api/products');
@@ -255,20 +279,51 @@ app.get('/', (req, res) => {
 
         function updateStats() {
             var approved = allItems.filter(i => i.status === 'approved');
-            var counts = { 'شاشات': 0, 'سبيكرات': 0, 'كفرات': 0 };
+            var counts = { 'شاشات': 0, 'أكسسوارات': 0, 'قطع': 0, 'هواتف مستعملة': 0 };
             approved.forEach(item => {
                 if (counts[item.category] !== undefined) counts[item.category]++;
             });
             document.getElementById('statsRow').innerHTML = 
                 '<div class="stat-card">📱 شاشات: ' + counts['شاشات'] + '</div>' +
-                '<div class="stat-card">🔊 سبيكرات: ' + counts['سبيكرات'] + '</div>' +
-                '<div class="stat-card">🛡️ كفرات: ' + counts['كفرات'] + '</div>';
+                '<div class="stat-card">🔌 أكسسوارات: ' + counts['أكسسوارات'] + '</div>' +
+                '<div class="stat-card">⚙️ قطع: ' + counts['قطع'] + '</div>' +
+                '<div class="stat-card">📱 مستعمل: ' + counts['هواتف مستعملة'] + '</div>';
         }
 
         function toggleSection(id) {
             var el = document.getElementById(id);
             el.style.display = el.style.display === 'block' ? 'none' : 'block';
             if (el.style.display === 'block') el.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // دالة التحقق الفريدة للمسؤول قبل فتح لوحة التحكم
+        function verifyAdminAccess(id) {
+            if (isAdminVerified) {
+                toggleSection(id);
+            } else {
+                targetSectionId = id;
+                document.getElementById('adminAuthModal').style.display = 'flex';
+                document.getElementById('adminPasswordInput').focus();
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminAuthModal').style.display = 'none';
+            document.getElementById('adminPasswordInput').value = '';
+        }
+
+        function submitAdminPassword() {
+            var password = document.getElementById('adminPasswordInput').value;
+            // كلمة المرور الافتراضية المحددة للوحة التحكم
+            if (password === 'admin123') {
+                isAdminVerified = true;
+                closeAdminModal();
+                showToast('تم تسجيل دخول المسؤول بنجاح');
+                toggleSection(targetSectionId);
+                renderAdminPanels();
+            } else {
+                showToast('كلمة السر غير صحيحة! يرجى إعادة المحاولة', true);
+            }
         }
 
         function showAllStore() {
@@ -289,7 +344,6 @@ app.get('/', (req, res) => {
         function refreshStoreUI() {
             var storeGrid = document.getElementById('store-grid');
             var storeHTML = '';
-            
             var approvedItems = allItems.filter(i => i.status === 'approved');
 
             approvedItems.forEach(item => {
@@ -304,9 +358,9 @@ app.get('/', (req, res) => {
                     '</div>';
             });
             
-            storeGrid.innerHTML = storeHTML || '<p style="text-align:center; grid-column:1/-1; padding:20px;">لا توجد قطع معروضة في هذا القسم حالياً.</p>';
+            storeGrid.innerHTML = storeHTML || '<p style="text-align:center; grid-column:1/-1; padding:20px;">لا توجد مواد معروضة في هذا القسم حالياً.</p>';
             updateStats();
-            renderAdminPanels();
+            if (isAdminVerified) renderAdminPanels();
         }
 
         function renderAdminPanels() {
@@ -314,42 +368,65 @@ app.get('/', (req, res) => {
             var approvedContainer = document.getElementById('admin-approved-grid');
             
             var pendingItems = allItems.filter(i => i.status === 'pending');
-            var customApproved = allItems.filter(i => i.status === 'approved' && !i.id.startsWith('d'));
+            var approvedItems = allItems.filter(i => i.status === 'approved');
 
-            // الطلبات المعلقة
+            // الطلبات المعلقة الواردة من الهواتف
             let pendHtml = '';
             pendingItems.forEach(p => {
                 pendHtml += '<div class="card" style="border: 1px dashed #f59e0b;">' +
                     '<img src="' + p.img + '">' +
                     '<h3>' + escapeHtml(p.title) + '</h3>' +
                     '<p>' + escapeHtml(p.desc) + '</p>' +
+                    '<span class="badge" style="margin-bottom:10px;">' + p.category + '</span>' +
                     '<div class="admin-actions">' +
-                    '<button onclick="adminAction(\'' + p.id + '\', \'accept\')" class="btn btn-success">قبول</button>' +
-                    '<button onclick="adminAction(\'' + p.id + '\', \'reject\')" class="btn btn-danger">رفض</button>' +
+                    '<button onclick="adminAction(\'' + p.id + '\', \'accept\')" class="btn btn-success">قبول ونشر</button>' +
+                    '<button onclick="adminAction(\'' + p.id + '\', \'reject\')" class="btn btn-danger">رفض وحذف</button>' +
                     '</div></div>';
             });
-            pendingContainer.innerHTML = pendHtml || '<p style="grid-column:1/-1; text-align:center; padding:20px;">لا توجد طلبات معلقة.</p>';
+            pendingContainer.innerHTML = pendHtml || '<p style="grid-column:1/-1; text-align:center; padding:20px; color: var(--text-muted);">لا توجد طلبات معلقة بانتظار المراجعة.</p>';
 
-            // السلع المضافة القابلة للحذف
+            // إدارة المواد المقبولة حالياً والمنشورة
             let appHtml = '';
-            customApproved.forEach(a => {
-                appHtml += '<div class="card">' +
+            approvedItems.forEach(a => {
+                appHtml += '<div class="card" style="border: 1px solid rgba(16, 185, 129, 0.2);">' +
                     '<img src="' + a.img + '">' +
                     '<h3>' + escapeHtml(a.title) + '</h3>' +
+                    '<p>' + escapeHtml(a.desc) + '</p>' +
+                    '<span class="badge" style="margin-bottom:10px;">' + a.category + '</span>' +
                     '<div class="admin-actions">' +
-                    '<button onclick="deleteItem(\'' + a.id + '\')" class="btn btn-danger">حذف</button>' +
+                    '<button onclick="deleteItem(\'' + a.id + '\')" class="btn btn-danger" style="width:100%"><i class="fas fa-trash-alt"></i> إزالة من الموقع</button>' +
                     '</div></div>';
             });
-            approvedContainer.innerHTML = appHtml || '<p style="grid-column:1/-1; text-align:center; padding:20px;">لا توجد منتجات مضافة مخصصة بعد.</p>';
+            approvedContainer.innerHTML = appHtml || '<p style="grid-column:1/-1; text-align:center; padding:20px; color: var(--text-muted);">لا توجد منتجات منشورة.</p>';
         }
+
+        // معالجة ملف الصورة المرفوع من الهاتف وتحويله فورياً لمعاينته
+        document.getElementById('pImgFile').addEventListener('change', function(e) {
+            var file = e.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    uploadedImageBase64 = event.target.result;
+                    document.getElementById('previewImg').src = uploadedImageBase64;
+                    document.getElementById('imagePreviewDiv').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
         async function clientSubmitProduct(event) {
             event.preventDefault();
+            
+            if (!uploadedImageBase64) {
+                showToast('يرجى اختيار صورة من هاتفك أولاً', true);
+                return;
+            }
+
             var newItem = {
                 title: document.getElementById('pTitle').value,
                 category: document.getElementById('pCategory').value,
                 desc: document.getElementById('pDesc').value,
-                img: document.getElementById('pImg').value
+                img: uploadedImageBase64
             };
 
             try {
@@ -359,14 +436,15 @@ app.get('/', (req, res) => {
                     body: JSON.stringify(newItem)
                 });
                 if(res.ok) {
-                    showToast('تم إرسال السلعة للمراجعة بنجاح!', false);
+                    showToast('تم إرسال المادة بنجاح! ستظهر فور موافقة المسؤول.', false);
                     document.getElementById('productForm').reset();
                     document.getElementById('imagePreviewDiv').style.display = 'none';
                     document.getElementById('client-section').style.display = 'none';
+                    uploadedImageBase64 = ''; 
                     fetchProductsFromServer();
                 }
             } catch (err) {
-                showToast('فشل إرسال المنتج', true);
+                showToast('فشل إرسال المنتج، يرجى المحاولة مرة أخرى', true);
             }
         }
 
@@ -377,37 +455,27 @@ app.get('/', (req, res) => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id, action })
                 });
-                showToast(action === 'accept' ? 'تم قبول السلعة' : 'تم رفض السلعة');
+                showToast(action === 'accept' ? 'تمت الموافقة على السلعة ونشرها للعامة' : 'تم رفض وحذف طلب السلعة');
                 fetchProductsFromServer();
-            } catch(e) { showToast('حدث خطأ', true); }
+            } catch(e) { showToast('حدث خطأ في تنفيذ الإجراء', true); }
         }
 
         async function deleteItem(id) {
-            if (!confirm('هل أنت متأكد من الحذف؟')) return;
+            if (!confirm('هل أنت متأكد من رغبتك في إزالة هذه المادة من المتجر نهائياً؟')) return;
             try {
                 await fetch('/api/products/action', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id, action: 'delete' })
                 });
-                showToast('تم الحذف بنجاح');
+                showToast('تمت إزالة المادة بنجاح');
                 fetchProductsFromServer();
-            } catch(e) { showToast('حدث خطأ', true); }
+            } catch(e) { showToast('حدث خطأ أثناء الحذف', true); }
         }
 
         document.getElementById('searchInput').addEventListener('input', e => {
             searchQuery = e.target.value;
             refreshStoreUI();
-        });
-
-        document.getElementById('pImg').addEventListener('input', function() {
-            var previewDiv = document.getElementById('imagePreviewDiv');
-            if (this.value) {
-                document.getElementById('previewImg').src = this.value;
-                previewDiv.style.display = 'block';
-            } else {
-                previewDiv.style.display = 'none';
-            }
         });
 
         function escapeHtml(str) {
@@ -431,8 +499,11 @@ app.post('/api/products', (req, res) => {
     const { title, category, desc, img } = req.body;
     const newItem = {
         id: Date.now() + '-' + Math.random().toString(36).substr(2, 4),
-        title, category, desc, img,
-        status: 'pending'
+        title, 
+        category, 
+        desc, 
+        img, // تخزين الصورة المرفوعة بصيغة Base64 string على السيرفر
+        status: 'pending' // افتراضياً معلق وبانتظار موافقة المسؤول
     };
     serverProducts.push(newItem);
     res.status(201).json({ success: true });
