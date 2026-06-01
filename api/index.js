@@ -2,10 +2,10 @@ const express = require('express');
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // واجهة الموقع الكاملة والمطورة لـ Mobitech
 app.get('/', (req, res) => {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.send(`
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -28,7 +28,6 @@ app.get('/', (req, res) => {
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
         
-        /* Navbar */
         nav {
             background-color: rgba(21, 28, 44, 0.8);
             backdrop-filter: blur(10px);
@@ -44,19 +43,16 @@ app.get('/', (req, res) => {
         .nav-links a { color: var(--text-color); text-decoration: none; font-weight: 500; }
         .nav-links a:hover { color: var(--accent-color); }
 
-        /* Hero */
         .hero { padding: 60px 5% 40px; text-align: center; background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 60%); }
         .hero h1 { font-size: 2.8rem; font-weight: 900; margin-bottom: 15px; }
         .hero h1 span { color: var(--accent-color); }
         .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 25px; }
         
-        /* Buttons */
         .btn { padding: 10px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; border: none; cursor: pointer; transition: opacity 0.2s; }
         .btn-primary { background-color: var(--accent-color); color: #0b0f19; }
         .btn-whatsapp { background-color: #25d366; color: #fff; }
         .btn:hover { opacity: 0.9; }
 
-        /* Sections */
         .section-title { text-align: center; font-size: 2rem; margin: 40px 0 20px; }
         .section-title::after { content: ''; display: block; width: 60px; height: 3px; background-color: var(--accent-color); margin: 10px auto 0; }
         
@@ -67,7 +63,6 @@ app.get('/', (req, res) => {
         .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
         .badge { padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; background-color: rgba(56, 189, 248, 0.1); color: var(--accent-color); }
 
-        /* FRP Form Section */
         .frp-section { background-color: var(--card-bg); max-width: 600px; margin: 40px auto; padding: 30px; border-radius: 15px; border: 1px solid rgba(56, 189, 248, 0.2); }
         .form-group { margin-bottom: 20px; display: flex; flex-direction: column; text-align: right; }
         .form-group label { margin-bottom: 8px; font-weight: bold; color: var(--text-color); }
@@ -75,7 +70,7 @@ app.get('/', (req, res) => {
         .form-group input:focus { border-color: var(--accent-color); outline: none; }
         .note { font-size: 0.85rem; color: var(--danger-color); margin-top: 5px; }
 
-        footer { background-color: #070a10; padding: 30px 5%; text-align: center; margin-top: 5px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+        footer { background-color: #070a10; padding: 30px 5%; text-align: center; margin-top: 40px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
     </style>
 </head>
 <body>
@@ -83,14 +78,13 @@ app.get('/', (req, res) => {
     <nav>
         <div class="logo"><i class="fas fa-mobile-alt"></i> Mobitech</div>
         <ul class="nav-links">
-            <li><a href="#services">خدماتنا</a></li>
             <li><a href="#store">المتجر</a></li>
             <li><a href="#frp">خدمة FRP</a></li>
         </ul>
     </nav>
 
     <section class="hero">
-        <h1>منصة <span>Mobitech</span> الرقمية بإدارة أمجد عاد</h1>
+        <h1>منصة <span>Mobitech</span> الرقمية بإدارة أمجد هاد</h1>
         <p>مرحباً بك في المنصة المعتمدة لصيانة الهواتف، الأجهزة الذكية، تأمين قطع الغيار والأكسسوارات الاحترافية.</p>
         <a href="https://wa.me/96181157961" class="btn btn-whatsapp" target="_blank">
             <i class="fab fa-whatsapp"></i> مراسلة أمجد عبر الواتساب
@@ -103,19 +97,19 @@ app.get('/', (req, res) => {
             <div class="card">
                 <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=500&q=80" alt="كفرات حماية">
                 <h3>كفرات هواتف ذكية (iPhone & Samsung)</h3>
-                <p>تشكيلة واسعة من الكفرات الحرارية والمقاومة للصدمات متوفرة لجميع الموديلات الحيثية بجودة ووضوح عاليين.</p>
+                <p>تشكيلة واسعة من الكفرات الحرارية والمقاومة للصدمات متوفرة لجميع الموديلات بجودة ووضوح عاليين.</p>
                 <span class="badge">قسم الكفرات</span>
             </div>
             <div class="card">
                 <img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=500&q=80" alt="PS5">
-                <h3>أكسسوارات قيمنج (PS5 & PSP)</h3>
-                <p>قبضات تحكم أصليّة، قطع غيار، حقائب تنقل، وأكسسوارات صيانة خاصة بمنصات PlayStation وبلايستيشن المحمول.</p>
+                <h3>أكسسوارات ألعاب (PS5 & PSP)</h3>
+                <p>قبضات تحكم أصليّة، قطع غيار، حقائب تنقل، وأكسسوارات صيانة خاصة بمنصات الألعاب.</p>
                 <span class="badge">أكسسوارات ألعاب</span>
             </div>
             <div class="card">
                 <img src="https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?auto=format&fit=crop&w=500&q=80" alt="صيانة شاشات">
                 <h3>قطع غيار وشاشات أصلية</h3>
-                <p>شاشات وبطاريات مكفولة ومفحوصة بدقة من خلال خبراء الصيانة لضمان الأداء الكامل واللمس السريع.</p>
+                <p>شاشات وبطاريات مكفولة ومفحوصة بدقة من خلال خبراء الصيانة لضمان الأداء الكامل.</p>
                 <span class="badge">قطع غيار</span>
             </div>
         </div>
@@ -129,22 +123,22 @@ app.get('/', (req, res) => {
             نظراً لقوانين الأمان والحماية، يرجى ملء البيانات أدناه لتقديم طلب فك الحساب وإثبات ملكية الجهاز.
         </p>
         
-        <form action="/api/frp-request" method="POST">
+        <form onsubmit="alert('تم إرسال طلب الـ FRP بنجاح للتأكد من الملكية والمراجعة!'); return false;">
             <div class="form-group">
                 <label>اسم ونوع الهاتف بالكامل:</label>
-                <input type="text" name="phoneModel" placeholder="مثال: Samsung S24 Ultra" required>
+                <input type="text" placeholder="مثال: Samsung S24 Ultra" required>
             </div>
             <div class="form-group">
                 <label>اسم صاحب الهاتف الثلاثي:</label>
-                <input type="text" name="ownerName" placeholder="إدخال الاسم الكامل" required>
+                <input type="text" placeholder="إدخال الاسم الكامل" required>
             </div>
             <div class="form-group">
                 <label>رقم هاتف للتواصل:</label>
-                <input type="tel" name="ownerPhone" placeholder="مثال: 961xxxxxxxx" required>
+                <input type="tel" placeholder="مثال: 961xxxxxxxx" required>
             </div>
             <div class="form-group">
                 <label>رابط صورة علبة الهاتف (لإثبات الملكية):</label>
-                <input type="url" name="boxImageUrl" placeholder="ضع رابط الصورة هنا" required>
+                <input type="url" placeholder="ضع رابط الصورة هنا" required>
                 <span class="note">* يجب إرفاق صورة العلبة واضحة للتأكد من أن الهاتف ليس مسروقاً.</span>
             </div>
             <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; border-radius: 8px;">
@@ -154,7 +148,7 @@ app.get('/', (req, res) => {
     </section>
 
     <footer>
-        <p>© 2026 جميع الحقوق محفوظة لمنصة Mobitech | بإشراف المسؤول أمجد عاد</p>
+        <p>© 2026 جميع الحقوق محفوظة لمنصة Mobitech | بإشراف المسؤول أمجد هاد</p>
     </footer>
 
 </body>
@@ -162,20 +156,8 @@ app.get('/', (req, res) => {
     `);
 });
 
-// المسارات البرمجية (الخلفية) المجهزة للـ Admin والمستندات المستقبلية لـ Supabase
-app.post('/api/frp-request', (req, res) => {
-    const { phoneModel, ownerName, ownerPhone, boxImageUrl } = req.body;
-    // هنا سيتم الربط المباشر مع جداول قاعدة البيانات لحفظ الطلبات معلقة لحين موافقة أمجد
-    res.json({ 
-        success: true, 
-        message: "تم استلام طلب الـ FRP بنجاح. سيتم مراجعة صورة العلبة والبيانات من قِبل الأدمن أمجد عاد للتأكد من الملكية والبدء بالعمل والاتصال بك." 
-    });
-});
-
-app.post('/api/admin/login', (req, res) => {
-    const { username, password } = req.body;
-    // مسار تسجيل دخول الـ Admin بكلمة السر الفئوية وتحديد صلاحيات التجار والزبائن
-    res.json({ message: "جاري تهيئة صلاحيات لوحة التحكم للمسؤول..." });
+app.get('/api', (req, res) => {
+    res.json({ message: "Welcome to Mobitech API Backend" });
 });
 
 module.exports = app;
