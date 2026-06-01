@@ -48,7 +48,6 @@ app.get('/', (req, res) => {
         .hero h1 span { color: var(--accent-color); }
         .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 20px; }
         
-        /* أزرار الدخول التفاعلية (زبون / مسؤول) كما في تصميمك القديم */
         .interactive-modes { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); max-width: 500px; margin: 0 auto 25px; }
         .mode-title { width: 100%; text-align: center; font-size: 0.95rem; color: var(--accent-color); margin-bottom: 10px; display: block; }
 
@@ -58,12 +57,10 @@ app.get('/', (req, res) => {
         .btn-client { background-color: #1e293b; color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 20px; }
         .btn-admin { background-color: #f59e0b; color: #0b0f19; border-radius: 8px; padding: 10px 20px; }
         
-        /* أزرار الاتصال الملونة الحية الكبيرة من تصميمك المحبب */
         .social-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 35px; flex-wrap: wrap; }
         .btn-whatsapp { background-color: #25d366; color: #fff; border-radius: 10px; width: 45%; max-width: 220px; justify-content: center; }
         .btn-telegram { background-color: #0284c7; color: #fff; border-radius: 10px; width: 45%; max-width: 220px; justify-content: center; }
 
-        /* شريط التصنيفات التفاعلي السريع للقطع */
         .categories-title { font-size: 1.3rem; margin: 30px 0 15px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .categories-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; padding: 0 5%; }
         .cat-btn { padding: 8px 18px; border-radius: 25px; border: none; background: #1e293b; color: var(--text-color); cursor: pointer; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; transition: background 0.2s; }
@@ -78,15 +75,14 @@ app.get('/', (req, res) => {
         .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; flex-grow: 1; }
         .badge { padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; background-color: rgba(56, 189, 248, 0.1); color: var(--accent-color); align-self: center; }
 
-        /* الأقسام المخفية التي تفتح وتغلق ديناميكياً */
         .dynamic-section { background-color: var(--card-bg); max-width: 650px; margin: 30px auto; padding: 25px; border-radius: 15px; border: 1px solid rgba(56, 189, 248, 0.2); display: none; }
         .form-group { margin-bottom: 18px; display: flex; flex-direction: column; text-align: right; }
         .form-group label { margin-bottom: 8px; font-weight: bold; color: var(--text-color); font-size: 0.95rem; }
         .form-group input, .form-group textarea, .form-group select { padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); background-color: var(--bg-color); color: #fff; font-size: 1rem; width: 100%; }
         
         .btn-submit { background-color: var(--accent-color); color: #0b0f19; font-weight: bold; width: 100%; justify-content: center; border-radius: 8px; padding: 12px; margin-top: 10px; }
-        .btn-success { background-color: var(--success-color); color: white; padding: 6px 15px; font-size: 0.85rem; border-radius: 5px; }
-        .btn-danger { background-color: var(--danger-color); color: white; padding: 6px 15px; font-size: 0.85rem; border-radius: 5px; }
+        .btn-success { background-color: var(--success-color); color: white; padding: 6px 15px; font-size: 0.85rem; border-radius: 5px; border: none; cursor: pointer; }
+        .btn-danger { background-color: var(--danger-color); color: white; padding: 6px 15px; font-size: 0.85rem; border-radius: 5px; border: none; cursor: pointer; }
         .admin-actions { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
 
         .frp-box { background: linear-gradient(135deg, #1e1b4b, #151c2c); border: 1px solid rgba(139, 92, 246, 0.3); padding: 20px; border-radius: 12px; text-align: center; }
@@ -100,7 +96,7 @@ app.get('/', (req, res) => {
     <nav>
         <a href="/" class="logo"><i class="fas fa-mobile-alt"></i> Mobitech</a>
         <ul class="nav-links">
-            <li><a onclick="showView('store-view')">المتجر</a></li>
+            <li><a onclick="showAllStore()">المتجر</a></li>
             <li><a onclick="toggleSection('frp-section')">خدمة FRP</a></li>
             <li><a onclick="toggleSection('client-section')">إضافة سلعة</a></li>
         </ul>
@@ -145,15 +141,14 @@ app.get('/', (req, res) => {
 
     <h3 class="categories-title">📦 تصفح معروضات المتجر المتوفرة حياً</h3>
     <div class="categories-bar">
-        <button class="cat-btn active" onclick="filterCat('الكل')">⚡ الكل</button>
-        <button class="cat-btn" onclick="filterCat('شاشات')">📱 شاشات</button>
-        <button class="cat-btn" onclick="filterCat('سبيكرات')">🔊 سبيكرات</button>
-        <button class="cat-btn" onclick="filterCat('كفرات')">🛡️ كفرات</button>
+        <button id="btn-all" class="cat-btn active" onclick="filterCat('الكل', event)">⚡ الكل</button>
+        <button class="cat-btn" onclick="filterCat('شاشات', event)">📱 شاشات</button>
+        <button class="cat-btn" onclick="filterCat('سبيكرات', event)">🔊 سبيكرات</button>
+        <button class="cat-btn" onclick="filterCat('كفرات', event)">🛡️ كفرات</button>
     </div>
 
     <section id="store-view">
-        <div class="grid-container" id="store-grid">
-            </div>
+        <div class="grid-container" id="store-grid"></div>
     </section>
 
     <section id="client-section" class="dynamic-section">
@@ -175,7 +170,7 @@ app.get('/', (req, res) => {
             </div>
             <div class="form-group">
                 <label>المواصفات الفنية أو السعر المعروض للبيع:</label>
-                <textarea id="pDesc" rows="3" placeholder="أدخل تفاصيل حالة القطعة، مدة الضمان، أو السعر..." required></textarea>
+                <textarea id="pDesc" rows="3" placeholder="اكتب حالة القطعة والسعر..." required></textarea>
             </div>
             <div class="form-group">
                 <label>رابط الصورة المباشر للسلعة:</label>
@@ -189,8 +184,7 @@ app.get('/', (req, res) => {
         <h2 style="text-align: center; margin-bottom: 20px; color: #f59e0b;">
             <i class="fas fa-user-shield"></i> لوحة تحكم المسؤول (الطلبات المعلقة)
         </h2>
-        <div class="grid-container" id="admin-grid" style="padding:0;">
-            </div>
+        <div class="grid-container" id="admin-grid" style="padding:0;"></div>
     </section>
 
     <footer>
@@ -198,14 +192,12 @@ app.get('/', (req, res) => {
     </footer>
 
     <script>
-        // المنتجات الأساسية الثابتة لمنع ظهور الصفحة فارغة أبداً عند بداية التشغيل
         var defaultItems = [
             { title: "شاشات بديلة مفحوصة (OLED & LCD)", category: "شاشات", desc: "شاشات وبطاريات عالية الجودة مع الضمان الكامل للأداء واللمس المتعدد.", img: "https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?auto=format&fit=crop&w=500&q=80" },
             { title: "سبيكر مضخم صوت نقي للأجهزة الذكية", category: "سبيكرات", desc: "سبيكرات صيانة داخلية وخارجية أصلية لجميع فئات الهواتف المحمولة.", img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=500&q=80" },
-            { title: "كفرات حماية حرارية ومقاومة للصدمات", category: "كفرات", desc: "تشكيلة كفرات متكاملة ذات مظهر عصري أنيق وحماية قصوى لظهر وجوانب الهاتف.", img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=500&q=80" }
+            { title: "كفرات حماية حرارية ومقاومة للصدمات", category: "كفرات", desc: "تشكيلة كفرات متكاملة ذات مظهر عصري أنيق وحماية قصوى لهاتفك.", img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=500&q=80" }
         ];
 
-        // مصفوفات معزولة ومحمية بالكامل لضمان عمل الحفظ والإضافة بشكل دائم ومستقر
         var approvedItems = JSON.parse(localStorage.getItem('mobitech_saved_approved')) || [];
         var pendingItems = JSON.parse(localStorage.getItem('mobitech_saved_pending')) || [];
         var currentFilter = 'الكل';
@@ -220,13 +212,21 @@ app.get('/', (req, res) => {
             }
         }
 
-        function filterCat(cat) {
+        function showAllStore() {
+            currentFilter = 'الكل';
+            var buttons = document.querySelectorAll('.cat-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-all').classList.add('active');
+            refreshStoreUI();
+        }
+
+        function filterCat(cat, e) {
             currentFilter = cat;
             var buttons = document.querySelectorAll('.cat-btn');
-            for(var i=0; i<buttons.length; i++) {
-                buttons[i].classList.remove('active');
+            buttons.forEach(b => b.classList.remove('active'));
+            if (e && e.currentTarget) {
+                e.currentTarget.classList.add('active');
             }
-            event.target.classList.add('active');
             refreshStoreUI();
         }
 
@@ -234,7 +234,6 @@ app.get('/', (req, res) => {
             var storeGrid = document.getElementById('store-grid');
             var adminGrid = document.getElementById('admin-grid');
             
-            // دمج المعروضات الثابتة مع المعروضات المضافة والمقبولة من الأدمن
             var displayItems = defaultItems.concat(approvedItems);
             var storeHTML = '';
 
@@ -251,7 +250,6 @@ app.get('/', (req, res) => {
             }
             storeGrid.innerHTML = storeHTML || '<p style="text-align:center; grid-column:1/-1; padding:20px;">لا توجد قطع معروضة في هذا القسم حالياً.</p>';
 
-            // بناء واجهة لوحة تحكم المسؤول للطلبات المعلقة لإتاحة القبول والرفض
             if (pendingItems.length === 0) {
                 adminGrid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:var(--text-muted); padding: 20px;">لا توجد سلع مضافة معلقة حالياً بانتظار المراجعة والقبول.</p>';
             } else {
@@ -285,7 +283,7 @@ app.get('/', (req, res) => {
             pendingItems.push(newItem);
             localStorage.setItem('mobitech_saved_pending', JSON.stringify(pendingItems));
             
-            alert('تم تحميل السلعة وحفظها بنجاح! ستظهر بالمتجر فور موافقة المسؤول عليها من لوحة التحكم.');
+            alert('تم تحميل السلعة بنجاح! افتح (لوحة المسؤول) بالأسفل لتجدها بانتظار قبولك وتفعيلها في المتجر العام.');
             document.getElementById('productForm').reset();
             document.getElementById('client-section').style.display = 'none';
             refreshStoreUI();
@@ -301,7 +299,6 @@ app.get('/', (req, res) => {
             refreshStoreUI();
         }
 
-        // تشغيل البناء الفوري للواجهة بمجرد فتح المنصة
         refreshStoreUI();
     </script>
 </body>
