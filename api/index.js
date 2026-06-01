@@ -3,6 +3,27 @@ const app = express();
 
 app.use(express.json());
 
+// مصفوفة لتخزين السلع المؤقتة (التي وافق عليها المسؤول أو الافتراضية)
+let approvedProducts = [
+    {
+        id: 1,
+        title: "كفرات هواتف ذكية (iPhone & Samsung)",
+        desc: "تشكيلة واسعة من الكفرات الحرارية والمقاومة للصدمات متوفرة لجميع الموديلات بجودة ووضوح عاليين.",
+        category: "قسم الكفرات",
+        img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=500&q=80"
+    },
+    {
+        id: 2,
+        title: "أكسسوارات ألعاب (PS5 & PSP)",
+        desc: "قبضات تحكم أصليّة، قطع غيار، حقائب تنقل، وأكسسوارات صيانة خاصة بمنصات الألعاب.",
+        category: "أكسسوارات ألعاب",
+        img: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=500&q=80"
+    }
+];
+
+// مصفوفة لتخزين طلبات الزبائن المنتظرة مراجعة المسؤول
+let pendingProducts = [];
+
 // واجهة الموقع الكاملة والمطورة لـ Mobitech
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -12,7 +33,7 @@ app.get('/', (req, res) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobitech | منصة موبيتك المتكاملة</title>
+    <title>Mobitech | المنصة الذكية المتكاملة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -48,116 +69,30 @@ app.get('/', (req, res) => {
         .hero h1 span { color: var(--accent-color); }
         .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 25px; }
         
-        .btn { padding: 10px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; border: none; cursor: pointer; transition: opacity 0.2s; }
+        .social-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .btn { padding: 12px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; border: none; cursor: pointer; transition: opacity 0.2s, transform 0.2s; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
         .btn-primary { background-color: var(--accent-color); color: #0b0f19; }
+        .btn-success { background-color: var(--success-color); color: white; }
+        .btn-danger { background-color: var(--danger-color); color: white; }
         .btn-whatsapp { background-color: #25d366; color: #fff; }
-        .btn:hover { opacity: 0.9; }
+        .btn-telegram { background-color: #0088cc; color: #fff; }
 
+        .section-container { max-width: 1200px; margin: 0 auto; padding: 20px 5%; }
         .section-title { text-align: center; font-size: 2rem; margin: 40px 0 20px; }
         .section-title::after { content: ''; display: block; width: 60px; height: 3px; background-color: var(--accent-color); margin: 10px auto 0; }
         
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 20px 5%; }
-        .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 20px; text-align: center; overflow: hidden; }
-        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
+        .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; background-color: #070a10; }
         .card h3 { margin-bottom: 10px; font-size: 1.3rem; }
-        .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; }
-        .badge { padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; background-color: rgba(56, 189, 248, 0.1); color: var(--accent-color); }
+        .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; flex-grow: 1; }
+        .badge { padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; background-color: rgba(56, 189, 248, 0.1); color: var(--accent-color); align-self: center; }
 
-        .frp-section { background-color: var(--card-bg); max-width: 600px; margin: 40px auto; padding: 30px; border-radius: 15px; border: 1px solid rgba(56, 189, 248, 0.2); }
+        .form-section { background-color: var(--card-bg); max-width: 600px; margin: 40px auto; padding: 30px; border-radius: 15px; border: 1px solid rgba(56, 189, 248, 0.1); }
         .form-group { margin-bottom: 20px; display: flex; flex-direction: column; text-align: right; }
         .form-group label { margin-bottom: 8px; font-weight: bold; color: var(--text-color); }
-        .form-group input { padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); background-color: var(--bg-color); color: #fff; font-size: 1rem; }
-        .form-group input:focus { border-color: var(--accent-color); outline: none; }
-        .note { font-size: 0.85rem; color: var(--danger-color); margin-top: 5px; }
-
-        footer { background-color: #070a10; padding: 30px 5%; text-align: center; margin-top: 40px; border-top: 1px solid rgba(255, 255, 255, 0.05); }
-    </style>
-</head>
-<body>
-
-    <nav>
-        <div class="logo"><i class="fas fa-mobile-alt"></i> Mobitech</div>
-        <ul class="nav-links">
-            <li><a href="#store">المتجر</a></li>
-            <li><a href="#frp">خدمة FRP</a></li>
-        </ul>
-    </nav>
-
-    <section class="hero">
-        <h1>منصة <span>Mobitech</span> الرقمية بإدارة أمجد هاد</h1>
-        <p>مرحباً بك في المنصة المعتمدة لصيانة الهواتف، الأجهزة الذكية، تأمين قطع الغيار والأكسسوارات الاحترافية.</p>
-        <a href="https://wa.me/96181157961" class="btn btn-whatsapp" target="_blank">
-            <i class="fab fa-whatsapp"></i> مراسلة أمجد عبر الواتساب
-        </a>
-    </section>
-
-    <section id="store">
-        <h2 class="section-title">متجر الأجهزة والأكسسوارات</h2>
-        <div class="grid-container">
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=500&q=80" alt="كفرات حماية">
-                <h3>كفرات هواتف ذكية (iPhone & Samsung)</h3>
-                <p>تشكيلة واسعة من الكفرات الحرارية والمقاومة للصدمات متوفرة لجميع الموديلات بجودة ووضوح عاليين.</p>
-                <span class="badge">قسم الكفرات</span>
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=500&q=80" alt="PS5">
-                <h3>أكسسوارات ألعاب (PS5 & PSP)</h3>
-                <p>قبضات تحكم أصليّة، قطع غيار، حقائب تنقل، وأكسسوارات صيانة خاصة بمنصات الألعاب.</p>
-                <span class="badge">أكسسوارات ألعاب</span>
-            </div>
-            <div class="card">
-                <img src="https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?auto=format&fit=crop&w=500&q=80" alt="صيانة شاشات">
-                <h3>قطع غيار وشاشات أصلية</h3>
-                <p>شاشات وبطاريات مكفولة ومفحوصة بدقة من خلال خبراء الصيانة لضمان الأداء الكامل.</p>
-                <span class="badge">قطع غيار</span>
-            </div>
-        </div>
-    </section>
-
-    <section id="frp" class="frp-section">
-        <h2 style="text-align: center; margin-bottom: 20px; color: var(--accent-color);">
-            <i class="fas fa-unlock-alt"></i> خدمة تخطي حساب جوجل (FRP)
-        </h2>
-        <p style="text-align: center; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px;">
-            نظراً لقوانين الأمان والحماية، يرجى ملء البيانات أدناه لتقديم طلب فك الحساب وإثبات ملكية الجهاز.
-        </p>
+        .form-group input, .form-group textarea, .form-group select { padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); background-color: var(--bg-color); color: #fff; font-size: 1rem; width: 100%; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--accent-color); outline: none; }
         
-        <form onsubmit="alert('تم إرسال طلب الـ FRP بنجاح للتأكد من الملكية والمراجعة!'); return false;">
-            <div class="form-group">
-                <label>اسم ونوع الهاتف بالكامل:</label>
-                <input type="text" placeholder="مثال: Samsung S24 Ultra" required>
-            </div>
-            <div class="form-group">
-                <label>اسم صاحب الهاتف الثلاثي:</label>
-                <input type="text" placeholder="إدخال الاسم الكامل" required>
-            </div>
-            <div class="form-group">
-                <label>رقم هاتف للتواصل:</label>
-                <input type="tel" placeholder="مثال: 961xxxxxxxx" required>
-            </div>
-            <div class="form-group">
-                <label>رابط صورة علبة الهاتف (لإثبات الملكية):</label>
-                <input type="url" placeholder="ضع رابط الصورة هنا" required>
-                <span class="note">* يجب إرفاق صورة العلبة واضحة للتأكد من أن الهاتف ليس مسروقاً.</span>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; border-radius: 8px;">
-                إرسال الطلب للمراجعة والتدقيق
-            </button>
-        </form>
-    </section>
-
-    <footer>
-        <p>© 2026 جميع الحقوق محفوظة لمنصة Mobitech | بإشراف المسؤول أمجد هاد</p>
-    </footer>
-
-</body>
-</html>
-    `);
-});
-
-app.get('/api', (req, res) => {
-    res.json({ message: "Welcome to Mobitech API Backend" });
-});
-
-module.exports = app;
+        .admin-panel { border: 2px dashed rgba(239
