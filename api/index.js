@@ -521,3 +521,10 @@ app.post('/api/products/action', (req, res) => {
 });
 
 module.exports = app;
+// قيام السيرفر بقراءة المنفذ المخصص من Vercel تلقائياً، أو استخدام المنفذ 3000 محلياً
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
