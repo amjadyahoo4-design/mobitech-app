@@ -5,6 +5,9 @@ app.use(express.json());
 
 // واجهة الموقع الكاملة (HTML + CSS)
 app.get('/', (req, res) => {
+    // السطر السحري الذي يخبر المتصفح أن هذه صفحة ويب وليس نص عادي
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    
     res.send(`
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -191,4 +194,34 @@ app.get('/', (req, res) => {
         </div>
     </div>
 
-    <h2 class="section-title">المعروض
+    <h2 class="section-title">المعروضات الأخيرة (قريباً على التطبيق)</h2>
+    <div class="grid-container">
+        <div class="card">
+            <i class="fas fa-mobile-screen"></i>
+            <h3>شاشة Samsung S24 Ultra</h3>
+            <p>شاشة أصلية فك وكالة، تدعم ريفريش ريت كامل ومتوافقة 100%.</p>
+            <span class="price-badge">متوفرة في المتجر</span>
+        </div>
+        <div class="card">
+            <i class="fas fa-battery-full"></i>
+            <h3>بطاريات ذات جودة عالية</h3>
+            <p>تشكيلة واسعة من البطاريات المكفولة لجميع موديلات iPhone و Samsung و Oppo.</p>
+            <span class="price-badge">طلب فوري</span>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 جميع الحقوق محفوظة لمنصة Mobitech</p>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">تم التأسيس كقاعدة صلبة للانطلاق قريباً نحو تطبيق الهاتف الذكي.</p>
+    </footer>
+
+</body>
+</html>
+    `);
+});
+
+app.get('/api', (req, res) => {
+    res.json({ message: "Welcome to Mobitech API Backend" });
+});
+
+module.exports = app;
