@@ -3,7 +3,7 @@ const app = express();
 
 app.use(express.json());
 
-// واجهة الموقع الكاملة (HTML + CSS + JS)
+// واجهة الموقع الكاملة (HTML + CSS)
 app.get('/', (req, res) => {
     res.send(`
 <!DOCTYPE html>
@@ -33,7 +33,6 @@ app.get('/', (req, res) => {
             color: var(--text-color);
             line-height: 1.6;
         }
-        /* Navbar */
         nav {
             background-color: rgba(21, 28, 44, 0.8);
             backdrop-filter: blur(10px);
@@ -54,7 +53,6 @@ app.get('/', (req, res) => {
             align-items: center;
             gap: 10px;
         }
-        /* Hero Section */
         .hero {
             padding: 80px 5% 60px;
             text-align: center;
@@ -75,7 +73,6 @@ app.get('/', (req, res) => {
             max-width: 600px;
             margin: 0 auto 30px;
         }
-        /* Services Section */
         .section-title {
             text-align: center;
             font-size: 2rem;
@@ -122,7 +119,6 @@ app.get('/', (req, res) => {
             color: var(--text-muted);
             font-size: 0.95rem;
         }
-        /* Marketplace Quick View */
         .price-badge {
             background-color: rgba(56, 189, 248, 0.2);
             color: var(--accent-color);
@@ -132,7 +128,6 @@ app.get('/', (req, res) => {
             display: inline-block;
             margin-top: 15px;
         }
-        /* Footer & Contact */
         footer {
             background-color: #070a10;
             padding: 40px 5%;
@@ -185,7 +180,7 @@ app.get('/', (req, res) => {
             <p>إصلاح أعطال البورد المعقدة، الشورت، ومشاكل خطوط الطاقة بأحدث الميكروسكوبات ومعدات اللحام.</p>
         </div>
         <div class="card">
-            <i class="fas fa-screen-users"></i>
+            <i class="fas fa-mobile-screen-button"></i>
             <h3>تبديل الشاشات والزجاج</h3>
             <p>تغيير الشاشات المتضررة بدقة عالية مع الحفاظ على كفاءة اللمس والألوان الأصلية للجهاز.</p>
         </div>
@@ -196,48 +191,4 @@ app.get('/', (req, res) => {
         </div>
     </div>
 
-    <h2 class="section-title">المعروضات الأخيرة (قريباً على التطبيق)</h2>
-    <div class="grid-container">
-        <div class="card">
-            <i class="fas fa-mobile-screen"></i>
-            <h3>شاشة Samsung S24 Ultra</h3>
-            <p>شاشة أصلية فك وكالة، تدعم ريفريش ريت كامل ومتوافقة 100%.</p>
-            <span class="price-badge">متوفرة في المتجر</span>
-        </div>
-        <div class="card">
-            <i class="fas fa-battery-full"></i>
-            <h3>بطاريات ذات جودة عالية</h3>
-            <p>تشكيلة واسعة من البطاريات المكفولة لجميع موديلات iPhone و Samsung و Oppo.</p>
-            <span class="price-badge">طلب فوري</span>
-        </div>
-    </div>
-
-    <footer>
-        <p>© 2026 جميع الحقوق محفوظة لمنصة Mobitech</p>
-        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 10px;">تم التأسيس كقاعدة صلبة للانطلاق قريباً نحو تطبيق الهاتف الذكي.</p>
-    </footer>
-
-</body>
-</html>
-    `);
-});
-
-// مسارات الـ API الفرعية الخاصة بك تتركها بالأسفل كما هي
-app.get('/api', (req, res) => {
-    res.json({ message: "Welcome to Mobitech API Backend" });
-});
-
-module.exports = app;
-    ```
-
----
-
-### 🚀 الخطوة الثانية: الحفظ والمشاهدة
-
-1. بعد لصق الكود أعلاه، انزل لأسفل الصفحة واضغط على **Commit changes**.
-2. انتظر دقيقة واحدة حتى يقوم Vercel ببناء المشروع تلقائياً.
-3. افتح رابط موقعك الآن: `https://mobitech-app.vercel.app`
-
-ستنبهر بالنتيجة! ستظهر لك صفحة ويب كاملة، ممتازة للعرض على الهاتف، ومجهزة بالكامل. هذه الواجهة هي "الواجهة المؤقتة الس سريعة"، وبنفس الوقت كود الـ Backend الخاص بك بالأسفل محتفظ بالـ API، لنبدأ لاحقاً بربطه بتطبيق الهاتف خطوة بخطوة عندما تكون مستعداً! 
-
-جرب التعديل وأخبرني عندما يفتح معك بشكل كامل لتراه بنفسك!
+    <h2 class="section-title">المعروض
