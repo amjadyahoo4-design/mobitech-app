@@ -48,7 +48,6 @@ app.get('/', (req, res) => {
         .hero h1 span { color: var(--accent-color); }
         .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 25px; }
         
-        /* أزرار التواصل العصرية السريعة */
         .social-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
         .btn { padding: 12px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; border: none; cursor: pointer; transition: opacity 0.2s, transform 0.2s; }
         .btn:hover { opacity: 0.9; transform: translateY(-2px); }
@@ -124,4 +123,24 @@ app.get('/', (req, res) => {
             <div class="card">
                 <img src="https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?auto=format&fit=crop&w=500&q=80" alt="صيانة شاشات">
                 <h3>قطع غيار وشاشات أصلية</h3>
-                <p
+                <p>شاشات وبطاريات مكفولة ومفحوصة بدقة من خلال خبراء الصيانة لضمان الأداء الكامل.</p>
+                <span class="badge">قطع غيار</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="client-section" class="form-section">
+        <h2 style="text-align: center; margin-bottom: 20px; color: var(--accent-color);">
+            <i class="fas fa-plus-circle"></i> إضافة سلعة للبيع (زبون)
+        </h2>
+        <form id="productForm" onsubmit="clientSubmitProduct(event)">
+            <div class="form-group">
+                <label>اسم ومواصفات السلعة بالكامل:</label>
+                <input type="text" id="pTitle" placeholder="مثال: Samsung S24 Ultra 512GB" required>
+            </div>
+            <div class="form-group">
+                <label>تصنيف القسم:</label>
+                <select id="pCategory">
+                    <option value="قطع غيار">قطع غيار وشاشات</option>
+                    <option value="قسم الكفرات">كفرات وأكسسوارات</option>
+                    <option value="أكسسوارات ألعاب">ألعاب وجيمين
