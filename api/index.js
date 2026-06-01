@@ -5,9 +5,6 @@ app.use(express.json());
 
 // واجهة الموقع الكاملة (HTML + CSS)
 app.get('/', (req, res) => {
-    // السطر السحري الذي يخبر المتصفح أن هذه صفحة ويب وليس نص عادي
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    
     res.send(`
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
