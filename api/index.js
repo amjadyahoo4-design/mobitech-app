@@ -11,6 +11,9 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+app.get('/', (req, res) => {
+    res.send('Mobitech API is running successfully!');
+});
 
 app.get('/api', (req, res) => {
     res.status(200).json({ 
