@@ -1,102 +1,271 @@
-const express = require('express');
-const app = express();
-
-app.use(express.json());
-
-// مصفوفة المنتجات الأساسية مخزنة الآن على السيرفر لضمان ظهورها لجميع الزوار دائماً
-let serverProducts = [
-    { id: "d1", title: "شاشات بديلة مفحوصة (OLED & LCD)", category: "شاشات", desc: "شاشات وبطاريات عالية الجودة مع الضمان الكامل للأداء واللمس المتعدد.", img: "https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?auto=format&fit=crop&w=500&q=80", status: "approved" },
-    { id: "d2", title: "سبيكر مضخم صوت نقي للأجهزة الذكية", category: "سبيكرات", desc: "سبيكرات صيانة داخلية وخارجية أصلية لجميع فئات الهواتف المحمولة.", img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=500&q=80", status: "approved" },
-    { id: "d3", title: "كفرات حماية حرارية ومقاومة للصدمات", category: "كفرات", desc: "تشكيلة كفرات متكاملة ذات مظهر عصري أنيق وحماية قصوى لهاتفك.", img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?auto=format&fit=crop&w=500&q=80", status: "approved" }
-];
-
-// واجهة الموقع الكاملة والمتكاملة لمنصة Mobitech المحدثة
 app.get('/', (req, res) => {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.send(`
-<!DOCTYPE html>
+    res.send(`<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobitech | المنصة الذكية المتكاملة (نسخة محسنة)</title>
+    <title>Mobitech | المنصة الذكية</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-color: #0b0f19;
-            --card-bg: #151c2c;
-            --accent-color: #38bdf8;
-            --success-color: #10b981;
-            --danger-color: #ef4444;
-            --text-color: #f3f4f6;
-            --text-muted: #9ca3af;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0b0f19; color: #f3f4f6; font-family: 'Tajawal', sans-serif; }
+        nav { background: #151c2c; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; }
+        .logo { color: #38bdf8; font-size: 1.5rem; font-weight: bold; }
+        .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+        .nav-links a { color: white; text-decoration: none; cursor: pointer; }
+        .btn { padding: 0.5rem 1.2rem; border-radius: 2rem; border: none; cursor: pointer; font-weight: bold; }
+        .btn-client { background: #1e293b; color: white; }
+        .btn-admin { background: #f59e0b; color: black; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 1.5rem; padding: 2rem 5%; }
+        .card { background: #151c2c; border-radius: 1rem; padding: 1rem; text-align: center; }
+        .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 0.5rem; }
+        .dynamic-section { display: none; background: #151c2c; margin: 2rem auto; padding: 1.5rem; border-radius: 1rem; max-width: 600px; }
+        input, select, textarea { width: 100%; padding: 0.5rem; margin-top: 0.3rem; border-radius: 0.5rem; background: #0b0f19; color: white; border: 1px solid #334155; }
+        button { margin-top: 0.5rem; }
+        .badge { background: #38bdf820; color: #38bdf8; padding: 0.2rem 0.8rem; border-radius: 1rem; font-size: 0.8rem; display: inline-block; }
+        .admin-actions { display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.8rem; }
+    </style>
+</head>
+<body>
+<nav>
+    <div class="logo"><i class="fas fa-mobile-alt"></i> Mobitech</div>
+    <ul class="nav-links">
+        <li><a onclick="showAll()">المتجر</a></li>
+        <li><a onclick="toggle('frpSection')">خدمة FRP</a></li>
+        <li><a onclick="toggle('clientSection')">إضافة سلعة</a></li>
+        <li><a onclick="toggle('adminSection')">لوحة المسؤول</a></li>
+    </ul>
+</nav>
+
+<div style="text-align:center; padding: 2rem 1rem 0;">
+    <h1>منصة <span style="color:#38bdf8">Mobitech</span> الذكية</h1>
+    <p>أحدث قطع الغيار وخدمات FRP الفورية</p>
+    <div style="margin:1rem;">
+        <a href="https://wa.me/96181157961" class="btn" style="background:#25d366; color:white; display:inline-flex; gap:0.5rem;">واتساب</a>
+        <a href="https://t.me/Mobitech_Support" class="btn" style="background:#0284c7; color:white; display:inline-flex; gap:0.5rem;">تليجرام</a>
+    </div>
+</div>
+
+<!-- قسم FRP -->
+<div id="frpSection" class="dynamic-section" style="text-align:center;">
+    <h3>🔓 خدمة FRP (تخطي حساب جوجل)</h3>
+    <p>حلول فورية لجميع الأجهزة - سامسونج، شاومي، أوبو</p>
+    <a href="https://wa.me/96181157961?text=أريد%20خدمة%20FRP" class="btn" style="background:#38bdf8;">اطلب الخدمة الآن</a>
+</div>
+
+<!-- المتجر -->
+<div class="grid-container" id="storeGrid"></div>
+
+<!-- إضافة سلعة -->
+<div id="clientSection" class="dynamic-section">
+    <h3>➕ إضافة سلعة للبيع</h3>
+    <form id="productForm">
+        <label>اسم السلعة:</label>
+        <input type="text" id="title" required>
+        <label>القسم:</label>
+        <select id="cat"><option>شاشات</option><option>سبيكرات</option><option>كفرات</option></select>
+        <label>الوصف والسعر:</label>
+        <textarea id="desc" rows="2"></textarea>
+        <label>رابط الصورة:</label>
+        <input type="url" id="img" required>
+        <button type="submit" class="btn btn-client" style="width:100%; margin-top:1rem;">إرسال للمراجعة</button>
+    </form>
+</div>
+
+<!-- لوحة المسؤول -->
+<div id="adminSection" class="dynamic-section" style="max-width:900px;">
+    <h3 style="color:#f59e0b;">👑 لوحة المسؤول</h3>
+    <div id="pendingList"></div>
+    <hr style="margin:1rem 0;">
+    <div id="approvedList"></div>
+</div>
+
+<script>
+    // ---------- البيانات الأولية ----------
+    let defaultItems = [
+        { id: "d1", title: "شاشة سامسونج A52", category: "شاشات", desc: "OLED أصلية 120Hz", img: "https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?w=400" },
+        { id: "d2", title: "سبيكر ايفون 12", category: "سبيكرات", desc: "جودة عالية", img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400" },
+        { id: "d3", title: "كفر حماية شفاف", category: "كفرات", desc: "سيليكون مضاد للصدمات", img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400" }
+    ];
+
+    let approved = [];   // المنتجات المعروضة في المتجر
+    let pending = [];    // منتجات بانتظار الموافقة
+
+    // تحميل من localStorage
+    function load() {
+        let savedApproved = localStorage.getItem('mobitech_approved');
+        let savedPending = localStorage.getItem('mobitech_pending');
+        if (savedApproved) approved = JSON.parse(savedApproved);
+        if (savedPending) pending = JSON.parse(savedPending);
+        // دمج المنتجات الافتراضية إذا لم تكن موجودة
+        if (approved.length === 0) {
+            approved = [...defaultItems];
+            save();
+        } else {
+            // تأكد من وجود المنتجات الافتراضية
+            for (let def of defaultItems) {
+                if (!approved.some(a => a.id === def.id)) approved.push(def);
+            }
+            save();
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
-        
-        nav {
-            background-color: rgba(21, 28, 44, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky; top: 0; z-index: 1000;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+        renderAll();
+    }
+
+    function save() {
+        localStorage.setItem('mobitech_approved', JSON.stringify(approved));
+        localStorage.setItem('mobitech_pending', JSON.stringify(pending));
+    }
+
+    // عرض المتجر
+    function renderStore() {
+        let grid = document.getElementById('storeGrid');
+        if (!grid) return;
+        if (approved.length === 0) {
+            grid.innerHTML = '<p style="grid-column:1/-1; text-align:center;">لا توجد منتجات حالياً</p>';
+            return;
         }
-        .logo { font-size: 24px; font-weight: 900; color: var(--accent-color); display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .nav-links { display: flex; gap: 20px; list-style: none; }
-        .nav-links a { color: var(--text-color); text-decoration: none; font-weight: 500; cursor: pointer; }
-        .nav-links a:hover { color: var(--accent-color); }
+        let html = '';
+        for (let item of approved) {
+            html += \`
+                <div class="card">
+                    <img src="\${item.img}" onerror="this.src='https://placehold.co/400x200?text=No+Image'">
+                    <h3>\${escapeHtml(item.title)}</h3>
+                    <p>\${escapeHtml(item.desc)}</p>
+                    <span class="badge">\${item.category}</span>
+                </div>
+            \`;
+        }
+        grid.innerHTML = html;
+    }
 
-        .hero { padding: 50px 5% 30px; text-align: center; background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 60%); }
-        .hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 10px; }
-        .hero h1 span { color: var(--accent-color); }
-        .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 20px; }
+    // عرض لوحة المسؤول
+    function renderAdmin() {
+        let pendingDiv = document.getElementById('pendingList');
+        let approvedDiv = document.getElementById('approvedList');
+        if (!pendingDiv || !approvedDiv) return;
         
-        .interactive-modes { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); max-width: 500px; margin: 0 auto 25px; }
-        .mode-title { width: 100%; text-align: center; font-size: 0.95rem; color: var(--accent-color); margin-bottom: 10px; display: block; }
+        if (pending.length === 0) {
+            pendingDiv.innerHTML = '<p>⚠️ لا توجد طلبات معلقة</p>';
+        } else {
+            let pendHtml = '<h4>⏳ طلبات معلقة</h4><div class="grid-container" style="padding:0;">';
+            for (let i=0; i<pending.length; i++) {
+                let p = pending[i];
+                pendHtml += \`
+                    <div class="card">
+                        <img src="\${p.img}" onerror="this.src='https://placehold.co/400x200'">
+                        <h3>\${escapeHtml(p.title)}</h3>
+                        <p>\${escapeHtml(p.desc)}</p>
+                        <span class="badge">\${p.category}</span>
+                        <div class="admin-actions">
+                            <button class="btn" style="background:#10b981;" onclick="acceptItem('\${p.id}')">قبول</button>
+                            <button class="btn" style="background:#ef4444;" onclick="rejectItem('\${p.id}')">رفض</button>
+                        </div>
+                    </div>
+                \`;
+            }
+            pendHtml += '</div>';
+            pendingDiv.innerHTML = pendHtml;
+        }
 
-        .btn { padding: 12px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; border: none; cursor: pointer; transition: opacity 0.2s, transform 0.2s; font-size: 1rem; }
-        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
-        
-        .btn-client { background-color: #1e293b; color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 20px; }
-        .btn-admin { background-color: #f59e0b; color: #0b0f19; border-radius: 8px; padding: 10px 20px; }
-        
-        .social-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 35px; flex-wrap: wrap; }
-        .btn-whatsapp { background-color: #25d366; color: #fff; border-radius: 10px; width: 45%; max-width: 220px; justify-content: center; }
-        .btn-telegram { background-color: #0284c7; color: #fff; border-radius: 10px; width: 45%; max-width: 220px; justify-content: center; }
+        if (approved.length === 0) {
+            approvedDiv.innerHTML = '<p>✅ لا توجد منتجات مقبولة بعد</p>';
+        } else {
+            let appHtml = '<h4>✅ المنتجات المعروضة في المتجر</h4><div class="grid-container" style="padding:0;">';
+            for (let item of approved) {
+                appHtml += \`
+                    <div class="card">
+                        <img src="\${item.img}" onerror="this.src='https://placehold.co/400x200'">
+                        <h3>\${escapeHtml(item.title)}</h3>
+                        <p>\${escapeHtml(item.desc)}</p>
+                        <span class="badge">\${item.category}</span>
+                        <button class="btn" style="background:#ef4444; margin-top:0.5rem;" onclick="deleteItem('\${item.id}')">حذف من المتجر</button>
+                    </div>
+                \`;
+            }
+            appHtml += '</div>';
+            approvedDiv.innerHTML = appHtml;
+        }
+    }
 
-        .categories-title { font-size: 1.3rem; margin: 30px 0 15px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .categories-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; padding: 0 5%; }
-        .cat-btn { padding: 8px 18px; border-radius: 25px; border: none; background: #1e293b; color: var(--text-color); cursor: pointer; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; transition: background 0.2s; }
-        .cat-btn.active { background: #2563eb; color: #fff; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+    function renderAll() {
+        renderStore();
+        renderAdmin();
+    }
 
-        .search-bar { display: flex; justify-content: center; margin: 20px auto 10px; max-width: 500px; padding: 0 5%; }
-        .search-bar input { width: 100%; padding: 12px 20px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.1); background: #1e293b; color: white; font-size: 1rem; }
+    // دوال الإدارة
+    window.acceptItem = function(id) {
+        let itemIndex = pending.findIndex(p => p.id === id);
+        if (itemIndex !== -1) {
+            approved.push(pending[itemIndex]);
+            pending.splice(itemIndex, 1);
+            save();
+            renderAll();
+            alert('✅ تم قبول السلعة ونشرها في المتجر');
+        }
+    };
 
-        .stats-row { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 10px auto 20px; }
-        .stat-card { background: #151c2c; padding: 6px 15px; border-radius: 30px; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.05); }
+    window.rejectItem = function(id) {
+        if (confirm('هل تريد رفض هذه السلعة؟')) {
+            pending = pending.filter(p => p.id !== id);
+            save();
+            renderAll();
+            alert('تم رفض السلعة');
+        }
+    };
 
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 20px 5%; }
-        .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; position: relative; }
-        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; background: #0f1420; }
-        .card h3 { margin-bottom: 10px; font-size: 1.25rem; color: #fff; }
-        .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; flex-grow: 1; }
-        .badge { padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; background-color: rgba(56, 189, 248, 0.1); color: var(--accent-color); align-self: center; }
+    window.deleteItem = function(id) {
+        if (confirm('حذف هذا المنتج نهائياً من المتجر؟')) {
+            approved = approved.filter(item => item.id !== id);
+            save();
+            renderAll();
+            alert('تم الحذف');
+        }
+    };
 
-        .dynamic-section { background-color: var(--card-bg); max-width: 650px; margin: 30px auto; padding: 25px; border-radius: 15px; border: 1px solid rgba(56, 189, 248, 0.2); display: none; }
-        .form-group { margin-bottom: 18px; display: flex; flex-direction: column; text-align: right; }
-        .form-group label { margin-bottom: 8px; font-weight: bold; color: var(--text-color); font-size: 0.95rem; }
-        .form-group input, .form-group textarea, .form-group select { padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); background-color: var(--bg-color); color: #fff; font-size: 1rem; width: 100%; }
-        
-        .btn-submit { background-color: var(--accent-color); color: #0b0f19; font-weight: bold; width: 100%; justify-content: center; border-radius: 8px; padding: 12px; margin-top: 10px; }
-        .btn-success { background-color: var(--success-color); color: white; padding: 6px 15px; font-size: 0.85rem; border-radius: 5px; border: none; cursor: pointer; }
-        .btn-danger { background-color: var(--danger-color); color: white; padding: 6px 15px; font-size: 0.85rem; border-radius: 5px; border: none; cursor: pointer; }
-        .admin-actions { display: flex; gap: 10px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
+    // إضافة منتج من العميل
+    document.getElementById('productForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        let newItem = {
+            id: Date.now() + '-' + Math.random(),
+            title: document.getElementById('title').value,
+            category: document.getElementById('cat').value,
+            desc: document.getElementById('desc').value || 'لا يوجد وصف',
+            img: document.getElementById('img').value
+        };
+        pending.push(newItem);
+        save();
+        renderAll();
+        alert('تم إرسال السلعة للمسؤول للمراجعة');
+        this.reset();
+        toggle('clientSection');
+    });
 
-        .frp-box { background: linear-gradient(135deg, #1e1b4b, #151c2c); border: 1px solid rgba(139, 92, 246, 0.3); padding: 20px; border-radius: 12px; text-align: center; }
-        .frp-status { display: inline-block; padding: 5px 15px; background: rgba(16, 185, 129, 0.2); color: #34d399; border-radius: 20px; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem; }
+    // دوال مساعدة
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
 
-        .toast-notify { position: fixed; bottom
+    window.toggle = function(id) {
+        let el = document.getElementById(id);
+        if (el.style.display === 'block') el.style.display = 'none';
+        else el.style.display = 'block';
+    };
+
+    window.showAll = function() {
+        document.getElementById('storeGrid').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // بدء التشغيل
+    load();
+</script>
+</body>
+</html>`);
+});
