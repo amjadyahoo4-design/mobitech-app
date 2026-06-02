@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobitech | المنصة الذكية المتكاملة</title>
+    <title>Mobitech | المنصة الاحترافية</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -17,764 +17,644 @@
             --text-muted: #9ca3af;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; padding-bottom: 100px; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 80px; overflow-x: hidden; }
         
+        /* الهيدر العلوي المخصص لاسم المتجر لوحده وبشكل بارز */
+        .main-header {
+            text-align: center;
+            padding: 20px 0 10px;
+            background: linear-gradient(to bottom, #111827, var(--bg-color));
+        }
+        .main-header h1 { font-size: 3rem; font-weight: 900; color: var(--accent-color); letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .main-header p { font-size: 1rem; color: var(--text-muted); margin-top: 5px; }
+
+        /* شريط التنقل المتناسق */
         nav {
-            background-color: rgba(21, 28, 44, 0.8);
+            background-color: rgba(21, 28, 44, 0.85);
             backdrop-filter: blur(10px);
-            padding: 15px 5%;
+            padding: 12px 5%;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             position: sticky; top: 0; z-index: 1000;
             border-bottom: 1px solid rgba(56, 189, 248, 0.1);
         }
-        .logo { font-size: 24px; font-weight: 900; color: var(--accent-color); display: flex; align-items: center; gap: 10px; text-decoration: none; }
-        .nav-links { display: flex; gap: 20px; list-style: none; align-items: center; }
-        .nav-links a { color: var(--text-color); text-decoration: none; font-weight: 500; cursor: pointer; }
-        .nav-links a:hover { color: var(--accent-color); }
+        .nav-container { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-links { display: flex; gap: 25px; list-style: none; align-items: center; }
+        .nav-links a { color: var(--text-color); text-decoration: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent-color); }
         
-        .user-badge { background: #1e293b; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; border: 1px solid var(--accent-color); color: var(--accent-color); display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .user-controls { display: flex; align-items: center; gap: 15px; }
+        .user-badge { background: #1e293b; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; border: 1px solid var(--accent-color); color: var(--accent-color); font-weight: bold; display: flex; align-items: center; gap: 6px; }
+        .btn-logout { background: transparent; border: none; color: var(--danger-color); cursor: pointer; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; gap: 4px; }
 
-        .hero { padding: 50px 5% 30px; text-align: center; background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 60%); }
-        .hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; }
-        .hero h1 span { color: var(--accent-color); }
-        .hero p { font-size: 1.35rem; color: #e5e7eb; font-weight: 700; max-width: 800px; margin: 0 auto 25px; line-height: 1.8; text-shadow: 0 2px 4px rgba(0,0,0,0.4); }
-        
-        .interactive-modes { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); max-width: 500px; margin: 0 auto 25px; }
-        .mode-title { width: 100%; text-align: center; font-size: 0.95rem; color: var(--accent-color); margin-bottom: 10px; display: block; }
+        /* القائمة الجانبية المخصصة لإضافة مادة (Sidebar) */
+        .sidebar {
+            position: fixed; top: 0; left: -400px; width: 380px; height: 100%;
+            background-color: var(--card-bg); z-index: 3000; padding: 30px 25px;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.7); transition: left 0.4s ease;
+            overflow-y: auto; border-right: 2px solid var(--accent-color);
+        }
+        .sidebar.open { left: 0; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
+        .sidebar-close { background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
 
-        .btn { padding: 12px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; border: none; cursor: pointer; transition: opacity 0.2s, transform 0.2s; font-size: 1rem; }
-        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        /* تصميم الكروت والمعروضات */
+        .hero { padding: 30px 5% 15px; text-align: center; }
+        .hero p { font-size: 1.2rem; color: #e5e7eb; max-width: 600px; margin: 0 auto; }
         
-        .btn-client { background-color: #1e293b; color: #fff; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 20px; }
-        .btn-admin { background-color: #f59e0b; color: #0b0f19; border-radius: 8px; padding: 10px 20px; }
-        
-        .social-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 35px; flex-wrap: wrap; }
-        .btn-whatsapp { background-color: #25d366; color: #fff; border-radius: 10px; width: 45%; max-width: 220px; justify-content: center; }
-        .btn-telegram { background-color: #0284c7; color: #fff; border-radius: 10px; width: 45%; max-width: 220px; justify-content: center; }
-
-        .categories-title { font-size: 1.3rem; margin: 30px 0 15px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .categories-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; padding: 0 5%; }
-        .cat-btn { padding: 8px 18px; border-radius: 25px; border: none; background: #1e293b; color: var(--text-color); cursor: pointer; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; transition: background 0.2s; }
+        .categories-bar { display: flex; justify-content: center; gap: 10px; margin: 25px 0; flex-wrap: wrap; padding: 0 5%; }
+        .cat-btn { padding: 8px 18px; border-radius: 25px; border: none; background: #1e293b; color: var(--text-color); cursor: pointer; font-weight: bold; font-size: 0.9rem; }
         .cat-btn.active { background: #2563eb; color: #fff; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
 
-        .search-bar { display: flex; justify-content: center; margin: 20px auto 10px; max-width: 500px; padding: 0 5%; }
-        .search-bar input { width: 100%; padding: 12px 20px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.1); background: #1e293b; color: white; font-size: 1rem; }
+        .search-bar { display: flex; justify-content: center; margin: 10px auto; max-width: 500px; padding: 0 5%; }
+        .search-bar input { width: 100%; padding: 12px 20px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.1); background: #1e293b; color: white; font-size: 1rem; text-align: center; }
 
-        .stats-row { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 10px auto 20px; }
-        .stat-card { background: #151c2c; padding: 6px 15px; border-radius: 30px; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.05); }
-
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 25px; padding: 20px 5%; }
-        .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 20px 5%; max-width: 1300px; margin: 0 auto; }
+        .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 20px; text-align: center; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .card-img-holder { width: 100%; height: 200px; border-radius: 10px; margin-bottom: 15px; background: #090d16; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .card-img-holder img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .price-tag { color: var(--success-color); font-size: 1.4rem; font-weight: 900; margin: 8px 0; display: block; }
         
-        .card-img-holder { width: 100%; height: 210px; border-radius: 10px; margin-bottom: 15px; background: #090d16; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 5px; border: 1px solid rgba(255,255,255,0.03); }
-        .card-img-holder img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 6px; }
+        .quantity-control { display: flex; align-items: center; justify-content: center; gap: 15px; background: rgba(0,0,0,0.25); padding: 6px; border-radius: 10px; margin-top: auto; }
+        .qty-btn { width: 32px; height: 32px; border-radius: 6px; border: none; background: #2563eb; color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
         
-        .card h3 { margin-bottom: 8px; font-size: 1.25rem; color: #fff; font-weight: 700; min-height: 40px; display: flex; align-items: center; justify-content: center; }
-        .price-tag { color: var(--success-color); font-size: 1.4rem; font-weight: 900; margin-bottom: 12px; display: block; }
-        .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; flex-grow: 1; text-align: right; }
-        .badge { padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; background-color: rgba(56, 189, 248, 0.1); color: var(--accent-color); align-self: center; margin-bottom: 15px; }
-
-        .quantity-control-wrapper { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; margin-top: auto; }
-        .quantity-control { display: flex; align-items: center; justify-content: center; gap: 15px; background: rgba(0,0,0,0.25); padding: 8px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.02); }
-        .qty-btn { width: 34px; height: 34px; border-radius: 8px; border: none; background: #2563eb; color: white; font-size: 1.3rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .qty-number { font-size: 1.2rem; font-weight: 900; width: 40px; text-align: center; color: #fff; }
-
-        .dynamic-section { background-color: var(--card-bg); max-width: 650px; margin: 30px auto; padding: 25px; border-radius: 15px; border: 1px solid rgba(56, 189, 248, 0.2); display: none; }
-        .form-group { margin-bottom: 18px; display: flex; flex-direction: column; text-align: right; }
-        .form-group label { margin-bottom: 8px; font-weight: bold; color: var(--text-color); font-size: 0.95rem; }
-        .form-group input, .form-group textarea, .form-group select { padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); background-color: var(--bg-color); color: #fff; font-size: 1rem; width: 100%; }
-        
-        .btn-submit { background-color: var(--accent-color); color: #0b0f19; font-weight: bold; width: 100%; justify-content: center; border-radius: 8px; padding: 12px; margin-top: 10px; }
-        .btn-success { background-color: var(--success-color); color: white; padding: 6px 15px; font-size: 0.85rem; border-radius: 5px; border: none; cursor: pointer; }
-        .btn-danger { background-color: var(--danger-color); color: white; padding: 6px 15px; font-size: 0.85rem; border-radius: 5px; border: none; cursor: pointer; }
-        .admin-actions { display: flex; gap: 10px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
-
-        .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; border-top: 3px solid var(--accent-color); padding: 15px 5%; display: none; justify-content: space-between; align-items: center; z-index: 2500; box-shadow: 0 -5px 20px rgba(0,0,0,0.6); }
-        .cart-info { display: flex; align-items: center; gap: 15px; }
-        .cart-count { background: var(--accent-color); color: #0b0f19; font-weight: 900; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-        .cart-total { font-size: 1.3rem; font-weight: 900; color: var(--success-color); }
-
+        /* تصميم النوافذ المنبثقة والإنذارات */
         .global-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 4000; padding: 15px; }
-        .invoice-box { background: white; color: black; padding: 30px; border-radius: 12px; width: 100%; max-width: 550px; box-shadow: 0 4px 25px rgba(0,0,0,0.4); text-align: right; direction: rtl; }
-        .invoice-header { text-align: center; border-bottom: 2px dashed #ccc; padding-bottom: 15px; margin-bottom: 15px; }
-        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .invoice-table th, .invoice-table td { border-bottom: 1px solid #ddd; padding: 10px; text-align: right; }
-        .invoice-table th { background: #f4f4f4; font-weight: bold; }
+        .auth-card { background: var(--card-bg); border: 2px solid var(--accent-color); padding: 30px; border-radius: 15px; width: 95%; max-width: 450px; text-align: center; }
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; text-align: right; }
+        .form-group label { margin-bottom: 6px; font-weight: bold; font-size: 0.9rem; }
+        .form-group input, .form-group textarea, .form-group select { padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); background-color: #0b0f19; color: #fff; font-size: 1rem; width: 100%; }
 
-        /* ستايل لوحة تسجيل الدخول وطلب الحسابات المحدثة */
-        .auth-card { background: var(--card-bg); border: 2px solid var(--accent-color); padding: 30px; border-radius: 15px; width: 95%; max-width: 480px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .role-selector { display: flex; gap: 10px; margin-bottom: 15px; }
-        .role-option { flex: 1; padding: 12px; border-radius: 8px; background: #1e293b; color: var(--text-muted); cursor: pointer; font-weight: bold; border: 1px solid transparent; }
+        .role-selector { display: flex; gap: 10px; margin-top: 5px; }
+        .role-option { flex: 1; padding: 10px; border-radius: 8px; background: #1e293b; color: var(--text-muted); cursor: pointer; font-weight: bold; text-align: center; border: 1px solid transparent; }
         .role-option.active { background: rgba(56, 189, 248, 0.1); color: var(--accent-color); border-color: var(--accent-color); }
 
-        /* لوحة تنبيه الحظر أو الانتظار للمستخدمين غير المقبولين */
-        .lockscreen-view { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 10%; margin-top: 40px; background: rgba(21, 28, 44, 0.6); border-radius: 15px; border: 1px solid rgba(245, 158, 11, 0.3); }
-
-        .toast-notify { position: fixed; bottom: 95px; left: 50%; transform: translateX(-50%) scale(0.9); background: #1e293b; padding: 14px 28px; border-radius: 50px; display: flex; align-items: center; gap: 12px; z-index: 2000; border-right: 4px solid var(--accent-color); opacity: 0; transition: 0.2s; pointer-events: none; font-weight: bold; box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
-        .toast-notify.show { opacity: 1; transform: translateX(-50%) scale(1); }
-
-        footer { background-color: #070a10; padding: 25px 5%; text-align: center; margin-top: 50px; border-top: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-muted); font-size: 0.9rem; }
-        .image-preview { margin-top: 10px; text-align: center; display: none; }
-        .image-preview img { max-width: 100%; max-height: 150px; border-radius: 8px; border: 1px solid #38bdf8; }
+        /* شريط السلة العائم */
+        .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; border-top: 3px solid var(--accent-color); padding: 15px 5%; display: none; justify-content: space-between; align-items: center; z-index: 2500; }
         
-        .admin-user-table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: right; background: #1a2333; border-radius: 8px; overflow: hidden; }
-        .admin-user-table th, .admin-user-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .admin-user-table th { background: #243147; color: var(--accent-color); }
+        /* واجهة المسؤول المنفصلة تماماً خارج المتجر */
+        .admin-page { display: none; padding: 30px 5%; max-width: 1200px; margin: 0 auto; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: right; background: #151c2c; border-radius: 10px; overflow: hidden; }
+        .admin-table th, .admin-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .admin-table th { background: #1e293b; color: var(--accent-color); }
+
+        .toast-notify { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: #1e293b; padding: 12px 25px; border-radius: 30px; display: flex; align-items: center; gap: 10px; z-index: 5000; opacity: 0; transition: 0.3s; pointer-events: none; font-weight: bold; border-right: 4px solid var(--accent-color); }
+        .toast-notify.show { opacity: 1; }
+        .image-preview img { max-width: 100%; max-height: 120px; border-radius: 6px; margin-top: 10px; display: none; border: 1px solid var(--accent-color); }
     </style>
 </head>
 <body>
 
+    <header class="main-header" id="brandHeader">
+        <h1><i class="fas fa-bolt"></i> Mobitech</h1>
+        <p>المنصة المتقدمة لقطع غيار وصيانة الهواتف الذكية</p>
+    </header>
+
     <nav>
-        <a href="/" class="logo"><i class="fas fa-mobile-alt"></i> Mobitech</a>
-        <ul class="nav-links">
-            <li><a onclick="showAllStore()">المتجر</a></li>
-            <li><a onclick="toggleSection('client-section')">إضافة سلعة</a></li>
-            <li><a onclick="verifyAdminAccess('admin-panel')">لوحة المسؤول</a></li>
-            <li><div class="user-badge" id="navRoleBadge" onclick="openAuthModal()"><i class="fas fa-user-circle"></i> <span id="navRoleLabel">تسجيل دخول</span></div></li>
-        </ul>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a id="navStoreBtn" onclick="switchToTab('store')" class="active"><i class="fas fa-store"></i> المتجر الرئيسي</a></li>
+                <li><a id="navAddBtn" onclick="openSidebar()"><i class="fas fa-plus-circle"></i> إضافة سلعة</a></li>
+                <li><a id="navAdminBtn" onclick="openAdminGate()"><i class="fas fa-user-shield"></i> صفحة المسؤول</a></li>
+            </ul>
+            <div class="user-controls">
+                <div class="user-badge" id="userDisplayBadge"><i class="fas fa-user"></i> <span id="userLabel">زائر</span></div>
+                <button class="btn-logout" id="logoutBtn" onclick="logout()" style="display: none;"><i class="fas fa-sign-out-alt"></i> خروج</button>
+            </div>
+        </div>
     </nav>
 
-    <div class="lockscreen-view" id="lockscreenSection">
-        <i class="fas fa-hourglass-half" id="lockIcon" style="font-size: 4rem; color: #f59e0b; margin-bottom: 20px;"></i>
-        <h2 id="lockTitle" style="margin-bottom: 10px;">حسابك قيد المراجعة حالياً</h2>
-        <p id="lockDesc" style="color: var(--text-muted); max-width: 500px;">أهلاً بك، تم استلام بياناتك بنجاح. يرجى الانتظار حتى يقوم مسؤول المنصة بمراجعة حسابك وتفعيله لتتمكن من رؤية الأسعار وتأمين الطلبيات حياً.</p>
-        <button class="btn btn-client" style="margin-top: 20px;" onclick="logoutUser()">تسجيل خروج / حساب آخر</button>
-    </div>
-
-    <div id="mainWebsiteContent">
+    <div id="storeTabSection">
         <section class="hero">
-            <h1>منصة <span>Mobitech</span> الذكية</h1>
-            <p>المنصة المتكاملة لصيانة الهواتف وتأمين قطع الغيار والأكسسوارات</p>
-            
-            <div class="social-buttons">
-                <a href="https://wa.me/96181157961" class="btn btn-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> واتساب سريع</a>
-                <a href="https://t.me/+96181157961" class="btn btn-telegram" target="_blank"><i class="fab fa-telegram-plane"></i> تليجرام مباشر</a>
-            </div>
+            <p>تصفح حياً جميع المواد والقطع واطلب مباشرة عبر الواتساب والتليجرام</p>
         </section>
 
-        <h3 class="categories-title">📦 تصفح معروضات المتجر المتوفرة حياً</h3>
-        
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="🔍 ابحث عن منتج..." autocomplete="off">
+            <input type="text" id="searchInput" placeholder="🔍 ابحث عن شاشات، بطاريات، إكسسوارات...">
         </div>
 
         <div class="categories-bar">
-            <button id="btn-all" class="cat-btn active" onclick="filterCat('الكل', event)">⚡ الكل</button>
-            <button class="cat-btn" onclick="filterCat('شاشات', event)">📱 شاشات</button>
-            <button class="cat-btn" onclick="filterCat('أكسسوارات', event)">🔌 أكسسوارات</button>
-            <button class="cat-btn" onclick="filterCat('قطع', event)">⚙️ قطع</button>
-            <button class="cat-btn" onclick="filterCat('هواتف مستعملة', event)">📱 هواتف مستعملة</button>
+            <button class="cat-btn active" id="cat-all" onclick="filterCategory('الكل', event)">⚡ الكل</button>
+            <button class="cat-btn" onclick="filterCategory('شاشات', event)">📱 شاشات</button>
+            <button class="cat-btn" onclick="filterCategory('أكسسوارات', event)">🔌 أكسسوارات</button>
+            <button class="cat-btn" onclick="filterCategory('قطع', event)">⚙️ قطع غيار</button>
+            <button class="cat-btn" onclick="filterCategory('هواتف مستعملة', event)">📱 هواتف مستعملة</button>
         </div>
 
-        <div class="stats-row" id="statsRow"></div>
-
-        <section id="store-view">
-            <div class="grid-container" id="store-grid"></div>
-        </section>
+        <div class="grid-container" id="productsGrid"></div>
     </div>
 
-    <div id="authModal" class="global-modal">
-        <div class="auth-card">
-            <h3 style="color: white; margin-bottom: 10px;"><i class="fas fa-user-plus" style="color: var(--accent-color);"></i> انضم لمنصة مـوبـيـتـك</h3>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">سجل بياناتك الحقيقية ليتم تفعيل حسابك من قبل الإدارة</p>
-            
-            <form onsubmit="submitRegisterForm(event)">
-                <div class="form-group">
-                    <label>الاسم الكامل أو اسم المحل:</label>
-                    <input type="text" id="authName" placeholder="مثال: أحمد للتكنولوجيا أو متجر صيانة" required>
-                </div>
-                <div class="form-group">
-                    <label>رقم الهاتف المباشر (مع رمز الدولة):</label>
-                    <input type="tel" id="authPhone" placeholder="مثال: 96181157961" required>
-                </div>
-                <div class="form-group">
-                    <label>نوع الحساب المطلوب تفعيله:</label>
-                    <div class="role-selector">
-                        <div class="role-option active" id="roleOptClient" onclick="setAuthRoleOpt('زبون')">زبون عادي</div>
-                        <div class="role-option" id="roleOptTrader" onclick="setAuthRoleOpt('تاجر')">تاجر معتمد</div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-submit" style="border-radius: 8px;">إرسال طلب التسجيل للمسؤول</button>
-                <button type="button" onclick="closeAuthModal()" class="btn" style="background: transparent; color: var(--text-muted); margin-top: 10px; font-size: 0.9rem;">إغلاق التصفح المؤقت</button>
-            </form>
+    <div id="adminTabSection" class="admin-page">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <h2><i class="fas fa-lock"></i> لوحة الإدارة المستقلة (خارج المتجر)</h2>
+            <button class="cat-btn" onclick="switchToTab('store')" style="background: #4b5563;">العودة للمتجر</button>
         </div>
-    </div>
 
-    <div id="adminAuthModal" class="global-modal">
-        <div class="invoice-box" style="background: var(--card-bg); border: 1px solid var(--accent-color); max-width: 400px; text-align: center;">
-            <h3 style="margin-bottom: 15px; color: #f59e0b;"><i class="fas fa-lock"></i> تسجيل دخول المسؤول</h3>
-            <div class="form-group">
-                <label style="color: white; text-align: center; display: block;">أدخل كلمة مرور الإدارة:</label>
-                <input type="password" id="adminPasswordInput" placeholder="••••••••" style="text-align: center;">
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
-                <button onclick="submitAdminPassword()" class="btn btn-success" style="padding: 10px 20px;">دخول</button>
-                <button onclick="closeAdminModal()" class="btn btn-danger" style="padding: 10px 20px;">إلغاء</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="cart-bar" id="cartBar">
-        <div class="cart-info">
-            <div class="cart-count" id="cartCount">0</div>
-            <div>
-                <span style="font-size: 0.9rem; color: var(--text-muted); display:block;">سلة المشتريات الحية</span>
-                <span class="cart-total" id="cartTotal">الإجمالي: $0</span>
-            </div>
-        </div>
-        <button class="btn" style="background:#10b981; color:white; border-radius:8px;" onclick="openInvoice()"><i class="fas fa-file-invoice-dollar"></i> عرض الفاتورة وتأكيدها</button>
-    </div>
-
-    <div class="global-modal" id="invoiceModal">
-        <div class="invoice-box">
-            <div class="invoice-header">
-                <h2>Mobitech</h2>
-                <p>فاتورة مبيعات مبدئية وتأمين القطع</p>
-                <small id="invoiceDate"></small>
-            </div>
-            <table class="invoice-table">
-                <thead>
-                    <tr>
-                        <th>المادة والمنتج</th>
-                        <th>السعر الفردي</th>
-                        <th>الكمية المطلوبة</th>
-                        <th>الإجمالي الكلي</th>
-                    </tr>
-                </thead>
-                <tbody id="invoiceItems"></tbody>
-            </table>
-            <div style="text-align: left; font-size: 1.3rem; font-weight: bold; margin-bottom: 20px;">
-                صافي الإجمالي المطلوب: <span style="color:#10b981;" id="invoiceTotalSum"></span>
-            </div>
-            <div style="display:flex; gap:10px;">
-                <button onclick="window.print()" class="btn" style="background:#475569; color:white; flex:1; border-radius:6px; justify-content:center;"><i class="fas fa-print"></i> طباعة</button>
-                <button onclick="sendInvoiceWhatsApp()" class="btn" style="background:#25d366; color:white; flex:1; border-radius:6px; justify-content:center;"><i class="fab fa-whatsapp"></i> تأكيد بالواتساب</button>
-                <button onclick="closeInvoice()" class="btn" style="background:#ef4444; color:white; border-radius:6px;">إغلاق</button>
-            </div>
-        </div>
-    </div>
-
-    <section id="client-section" class="dynamic-section">
-        <h2 style="text-align: center; margin-bottom: 15px; color: var(--accent-color);"><i class="fas fa-plus-circle"></i> إضافة مادة وعرضها على الموقع</h2>
-        <form id="productForm" onsubmit="clientSubmitProduct(event)">
-            <div class="form-group">
-                <label>اسم ومواصفات السلعة بالكامل:</label>
-                <input type="text" id="pTitle" placeholder="مثال: شاشة Samsung S24 Ultra الأصلية" required>
-            </div>
-            <div class="form-group">
-                <label>تصنيف القسم التابع له:</label>
-                <select id="pCategory">
-                    <option value="شاشات">شاشات</option>
-                    <option value="أكسسوارات">أكسسوارات</option>
-                    <option value="قطع">قطع</option>
-                    <option value="هواتف مستعملة">هواتف مستعملة</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>السعر بالدولار الأمريكي ($):</label>
-                <input type="number" id="pPrice" placeholder="أدخل السعر المقترح بالدولار" min="0" required>
-            </div>
-            <div class="form-group">
-                <label>المواصفات الفنية وحالة السلعة:</label>
-                <textarea id="pDesc" rows="3" placeholder="اكتب التفاصيل بوضوح..." required></textarea>
-            </div>
-            <div class="form-group">
-                <label>تحميل صورة السلعة مباشرة (من ملفات هاتفك):</label>
-                <input type="file" id="pImgFile" accept="image/*" required>
-                <div class="image-preview" id="imagePreviewDiv">
-                    <img id="previewImg" alt="معاينة الصورة">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-submit">تحميل المادة وإرسالها لمراجعة المسؤول</button>
-        </form>
-    </section>
-
-    <section id="admin-panel" class="dynamic-section" style="max-width:1100px;">
-        <h2 style="text-align: center; margin-bottom: 25px; color: #f59e0b;"><i class="fas fa-user-shield"></i> لوحة تحكم المسؤول (الإدارة النشطة)</h2>
-        
-        <div style="margin-bottom: 35px; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.15);">
-            <h3 style="color: #38bdf8; margin-bottom: 10px;"><i class="fas fa-users-cog"></i> 👥 طلبات الحسابات المعلقة والمستخدمين حياً</h3>
+        <div style="background: var(--card-bg); padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px solid rgba(56,189,248,0.2);">
+            <h3 style="color: var(--accent-color); margin-bottom: 15px;"><i class="fas fa-users"></i> مراجعة طلبات الحسابات (زبائن وتجار)</h3>
             <div style="overflow-x: auto;">
-                <table class="admin-user-table">
+                <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>الاسم الكامل</th>
+                            <th>الاسم</th>
                             <th>رقم الهاتف</th>
-                            <th>الحساب المطلوب</th>
-                            <th>حالة الطلب</th>
-                            <th>الإجراء والقبول</th>
+                            <th>النوع المطلوبة</th>
+                            <th>الحالة الحالية</th>
+                            <th>الإجراءات</th>
                         </tr>
                     </thead>
-                    <tbody id="adminUsersTableBody"></tbody>
+                    <tbody id="adminUsersTable"></tbody>
                 </table>
             </div>
         </div>
 
         <div style="margin-bottom: 30px;">
-            <h3 style="border-bottom: 1px solid rgba(245, 158, 11, 0.3); padding-bottom: 5px; color: #f59e0b;">⏳ طلبات سلع معلقة بانتظار موافقتك</h3>
-            <div class="grid-container" id="admin-pending-grid" style="padding:15px 0 0 0;"></div>
+            <h3 style="color: #f59e0b; margin-bottom: 10px;">⏳ سلع بانتظار الموافقة والنشر</h3>
+            <div class="grid-container" id="adminPendingGrid" style="padding:0;"></div>
         </div>
         <div>
-            <h3 style="border-bottom: 1px solid rgba(16, 185, 129, 0.3); padding-bottom: 5px; color: var(--success-color);">✅ المنتجات النشطة على الموقع حالياً</h3>
-            <div class="grid-container" id="admin-approved-grid" style="padding:15px 0 0 0;"></div>
+            <h3 style="color: var(--success-color); margin-bottom: 10px;">✅ المواد المعروضة على المتجر</h3>
+            <div class="grid-container" id="adminApprovedGrid" style="padding:0;"></div>
         </div>
-    </section>
+    </div>
 
-    <footer>
-        <p>© 2026 جميع الحقوق محفوظة لمنصة Mobitech الرقمية المتكاملة</p>
-    </footer>
+    <div class="sidebar" id="addProductSidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-box-open" style="color:var(--accent-color)"></i> إضافة سلعة جديدة</h3>
+            <button class="sidebar-close" onclick="closeSidebar()">×</button>
+        </div>
+        <p id="sidebarRestrictionNotice" style="font-size:0.85rem; color:#f59e0b; margin-bottom:15px; display:none;"></p>
+        <form id="productForm" onsubmit="submitNewProduct(event)">
+            <div class="form-group">
+                <label>اسم المادة بالكامل:</label>
+                <input type="text" id="pTitle" placeholder="مثال: شاشة اوبو A38 أصلية" required>
+            </div>
+            <div class="form-group">
+                <label>القسم التابع له:</label>
+                <select id="pCategory">
+                    <option value="شاشات" id="opt-screens">شاشات</option>
+                    <option value="أكسسوارات" id="opt-acc">أكسسوارات</option>
+                    <option value="قطع" id="opt-parts">قطع غيار</option>
+                    <option value="هواتف مستعملة" id="opt-used">هواتف مستعملة</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>السعر المقترح ($):</label>
+                <input type="number" id="pPrice" placeholder="السعر بالدولار" required>
+            </div>
+            <div class="form-group">
+                <label>تفاصيل وحالة القطعة للزبون:</label>
+                <textarea id="pDesc" rows="3" placeholder="اكتب المواصفات بدقة..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label>صورة السلعة حية:</label>
+                <input type="file" id="pImg" accept="image/*" required>
+                <div class="image-preview"><img id="pImgPreview" alt="Preview"></div>
+            </div>
+            <button type="submit" class="cat-btn" style="width:100%; background:var(--accent-color); color:#0b0f19; font-size:1rem; padding:12px; border-radius:8px;">إرسال للتحقق والموافقة</button>
+        </form>
+    </div>
 
-    <div id="toastMsg" class="toast-notify"><i class="fas fa-bell"></i> <span>رسالة</span></div>
+    <div class="global-modal" id="authModal">
+        <div class="auth-card">
+            <h3 style="margin-bottom: 10px;"><i class="fas fa-user-lock" style="color:var(--accent-color)"></i> إكمال الحساب مطلوب لتأكيد الطلب</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom:20px;">الرجاء تزويدنا باسمك ورقمك لإرسال الفاتورة عبر الواتساب وتأكيد هويتك</p>
+            <form onsubmit="handleAuthSubmit(event)">
+                <div class="form-group">
+                    <label>الاسم الكامل أو اسم المحل:</label>
+                    <input type="text" id="authName" required placeholder="مثال: أمجد هادي (موبيتك)">
+                </div>
+                <div class="form-group">
+                    <label>رقم هاتف الواتساب الفعال:</label>
+                    <input type="tel" id="authPhone" required placeholder="مثال: 96181157961">
+                </div>
+                <div class="form-group">
+                    <label>تسجيل الدخول بصفتك:</label>
+                    <div class="role-selector">
+                        <div class="role-option active" id="roleClient" onclick="setRoleSelection('زبون')">زبون عادي</div>
+                        <div class="role-option" id="roleTrader" onclick="setRoleSelection('تاجر')">تاجر قطع معتمد</div>
+                    </div>
+                </div>
+                <button type="submit" class="cat-btn" style="width:100%; background:var(--success-color); color:white; padding:12px; font-size:1rem; margin-top:10px;">حفظ وتأكيد الطلب</button>
+                <button type="button" class="btn-logout" style="margin: 15px auto 0; text-align:center;" onclick="closeAuthModal()">إلغاء والتصفح فقط</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="global-modal" id="adminGateModal">
+        <div class="auth-card" style="max-width:380px;">
+            <h3 style="color:#f59e0b; margin-bottom:15px;"><i class="fas fa-shield-alt"></i> كلمة مرور الإدارة</h3>
+            <div class="form-group">
+                <input type="password" id="adminPassField" placeholder="أدخل رمز الدخول السرّي" style="text-align:center;">
+            </div>
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button onclick="submitAdminGate()" class="cat-btn" style="background:var(--success-color); flex:1;">دخول</button>
+                <button onclick="closeAdminGate()" class="cat-btn" style="background:var(--danger-color); flex:1;">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart-bar" id="cartBar">
+        <div>
+            <span style="font-size:0.85rem; color:var(--text-muted); display:block;">السلة المبدئية</span>
+            <span id="cartTotalText" style="font-size:1.2rem; font-weight:900; color:var(--success-color)">الإجمالي: $0</span>
+        </div>
+        <button class="cat-btn" style="background:#10b981; color:white;" onclick="processOrderCheckout()"> تأكيد الطلب بالواتساب <i class="fab fa-whatsapp"></i></button>
+    </div>
+
+    <div id="toast" class="toast-notify"><span>تنبيه</span></div>
 
     <script>
-        var allItems = [];
-        var cart = {}; 
+        // الذاكرة الثابتة لعدم ضياع البيانات عند تحديث السيرفر
+        var localProducts = JSON.parse(localStorage.getItem('mb_products')) || [
+            { id: "d1", title: "شاشات بديلة مفحوصة (OLED & LCD)", category: "شاشات", price: "45", desc: "شاشات وبطاريات عالية الجودة مع الضمان الكامل للأداء واللمس المتعدد.", img: "https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?w=500", status: "approved" },
+            { id: "d2", title: "شاحن سريع أصلي بقوة 45 واط", category: "أكسسوارات", price: "15", desc: "شواحن معتمدة تدعم الشحن السريع الآمن لكافة الهواتف.", img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500", status: "approved" }
+        ];
+        var localUsers = JSON.parse(localStorage.getItem('mb_users')) || [];
+
+        var cart = {};
         var currentFilter = 'الكل';
-        var searchQuery = '';
-        var isAdminVerified = false; 
-        var targetSectionId = ''; 
-        var uploadedImageBase64 = '';
+        var searchKey = '';
+        var selectedRole = 'زبون';
         
-        var currentSelectedRole = 'زبون'; // الخيار الافتراضي داخل فورم التسجيل
-        var userSessionPhone = localStorage.getItem('mobitech_user_phone') || '';
-        var userSessionStatus = 'guest'; 
-        var userSessionRole = 'زبون';
+        // جلسة العميل الحالية المباشرة
+        var currentUser = JSON.parse(localStorage.getItem('mb_current_user')) || null;
+        var isAdminSession = sessionStorage.getItem('mb_admin_active') === 'true';
 
-        function showToast(msg, isError) {
-            var toast = document.getElementById('toastMsg');
-            toast.querySelector('span').innerText = msg;
-            toast.style.borderRightColor = isError ? '#ef4444' : '#38bdf8';
-            toast.classList.add('show');
-            setTimeout(function() { toast.classList.remove('show'); }, 2500);
+        function showToast(msg, isErr = false) {
+            var t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.borderRightColor = isErr ? '#ef4444' : '#38bdf8';
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
         }
 
-        // دوال فحص وإدارة الحسابات
-        async function checkUserAuthStatus() {
-            if (!userSessionPhone) {
-                setWebsiteView('guest'); // زائر غير مسجل
-                return;
-            }
-            try {
-                const res = await fetch('/api/users/check', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ phone: userSessionPhone })
-                });
-                const data = await res.json();
-                if (data.exists) {
-                    userSessionStatus = data.status;
-                    userSessionRole = data.role;
-                    document.getElementById('navRoleLabel').innerText = data.name + ` (${data.role})`;
-                    setWebsiteView(data.status);
+        function syncStorage() {
+            localStorage.setItem('mb_products', JSON.stringify(localProducts));
+            localStorage.setItem('mb_users', JSON.stringify(localUsers));
+        }
+
+        function initApp() {
+            syncStorage();
+            updateUserUI();
+            renderStore();
+            if(isAdminSession) renderAdminPanelData();
+        }
+
+        function updateUserUI() {
+            var label = document.getElementById('userLabel');
+            var logoutBtn = document.getElementById('logoutBtn');
+            if(currentUser) {
+                label.innerText = currentUser.name + ` (${currentUser.role})`;
+                logoutBtn.style.display = 'block';
+                
+                // تطبيق القيود الفورية على فورم الإضافة بناءً على نوع الحساب
+                var notice = document.getElementById('sidebarRestrictionNotice');
+                if(currentUser.role === 'زبون') {
+                    notice.innerText = "⚠️ كزبون، يُسمح لك برفع الهواتف المستعملة فقط لعرضها.";
+                    notice.style.display = "block";
+                    document.getElementById('pCategory').value = 'هواتف مستعملة';
+                    document.getElementById('opt-screens').disabled = true;
+                    document.getElementById('opt-acc').disabled = true;
+                    document.getElementById('opt-parts').disabled = true;
                 } else {
-                    logoutUser();
+                    notice.style.display = "none";
+                    document.getElementById('opt-screens').disabled = false;
+                    document.getElementById('opt-acc').disabled = false;
+                    document.getElementById('opt-parts').disabled = false;
                 }
-            } catch(e) { setWebsiteView('approved'); }
-        }
-
-        function setWebsiteView(status) {
-            var mainContent = document.getElementById('mainWebsiteContent');
-            var lockscreen = document.getElementById('lockscreenSection');
-            
-            if (status === 'approved') {
-                mainContent.style.display = 'block';
-                lockscreen.style.display = 'none';
-            } else if (status === 'pending') {
-                mainContent.style.display = 'none';
-                lockscreen.style.display = 'flex';
-                document.getElementById('lockIcon').className = "fas fa-hourglass-half";
-                document.getElementById('lockTitle').innerText = "حسابك قيد المراجعة والتدقيق";
-                document.getElementById('lockDesc').innerText = "تم حفظ بياناتك بنجاح. يرجى الانتظار حتى يقوم المسؤول بالموافقة على حسابك وتفعيله لتصفح المنتجات والأسعار حياً.";
             } else {
-                // حالة ضيف لم يسجل بعد
-                mainContent.style.display = 'none';
-                lockscreen.style.display = 'flex';
-                document.getElementById('lockIcon').className = "fas fa-user-shield";
-                document.getElementById('lockTitle').innerText = "تسجيل الدخول مطلوب";
-                document.getElementById('lockDesc').innerText = "مرحباً بك في منصة Mobitech. رؤية المتجر وصيانة المواد تتطلب تسجيل حسابك أولاً ليتم قبوله من قبل الإدارة.";
+                label.innerText = 'زائر';
+                logoutBtn.style.display = 'none';
+                document.getElementById('sidebarRestrictionNotice').style.display = "none";
             }
         }
+
+        function switchToTab(tab) {
+            document.getElementById('navStoreBtn').classList.remove('active');
+            document.getElementById('navAdminBtn').classList.remove('active');
+            
+            if(tab === 'store') {
+                document.getElementById('navStoreBtn').classList.add('active');
+                document.getElementById('storeTabSection').style.display = 'block';
+                document.getElementById('adminTabSection').style.display = 'none';
+                document.getElementById('brandHeader').style.display = 'block';
+            } else if (tab === 'admin') {
+                document.getElementById('navAdminBtn').classList.add('active');
+                document.getElementById('storeTabSection').style.display = 'none';
+                document.getElementById('adminTabSection').style.display = 'block';
+                document.getElementById('brandHeader').style.display = 'none'; // إخفاء اسم المتجر فقط داخل لوحة الإدارة المستقلة لراحة العمل
+            }
+        }
+
+        // التحكم في القائمة الجانبية (Sidebar)
+        function openSidebar() { document.getElementById('addProductSidebar').classList.add('open'); }
+        function closeSidebar() { document.getElementById('addProductSidebar').classList.remove('open'); }
 
         function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
         function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
 
-        function setAuthRoleOpt(role) {
-            currentSelectedRole = role;
-            document.getElementById('roleOptClient').classList.remove('active');
-            document.getElementById('roleOptTrader').classList.remove('active');
-            if (role === 'زبون') document.getElementById('roleOptClient').classList.add('active');
-            else document.getElementById('roleOptTrader').classList.add('active');
+        function setRoleSelection(role) {
+            selectedRole = role;
+            document.getElementById('roleClient').classList.remove('active');
+            document.getElementById('roleTrader').classList.remove('active');
+            if(role === 'زبون') document.getElementById('roleClient').classList.add('active');
+            else document.getElementById('roleTrader').classList.add('active');
         }
 
-        async function submitRegisterForm(e) {
+        function handleAuthSubmit(e) {
             e.preventDefault();
             var name = document.getElementById('authName').value.trim();
             var phone = document.getElementById('authPhone').value.trim();
             
-            if(!name || !phone) return;
-
-            try {
-                const res = await fetch('/api/users/register', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ name, phone, role: currentSelectedRole })
-                });
-                const data = await res.json();
-                showToast(data.message);
-                
-                localStorage.setItem('mobitech_user_phone', phone);
-                userSessionPhone = phone;
-                closeAuthModal();
-                checkUserAuthStatus();
-                if (isAdminVerified) fetchAdminUsersList();
-            } catch(err) {
-                showToast('حدث خطأ أثناء إرسال البيانات', true);
-            }
-        }
-
-        function logoutUser() {
-            localStorage.removeItem('mobitech_user_phone');
-            userSessionPhone = '';
-            userSessionStatus = 'guest';
-            document.getElementById('navRoleLabel').innerText = 'تسجيل دخول';
-            setWebsiteView('guest');
-        }
-
-        async function fetchAdminUsersList() {
-            if (!isAdminVerified) return;
-            try {
-                const res = await fetch('/api/users');
-                const users = await res.json();
-                var tbody = document.getElementById('adminUsersTableBody');
-                let html = '';
-                
-                users.forEach(u => {
-                    let statusLabel = u.status === 'approved' ? '<span style="color:#10b981">نشط ومقبول</span>' : '<span style="color:#f59e0b">بانتظار الموافقة</span>';
-                    let actionButtons = u.status === 'pending' ? 
-                        `<button onclick="userAction('${u.id}', 'accept')" class="btn btn-success" style="padding:4px 10px; font-size:0.8rem;">قبول الحساب</button>
-                         <button onclick="userAction('${u.id}', 'reject')" class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem; margin-right:5px;">رفض</button>` :
-                        `<button onclick="userAction('${u.id}', 'delete')" class="btn btn-danger" style="padding:4px 10px; font-size:0.8rem;"><i class="fas fa-trash-alt"></i> إزالة</button>`;
-                    
-                    html += `<tr>
-                        <td><b>${escapeHtml(u.name)}</b></td>
-                        <td><a href="https://wa.me/${u.phone}" target="_blank" style="color:#38bdf8; text-decoration:none;"><i class="fab fa-whatsapp"></i> ${u.phone}</a></td>
-                        <td><span class="badge" style="margin:0;">${u.role}</span></td>
-                        <td>${statusLabel}</td>
-                        <td>${actionButtons}</td>
-                    </tr>`;
-                });
-                tbody.innerHTML = html || '<tr><td colspan="5" style="text-align:center; padding:15px;">لا يوجد مستخدمون مسجلون حالياً.</td></tr>';
-            } catch(e) {}
-        }
-
-        async function userAction(id, action) {
-            try {
-                await fetch('/api/users/action', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ id, action })
-                });
-                showToast('تم تحديث حالة حساب المستخدم بنجاح');
-                fetchAdminUsersList();
-                checkUserAuthStatus();
-            } catch(e) { showToast('فشل تنفيذ الإجراء', true); }
-        }
-
-        async function fetchProductsFromServer() {
-            try {
-                const res = await fetch('/api/products');
-                if (!res.ok) throw new Error();
-                allItems = await res.json();
-                refreshStoreUI();
-            } catch (err) {
-                console.error(err);
-                showToast("حدث خطأ في تحميل البيانات من السيرفر", true);
-            }
-        }
-
-        function updateStats() {
-            var approved = allItems.filter(i => i.status === 'approved');
-            var counts = { 'شاشات': 0, 'أكسسوارات': 0, 'قطع': 0, 'هواتف مستعملة': 0 };
-            approved.forEach(item => {
-                if (counts[item.category] !== undefined) counts[item.category]++;
-            });
-            document.getElementById('statsRow').innerHTML = 
-                '<div class="stat-card">📱 شاشات: ' + counts['شاشات'] + '</div>' +
-                '<div class="stat-card">🔌 أكسسوارات: ' + counts['أكسسوارات'] + '</div>' +
-                '<div class="stat-card">⚙️ قطع: ' + counts['قطع'] + '</div>' +
-                '<div class="stat-card">📱 مستعمل: ' + counts['هواتف مستعملة'] + '</div>';
-        }
-
-        function toggleSection(id) {
-            var el = document.getElementById(id);
-            el.style.display = el.style.display === 'block' ? 'none' : 'block';
-            if (el.style.display === 'block') el.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function verifyAdminAccess(id) {
-            if (isAdminVerified) {
-                toggleSection(id);
+            var userObj = { id: 'usr-' + Date.now(), name, phone, role: selectedRole, status: 'pending' };
+            
+            // التثبيت المحلي والسيرفر
+            var existing = localUsers.find(u => u.phone === phone);
+            if(!existing) {
+                localUsers.push(userObj);
             } else {
-                targetSectionId = id;
-                document.getElementById('adminAuthModal').style.display = 'flex';
-                document.getElementById('adminPasswordInput').focus();
+                userObj = existing;
+            }
+            
+            currentUser = userObj;
+            localStorage.setItem('mb_current_user', JSON.stringify(currentUser));
+            syncStorage();
+            updateUserUI();
+            closeAuthModal();
+            showToast("تم حفظ حسابك بنجاح!");
+            
+            fetch('/api/users/register', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ name, phone, role: selectedRole })
+            }).catch(()=>{});
+
+            if(Object.keys(cart).length > 0) {
+                processOrderCheckout();
             }
         }
 
-        function closeAdminModal() {
-            document.getElementById('adminAuthModal').style.display = 'none';
-            document.getElementById('adminPasswordInput').value = '';
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('mb_current_user');
+            updateUserUI();
+            cart = {};
+            updateCartBar();
+            renderStore();
+            showToast("تم تسجيل الخروج");
         }
 
-        function submitAdminPassword() {
-            var password = document.getElementById('adminPasswordInput').value;
-            if (password === 'admin123') {
-                isAdminVerified = true;
-                closeAdminModal();
-                showToast('تم تسجيل دخول المسؤول بنجاح');
-                toggleSection(targetSectionId);
-                fetchAdminUsersList();
-                renderAdminPanels();
+        function openAdminGate() {
+            if(isAdminSession) switchToTab('admin');
+            else document.getElementById('adminGateModal').style.display = 'flex';
+        }
+        function closeAdminGate() { document.getElementById('adminGateModal').style.display = 'none'; }
+        function submitAdminGate() {
+            var pass = document.getElementById('adminPassField').value;
+            if(pass === 'admin123') {
+                isAdminSession = true;
+                sessionStorage.setItem('mb_admin_active', 'true');
+                closeAdminGate();
+                switchToTab('admin');
+                renderAdminPanelData();
+                showToast("أهلاً بك يا مسؤول المنصة");
             } else {
-                showToast('كلمة السر غير صحيحة! يرجى إعادة المحاولة', true);
+                showToast("الرمز السري غير صحيح!", true);
             }
         }
 
-        function showAllStore() {
-            currentFilter = 'الكل'; searchQuery = '';
-            document.getElementById('searchInput').value = '';
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-all').classList.add('active');
-            refreshStoreUI();
-        }
-
-        function filterCat(cat, e) {
+        // فلترة وعرض السلع في المتجر المفتوح للجميع
+        function filterCategory(cat, e) {
             currentFilter = cat;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            if (e && e.currentTarget) e.currentTarget.classList.add('active');
-            refreshStoreUI();
+            if(e) e.currentTarget.classList.add('active');
+            renderStore();
         }
 
-        function adjustQty(id, change) {
-            if (!cart[id]) cart[id] = 0;
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchKey = e.target.value.toLowerCase();
+            renderStore();
+        });
+
+        function renderStore() {
+            var grid = document.getElementById('productsGrid');
+            var html = '';
+            var approved = localProducts.filter(p => p.status === 'approved');
+
+            approved.forEach(p => {
+                if(currentFilter !== 'الكل' && p.category !== currentFilter) return;
+                if(searchKey && !p.title.toLowerCase().includes(searchKey) && !p.desc.toLowerCase().includes(searchKey)) return;
+
+                var qty = cart[p.id] || 0;
+                html += `<div class="card">
+                    <div class="card-img-holder"><img src="${p.img}" onerror="this.src='https://images.unsplash.com/photo-1595556621984-6c0f9f44c648?w=500'"></div>
+                    <h3 style="font-size:1.1rem; margin-bottom:5px;">${escapeHtml(p.title)}</h3>
+                    <span class="price-tag">$${p.price}</span>
+                    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-align:right;">${escapeHtml(p.desc)}</p>
+                    <div class="quantity-control">
+                        <button class="qty-btn" onclick="triggerQuantity('${p.id}', 1)">+</button>
+                        <span style="font-weight:bold; width:30px; text-align:center;">${qty}</span>
+                        <button class="qty-btn" onclick="triggerQuantity('${p.id}', -1)">-</button>
+                    </div>
+                </div>`;
+            });
+            grid.innerHTML = html || '<p style="grid-column:1/-1; text-align:center; padding:30px; color:var(--text-muted)">لا توجد مواد متوفرة ضمن هذا القسم حالياً.</p>';
+        }
+
+        function triggerQuantity(id, change) {
+            if(!currentUser) {
+                openAuthModal();
+                return;
+            }
+            if(!cart[id]) cart[id] = 0;
             cart[id] += change;
-            if (cart[id] <= 0) delete cart[id];
-            
-            var element = document.getElementById('qty-' + id);
-            if(element) element.innerText = cart[id] || 0;
-            
+            if(cart[id] <= 0) delete cart[id];
+            renderStore();
             updateCartBar();
         }
 
         function updateCartBar() {
-            var totalCount = 0;
-            var totalPrice = 0;
-            for (var id in cart) {
-                var item = allItems.find(i => i.id === id);
-                if (item) {
-                    totalCount += cart[id];
-                    totalPrice += (parseFloat(item.price) || 0) * cart[id];
+            var bar = document.getElementById('cartBar');
+            var total = 0;
+            var count = 0;
+            for(let id in cart) {
+                var p = localProducts.find(i => i.id === id);
+                if(p) {
+                    total += (parseFloat(p.price) || 0) * cart[id];
+                    count += cart[id];
                 }
             }
-            var bar = document.getElementById('cartBar');
-            if (totalCount > 0) {
+            if(count > 0) {
                 bar.style.display = 'flex';
-                document.getElementById('cartCount').innerText = totalCount;
-                document.getElementById('cartTotal').innerText = 'الإجمالي: $' + totalPrice;
+                document.getElementById('cartTotalText').innerText = `المواد: ${count} | الإجمالي الكلي: $${total}`;
             } else {
                 bar.style.display = 'none';
             }
         }
 
-        function openInvoice() {
-            var modal = document.getElementById('invoiceModal');
-            var tbody = document.getElementById('invoiceItems');
-            var totalSumLabel = document.getElementById('invoiceTotalSum');
-            
-            document.getElementById('invoiceDate').innerText = 'التاريخ: ' + new Date().toLocaleString('ar-LB');
-            let html = '';
-            let totalSum = 0;
-
-            for (var id in cart) {
-                var item = allItems.find(i => i.id === id);
-                if (item) {
-                    var subtotal = (parseFloat(item.price) || 0) * cart[id];
-                    totalSum += subtotal;
-                    html += `<tr><td>${escapeHtml(item.title)}</td><td>$${item.price}</td><td>${cart[id]} قطعة</td><td>$${subtotal}</td></tr>`;
+        function processOrderCheckout() {
+            if(!currentUser) { openAuthModal(); return; }
+            let text = `👋 طلب صيانة وشراء جديد من منصة Mobitech الرقمية:\n\n`;
+            let total = 0;
+            for(let id in cart) {
+                var p = localProducts.find(i => i.id === id);
+                if(p) {
+                    let sub = parseFloat(p.price) * cart[id];
+                    total += sub;
+                    text += `▪️ ${p.title} (عدد ${cart[id]}) -> المجموع: $${sub}\n`;
                 }
             }
-            tbody.innerHTML = html;
-            totalSumLabel.innerText = '$' + totalSum;
-            modal.style.display = 'flex';
+            text += `\n💰 الصافي النهائي المطلوب: $${total}\n👤 اسم العميل: ${currentUser.name}\n📞 رقم الهاتف: ${currentUser.phone}`;
+            window.open('https://wa.me/96181157961?text=' + encodeURIComponent(text), '_blank');
         }
 
-        function closeInvoice() { document.getElementById('invoiceModal').style.display = 'none'; }
-
-        function sendInvoiceWhatsApp() {
-            let msg = `👋 مرحبا Mobitech، طلب شراء جديد من حساب (${userSessionRole}):\n\n`;
-            let totalSum = 0;
-            for (var id in cart) {
-                var item = allItems.find(i => i.id === id);
-                if (item) {
-                    var subtotal = (parseFloat(item.price) || 0) * cart[id];
-                    totalSum += subtotal;
-                    msg += `▪️ ${item.title}\n   الكمية: ${cart[id]} قطعة | السعر: $${item.price} | المجموع: $${subtotal}\n\n`;
-                }
-            }
-            msg += `💰 الحساب النهائي: $${totalSum}\n📱 رقم العميل المسجل بالمنصة: ${userSessionPhone}`;
-            window.open('https://wa.me/96181157961?text=' + encodeURIComponent(msg), '_blank');
-        }
-
-        function refreshStoreUI() {
-            var storeGrid = document.getElementById('store-grid');
-            var storeHTML = '';
-            var approvedItems = allItems.filter(i => i.status === 'approved');
-
-            approvedItems.forEach(item => {
-                if (currentFilter !== 'الكل' && item.category !== currentFilter) return;
-                if (searchQuery.trim() !== '' && !item.title.includes(searchQuery) && !item.desc.includes(searchQuery)) return;
-                
-                var currentQty = cart[item.id] || 0;
-                storeHTML += `<div class="card">
-                    <div class="card-img-holder">
-                        <img src="${item.img}" onerror="this.src='https://images.unsplash.com/photo-1595556621984-6c0f9f44c648?w=500'">
-                    </div>
-                    <h3>${escapeHtml(item.title)}</h3>
-                    <span class="price-tag">$${item.price || '0'}</span>
-                    <p>${escapeHtml(item.desc)}</p>
-                    <span class="badge">${item.category}</span>
-                    <div class="quantity-control-wrapper">
-                        <div class="quantity-control">
-                            <button class="qty-btn" onclick="adjustQty('${item.id}', 1)">+</button>
-                            <span class="qty-number" id="qty-${item.id}">${currentQty}</span>
-                            <button class="qty-btn minus" onclick="adjustQty('${item.id}', -1)">-</button>
-                        </div>
-                    </div>
-                </div>`;
-            });
-            storeGrid.innerHTML = storeHTML || '<p style="text-align:center; grid-column:1/-1; padding:20px;">لا توجد مواد معروضة حالياً.</p>';
-            updateStats();
-            if (isAdminVerified) renderAdminPanels();
-        }
-
-        function renderAdminPanels() {
-            var pendingContainer = document.getElementById('admin-pending-grid');
-            var approvedContainer = document.getElementById('admin-approved-grid');
-            var pendingItems = allItems.filter(i => i.status === 'pending');
-            var approvedItems = allItems.filter(i => i.status === 'approved');
-
-            let pendHtml = '';
-            pendingItems.forEach(p => {
-                pendHtml += `<div class="card" style="border: 1px dashed #f59e0b;">
-                    <div class="card-img-holder"><img src="${p.img}"></div>
-                    <h3>${escapeHtml(p.title)}</h3>
-                    <span class="price-tag">السعر: $${p.price}</span>
-                    <p>${escapeHtml(p.desc)}</p>
-                    <span class="badge" style="margin-bottom:10px;">${p.category}</span>
-                    <div class="admin-actions">
-                        <button onclick="adminAction('${p.id}', 'accept')" class="btn btn-success">قبول ونشر</button>
-                        <button onclick="adminAction('${p.id}', 'reject')" class="btn btn-danger">حذف</button>
-                    </div></div>`;
-            });
-            pendingContainer.innerHTML = pendHtml || '<p style="grid-column:1/-1; text-align:center; padding:20px; color: var(--text-muted);">لا توجد طلبات معلقة.</p>';
-
-            let appHtml = '';
-            approvedItems.forEach(a => {
-                appHtml += `<div class="card" style="border: 1px solid rgba(16, 185, 129, 0.2);">
-                    <div class="card-img-holder"><img src="${a.img}"></div>
-                    <h3>${escapeHtml(a.title)}</h3>
-                    <span class="price-tag">$${a.price}</span>
-                    <p>${escapeHtml(a.desc)}</p>
-                    <span class="badge" style="margin-bottom:10px;">${a.category}</span>
-                    <div class="admin-actions">
-                        <button onclick="deleteItem('${a.id}')" class="btn btn-danger" style="width:100%"><i class="fas fa-trash-alt"></i> إزالة</button>
-                    </div></div>`;
-            });
-            approvedContainer.innerHTML = appHtml || '<p style="grid-column:1/-1; text-align:center; padding:20px; color: var(--text-muted);">لا توجد منتجات.</p>';
-        }
-
-        document.getElementById('pImgFile').addEventListener('change', function(e) {
+        // معالجة رفع الصور الفوتوغرافية وتحويلها لقاعدة البيانات
+        var tempImageBase64 = '';
+        document.getElementById('pImg').addEventListener('change', function(e) {
             var file = e.target.files[0];
-            if (file) {
+            if(file) {
                 var reader = new FileReader();
-                reader.onload = function(event) {
-                    uploadedImageBase64 = event.target.result;
-                    document.getElementById('previewImg').src = uploadedImageBase64;
-                    document.getElementById('imagePreviewDiv').style.display = 'block';
-                };
+                reader.onload = function(evt) {
+                    tempImageBase64 = evt.target.result;
+                    var preview = document.getElementById('pImgPreview');
+                    preview.src = tempImageBase64;
+                    preview.style.display = 'block';
+                }
                 reader.readAsDataURL(file);
             }
         });
 
-        async function clientSubmitProduct(event) {
-            event.preventDefault();
-            if (!uploadedImageBase64) { showToast('يرجى اختيار صورة أولاً', true); return; }
-            var newItem = {
-                title: document.getElementById('pTitle').value,
-                category: document.getElementById('pCategory').value,
-                price: document.getElementById('pPrice').value, 
-                desc: document.getElementById('pDesc').value,
-                img: uploadedImageBase64
+        function submitNewProduct(e) {
+            e.preventDefault();
+            if(!currentUser) { showToast("يرجى تسجيل الدخول أولاً لرفع المواد!", true); openAuthModal(); return; }
+            
+            var title = document.getElementById('pTitle').value;
+            var category = document.getElementById('pCategory').value;
+            var price = document.getElementById('pPrice').value;
+            var desc = document.getElementById('pDesc').value;
+
+            // تطبيق قيد حظر الإدخال الخاطئ من الفرونت اند للأمان
+            if(currentUser.role === 'زبون' && category !== 'هواتف مستعملة') {
+                showToast("خطأ: يسمح لك برفع قسم الهواتف المستعملة فقط", true);
+                return;
+            }
+
+            var newProd = {
+                id: 'prod-' + Date.now(),
+                title, category, price, desc, img: tempImageBase64 || 'https://images.unsplash.com/photo-1595556621984-6c0f9f44c648?w=500',
+                status: 'pending' // معلق بانتظار المسؤول
             };
-            try {
-                const res = await fetch('/api/products', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newItem)
-                });
-                if(res.ok) {
-                    showToast('تم إرسال المادة بنجاح! بانتظار موافقة المسؤول.', false);
-                    document.getElementById('productForm').reset();
-                    document.getElementById('imagePreviewDiv').style.display = 'none';
-                    document.getElementById('client-section').style.display = 'none';
-                    uploadedImageBase64 = ''; 
-                    fetchProductsFromServer();
-                }
-            } catch (err) { showToast('فشل إرسال المنتج', true); }
+
+            localProducts.push(newProd);
+            syncStorage();
+            closeSidebar();
+            document.getElementById('productForm').reset();
+            document.getElementById('pImgPreview').style.display = 'none';
+            tempImageBase64 = '';
+            
+            showToast("تم إرسال المادة بنجاح! ستظهر فور قبول المسؤول لها.");
+            renderStore();
+            if(isAdminSession) renderAdminPanelData();
+
+            fetch('/api/products', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(newProd)
+            }).catch(()=>{});
         }
 
-        async function adminAction(id, action) {
-            try {
-                await fetch('/api/products/action', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id, action })
-                });
-                showToast(action === 'accept' ? 'تم نشر السلعة للعامة' : 'تم حذف طلب السلعة');
-                fetchProductsFromServer();
-            } catch(e) { showToast('حدث خطأ في تنفيذ الإجراء', true); }
+        // إدارة وعرض بيانات صفحة المسؤول المنفصلة تماماً خارج المتجر
+        function renderAdminPanelData() {
+            // 1. جدول المستخدمين والتجار الجدد
+            var userBody = document.getElementById('adminUsersTable');
+            let uHtml = '';
+            localUsers.forEach(u => {
+                let statusBadge = u.status === 'approved' ? '<span style="color:#10b981">نشط ومقبول</span>' : '<span style="color:#f59e0b">بانتظار الموافقة</span>';
+                let btn = u.status === 'pending' ? 
+                    `<button onclick="actionUser('${u.id}', 'accept')" class="cat-btn" style="background:var(--success-color); padding:4px 10px; font-size:0.8rem;">قبول وتفعيل</button>` : 
+                    `<button onclick="actionUser('${u.id}', 'delete')" class="cat-btn" style="background:var(--danger-color); padding:4px 10px; font-size:0.8rem;"><i class="fas fa-trash"></i></button>`;
+                
+                uHtml += `<tr>
+                    <td><b>${escapeHtml(u.name)}</b></td>
+                    <td><a href="https://wa.me/${u.phone}" target="_blank" style="color:var(--accent-color); text-decoration:none;"><i class="fab fa-whatsapp"></i> ${u.phone}</a></td>
+                    <td><span class="user-badge" style="display:inline-block; padding:2px 8px;">${u.role}</span></td>
+                    <td>${statusBadge}</td>
+                    <td>${btn}</td>
+                </tr>`;
+            });
+            userBody.innerHTML = uHtml || '<tr><td colspan="5" style="text-align:center; padding:15px;">لا يوجد مستخدمون مسجلون حالياً في النظام المحلي.</td></tr>';
+
+            // 2. إدارة السلع المعلقة والمقبولة
+            var pendingGrid = document.getElementById('adminPendingGrid');
+            var approvedGrid = document.getElementById('adminApprovedGrid');
+            
+            let pendHtml = '';
+            let apprHtml = '';
+
+            localProducts.forEach(p => {
+                let cardMarkup = `
+                    <div class="card" style="border-color: ${p.status === 'pending' ? '#f59e0b':'rgba(16,185,129,0.3)'}">
+                        <div class="card-img-holder"><img src="${p.img}"></div>
+                        <h3>${escapeHtml(p.title)}</h3>
+                        <span class="price-tag">$${p.price}</span>
+                        <p style="font-size:0.8rem; color:var(--text-muted); text-align:right;">${escapeHtml(p.desc)}</p>
+                        <span class="user-badge" style="align-self:center; margin:5px 0;">${p.category}</span>
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            ${p.status === 'pending' ? `<button onclick="actionProduct('${p.id}', 'accept')" class="cat-btn" style="background:var(--success-color); flex:1; padding:6px;">قبول ونشر</button>`:''}
+                            <button onclick="actionProduct('${p.id}', 'delete')" class="cat-btn" style="background:var(--danger-color); ${p.status==='approved'?'flex:1':''}; padding:6px;"><i class="fas fa-trash-alt"></i> إزالة</button>
+                        </div>
+                    </div>`;
+                if(p.status === 'pending') pendHtml += cardMarkup;
+                else apprHtml += cardMarkup;
+            });
+
+            pendingGrid.innerHTML = pendHtml || '<p style="text-align:center; width:100%; color:var(--text-muted)">لا توجد طلبات سلع معلقة.</p>';
+            approvedGrid.innerHTML = apprHtml || '<p style="text-align:center; width:100%; color:var(--text-muted)">المتجر خالي من المنتجات حالياً.</p>';
         }
 
-        async function deleteItem(id) {
-            if (!confirm('هل أنت متأكد من رغبتك في إزالة هذه المادة نهائياً؟')) return;
-            try {
-                await fetch('/api/products/action', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id, action: 'delete' })
-                });
-                showToast('تمت إزالة المادة بنجاح');
-                if (cart[id]) { delete cart[id]; updateCartBar(); }
-                fetchProductsFromServer();
-            } catch(e) { showToast('حدث خطأ أثناء الحذف', true); }
+        function actionUser(id, action) {
+            if(action === 'accept') {
+                var u = localUsers.find(i => i.id === id);
+                if(u) u.status = 'approved';
+                showToast("تم قبول الحساب وتفعيله بنجاح!");
+            } else {
+                localUsers = localUsers.filter(i => i.id !== id);
+                showToast("تمت إزالة الحساب بنجاح");
+            }
+            syncStorage();
+            updateUserUI();
+            renderAdminPanelData();
         }
 
-        document.getElementById('searchInput').addEventListener('input', e => {
-            searchQuery = e.target.value;
-            refreshStoreUI();
-        });
+        function actionProduct(id, action) {
+            if(action === 'accept') {
+                var p = localProducts.find(i => i.id === id);
+                if(p) p.status = 'approved';
+                showToast("تمت الموافقة الفورية ونشر السلعة بالمتجر!");
+            } else {
+                localProducts = localProducts.filter(i => i.id !== id);
+                if(cart[id]) { delete cart[id]; updateCartBar(); }
+                showToast("تم حذف وإزالة المادة بالكامل");
+            }
+            syncStorage();
+            renderStore();
+            renderAdminPanelData();
+            
+            fetch('/api/products/action', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ id, action })
+            }).catch(()=>{});
+        }
 
         function escapeHtml(str) {
             if (!str) return '';
             return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m] || m));
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            checkUserAuthStatus();
-            fetchProductsFromServer();
-        });
+        window.onload = initApp;
     </script>
 </body>
 </html>
