@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mobitech | المنصة الاحترافية المتكاملة</title>
+    <title>Mobitech | المنصة الاحترافية الكاملة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght=400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -19,19 +19,31 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 80px; overflow-x: hidden; }
         
-        .main-header { text-align: center; padding: 20px 0 10px; background: linear-gradient(to bottom, #111827, var(--bg-color)); }
+        .main-header { text-align: center; padding: 25px 0 15px; background: linear-gradient(to bottom, #111827, var(--bg-color)); }
         .main-header h1 { font-size: 2.5rem; font-weight: 900; color: var(--accent-color); display: flex; align-items: center; justify-content: center; gap: 12px; }
         .main-header p { font-size: 0.95rem; color: var(--text-muted); margin-top: 5px; }
 
-        nav { background-color: rgba(21, 28, 44, 0.95); backdrop-filter: blur(10px); padding: 12px 5%; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(56, 189, 248, 0.1); }
-        .nav-container { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; margin: 0 auto; }
-        .nav-links { display: flex; gap: 20px; list-style: none; align-items: center; }
-        .nav-links a { color: var(--text-color); text-decoration: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.95rem; }
-        .nav-links a:hover, .nav-links a.active { color: var(--accent-color); }
+        nav { background-color: rgba(21, 28, 44, 0.95); backdrop-filter: blur(10px); padding: 10px 15px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(56, 189, 248, 0.1); }
+        .nav-container { width: 100%; max-width: 1200px; display: flex; flex-direction: column; gap: 10px; margin: 0 auto; }
         
-        .user-controls { display: flex; align-items: center; gap: 10px; }
-        .user-badge { background: #1e293b; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; border: 1px solid var(--accent-color); color: var(--accent-color); font-weight: bold; display: flex; align-items: center; gap: 4px; }
-        .btn-logout { background: transparent; border: none; color: var(--danger-color); cursor: pointer; font-weight: bold; font-size: 0.85rem; }
+        .nav-top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px; }
+        .nav-links { display: flex; gap: 12px; list-style: none; align-items: center; width: 100%; justify-content: center; overflow-x: auto; white-space: nowrap; padding-top: 4px; }
+        .nav-links::-webkit-scrollbar { display: none; }
+        
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; padding: 6px 12px; border-radius: 20px; transition: all 0.2s; }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent-color); background: rgba(56, 189, 248, 0.08); }
+        
+        .user-controls { display: flex; align-items: center; gap: 8px; }
+        .user-badge { background: rgba(56, 189, 248, 0.1); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; border: 1px solid rgba(56, 189, 248, 0.2); color: var(--accent-color); font-weight: bold; display: flex; align-items: center; gap: 6px; }
+        .btn-logout { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: var(--danger-color); cursor: pointer; font-weight: bold; font-size: 0.8rem; padding: 6px 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; transition: all 0.2s; }
+        .btn-logout:hover { background: var(--danger-color); color: white; }
+
+        @media(min-width: 768px) {
+            .nav-container { flex-direction: row; justify-content: space-between; align-items: center; }
+            .nav-top-row { width: auto; border-bottom: none; padding-bottom: 0; }
+            .nav-links { width: auto; justify-content: flex-start; gap: 15px; padding-top: 0; }
+            .nav-links a { font-size: 0.95rem; }
+        }
 
         .sidebar {
             position: fixed; top: 0; left: -100%; width: 100%; max-width: 380px; height: 100%;
@@ -55,7 +67,7 @@
         .cat-btn.frp-style.active { background: linear-gradient(135deg, #7c3aed, #4f46e5) !important; color: #fff; }
 
         .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; padding: 20px 5%; max-width: 1300px; margin: 0 auto; }
-        .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 15px; text-align: center; display: flex; flex-direction: column; overflow: hidden; }
+        .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 15px; text-align: center; display: flex; flex-direction: column; overflow: hidden; position: relative; }
         .card-img-holder { width: 100%; height: 180px; border-radius: 8px; margin-bottom: 12px; background: #090d16; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .card-img-holder img { max-width: 100%; max-height: 100%; object-fit: contain; }
         .price-tag { color: var(--success-color); font-size: 1.3rem; font-weight: 900; margin: 5px 0; display: block; }
@@ -82,6 +94,13 @@
         .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; border-top: 3px solid var(--accent-color); padding: 12px 5%; display: none; justify-content: space-between; align-items: center; z-index: 2500; }
         .toast-notify { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: #1e293b; padding: 12px 25px; border-radius: 30px; display: flex; align-items: center; gap: 10px; z-index: 5000; opacity: 0; transition: 0.3s; pointer-events: none; font-weight: bold; border-right: 4px solid var(--accent-color); }
         .toast-notify.show { opacity: 1; }
+        
+        .lightbox-content { max-width: 90%; max-height: 80vh; border-radius: 8px; border: 3px solid var(--accent-color); box-shadow: 0 0 20px rgba(0,0,0,0.8); object-fit: contain; }
+
+        .image-toggle-container { display: flex; gap: 10px; margin-bottom: 10px; }
+        .toggle-sub-btn { flex: 1; padding: 8px; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); color: var(--text-color); border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold; transition: all 0.2s; }
+        .toggle-sub-btn.active { background: rgba(56, 189, 248, 0.15); border-color: var(--accent-color); color: var(--accent-color); }
+
         @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
     </style>
 </head>
@@ -94,15 +113,17 @@
 
     <nav>
         <div class="nav-container">
+            <div class="nav-top-row">
+                <div class="user-controls">
+                    <div class="user-badge" id="userDisplayBadge"><i class="fas fa-user"></i> <span id="userLabel">زائر</span></div>
+                    <button class="btn-logout" id="logoutBtn" onclick="logout()" style="display: none;" title="تسجيل الخروج"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
             <ul class="nav-links">
-                <li><a id="navStoreBtn" onclick="switchToTab('store')" class="active"><i class="fas fa-store"></i> الرئيسية والأقسام</a></li>
+                <li><a id="navStoreBtn" onclick="switchToTab('store')" class="active"><i class="fas fa-store"></i> المتجر</a></li>
                 <li><a id="navAddBtn" onclick="openSidebar()"><i class="fas fa-plus-circle"></i> إضافة سلعة</a></li>
                 <li><a id="navAdminBtn" onclick="openAdminGate()"><i class="fas fa-user-shield"></i> لوحة الإدارة</a></li>
             </ul>
-            <div class="user-controls">
-                <div class="user-badge" id="userDisplayBadge"><i class="fas fa-user"></i> <span id="userLabel">زائر</span></div>
-                <button class="btn-logout" id="logoutBtn" onclick="logout()" style="display: none;"><i class="fas fa-sign-out-alt"></i></button>
-            </div>
         </div>
     </nav>
 
@@ -117,7 +138,7 @@
 
         <div class="categories-bar">
             <button class="cat-btn active" id="cat-all" onclick="filterCategory('الكل', event)">⚡ الكل</button>
-            <button class="cat-btn" onclick="filterCategory('شاشات', event)">📱 شاشات</button>
+            <button class="cat-btn" id="cat-screens" onclick="filterCategory('شاشات', event)">📱 شاشات</button>
             <button class="cat-btn" onclick="filterCategory('أكسسوارات', event)">🔌 أكسسوارات</button>
             <button class="cat-btn" onclick="filterCategory('قطع', event)">⚙️ قطع غيار</button>
             <button class="cat-btn" onclick="filterCategory('هواتف مستعملة', event)">📱 هواتف مستعملة</button>
@@ -139,11 +160,11 @@
     <div id="adminTabSection" class="admin-page">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
             <h2><i class="fas fa-lock"></i> لوحة الأمان والمراجعة الشاملة</h2>
-            <button class="cat-btn" onclick="switchToTab('store')" style="background: #4b5563;">العودة للمتجر</button>
+            <button class="cat-btn" onclick="switchToTab('store')" style="background: var(--danger-color); color: white;"><i class="fas fa-times-circle"></i> إغلاق العرض</button>
         </div>
         
         <div style="background: var(--card-bg); padding: 20px; border-radius: 12px; margin: 25px 0; border: 1px solid rgba(139, 92, 246, 0.3);">
-            <h3 style="color: #a78bfa; margin-bottom:15px;"><i class="fas fa-id-card"></i> وثائق طلبات تخطي السوفتوير وFRP المستلمة (تراها الإدارة فقط)</h3>
+            <h3 style="color: #a78bfa; margin-bottom:15px;"><i class="fas fa-id-card"></i> وثائق طلبات تخطي السوفتوير وFRP المستلمة</h3>
             <div style="overflow-x: auto;">
                 <table class="admin-table">
                     <thead>
@@ -177,9 +198,14 @@
         </div>
 
         <div style="margin-top:30px;">
-            <h3 style="color:var(--success-color); margin-bottom:10px;">⏳ مراجعة ونشر المنتجات العادية</h3>
+            <h3 style="color:var(--success-color); margin-bottom:10px;">⏳ مراجعة ونشر المنتجات العادية والنواقص</h3>
             <div class="grid-container" id="adminProductsGrid" style="padding:0;"></div>
         </div>
+    </div>
+
+    <div class="global-modal" id="lightboxModal" onclick="closeLightbox()">
+        <img class="lightbox-content" id="lightboxImg" src="" alt="وثيقة التحقق">
+        <button class="sidebar-close" style="position: absolute; top: 20px; right: 30px;" onclick="closeLightbox()">×</button>
     </div>
 
     <div class="global-modal" id="frpRequestModal">
@@ -196,11 +222,16 @@
                     <input type="tel" id="frpPhone" required placeholder="مثال: 03183698">
                 </div>
                 <div class="form-group">
-                    <label>صورة علبة الهاتف أو هوية المالك الشخصية:</label>
-                    <input type="file" id="frpDoc" accept="image/*" required>
+                    <label>طريقة إرفاق وثيقة الملكية (علبة/هوية):</label>
+                    <div class="image-toggle-container">
+                        <button type="button" class="toggle-sub-btn active" id="btnFrpFileType" onclick="toggleFrpInputType('file')"><i class="fas fa-upload"></i> رفع ملف</button>
+                        <button type="button" class="toggle-sub-btn" id="btnFrpUrlType" onclick="toggleFrpInputType('url')"><i class="fas fa-link"></i> رابط URL</button>
+                    </div>
+                    <input type="file" id="frpDoc" accept="image/*">
+                    <input type="url" id="frpDocUrl" placeholder="أو الصق رابط صورة المستند هنا مباشر" style="display:none; margin-top:5px;">
                 </div>
                 <button type="submit" id="submitFrpBtn" class="cat-btn" style="width:100%; background:#8b5cf6; padding:12px; font-size:1rem; color:white;">إرسال المستندات بأمان للمسؤول</button>
-                <button type="button" class="btn-logout" style="margin-top:10px; display:block; width:100%; text-align:center;" onclick="closeFrpRequestModal()">إلغاء</button>
+                <button type="button" class="btn-logout" style="margin-top:10px; display:block; width:100%; text-align:center; border-radius:8px;" onclick="closeFrpRequestModal()">إلغاء</button>
             </form>
         </div>
     </div>
@@ -223,7 +254,15 @@
             </div>
             <div class="form-group"><label>السعر بالدولار ($):</label><input type="number" id="pPrice" required placeholder="السعر"></div>
             <div class="form-group"><label>المواصفات والتفاصيل الفنية:</label><textarea id="pDesc" rows="3" required placeholder="اكتب المواصفات والضمان..."></textarea></div>
-            <div class="form-group"><label>صورة السلعة:</label><input type="file" id="pImg" accept="image/*" required></div>
+            <div class="form-group">
+                <label>طريقة إدخال صورة السلعة:</label>
+                <div class="image-toggle-container">
+                    <button type="button" class="toggle-sub-btn active" id="btnProdFileType" onclick="toggleProductInputType('file')"><i class="fas fa-file-image"></i> رفع ملف</button>
+                    <button type="button" class="toggle-sub-btn" id="btnProdUrlType" onclick="toggleProductInputType('url')"><i class="fas fa-globe"></i> رابط URL</button>
+                </div>
+                <input type="file" id="pImg" accept="image/*">
+                <input type="url" id="pImgUrl" placeholder="الصق رابط صورة جاهز هنا مباشر للإنترنت" style="display:none; margin-top:5px;">
+            </div>
             <button type="submit" id="submitProductBtn" class="cat-btn" style="width:100%; background:var(--accent-color); color:#0b0f19; padding:12px; font-weight:bold;">إرسال المادة للمراجعة</button>
         </form>
     </div>
@@ -259,6 +298,10 @@
     <div id="toast" class="toast-notify">تنبيه</div>
 
     <script>
+        // تشفير مبسط لمنع القراءة السطحية للكود في المفتش (F12)
+        const _0x6a1e = ["A", "m", "j", "a", "d", "A", "a", "c", "c", "h", "h", "1", "1"];
+        function getSecureKey() { return _0x6a1e.join(""); }
+
         var localProducts = JSON.parse(localStorage.getItem('mb_products')) || [
             { id: "d1", title: "شاشات بديلة مفحوصة (OLED & LCD)", category: "شاشات", price: "45", desc: "شاشات وبطاريات عالية الجودة مع الضمان الكامل للأداء واللمس المتعدد.", img: "https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?w=500", status: "approved" },
             { id: "d2", title: "شاحن سريع أصلي بقوة 45 واط", category: "أكسسوارات", price: "15", desc: "شواحن معتمدة تدعم الشحن السريع الآمن لكافة الهواتف.", img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500", status: "approved" }
@@ -273,6 +316,8 @@
         var searchKey = '';
         var tempProductImageBase64 = '';
         var tempFrpDocBase64 = '';
+        var activeProductInputMode = 'file';
+        var activeFrpInputMode = 'file';
 
         function showToast(msg) {
             var t = document.getElementById('toast'); t.innerText = msg;
@@ -285,7 +330,7 @@
                 localStorage.setItem('mb_frp_reqs', JSON.stringify(frpRequests));
                 localStorage.setItem('mb_missing_demands', JSON.stringify(missingDemands));
             } catch (e) {
-                showToast("⚠️ ذاكرة المتصفح ممتلئة! يرجى إزالة الطلبات القديمة من لوحة المسؤول.");
+                showToast("⚠️ ذاكرة المتصفح ممتلئة! يفضل مسح الطلبات القديمة أو استخدام روابط الـ URL للصور لتوفير المساحة.");
             }
         }
 
@@ -299,7 +344,7 @@
         function updateUserUI() {
             var lbl = document.getElementById('userLabel');
             lbl.innerText = currentUser ? currentUser.name : 'زائر';
-            document.getElementById('logoutBtn').style.display = currentUser ? 'block' : 'none';
+            document.getElementById('logoutBtn').style.display = currentUser ? 'flex' : 'none';
             if(currentUser && document.getElementById('frpName')) {
                 document.getElementById('frpName').value = currentUser.name;
                 document.getElementById('frpPhone').value = currentUser.phone;
@@ -320,17 +365,44 @@
             if(tab === 'admin') document.getElementById('navAdminBtn').classList.add('active');
         }
 
-        function openSidebar() { if(!currentUser){ document.getElementById('authModal').style.display='flex'; return; } document.getElementById('addProductSidebar').classList.add('open'); }
+        function toggleProductInputType(mode) {
+            activeProductInputMode = mode;
+            document.getElementById('btnProdFileType').classList.toggle('active', mode === 'file');
+            document.getElementById('btnProdUrlType').classList.toggle('active', mode === 'url');
+            document.getElementById('pImg').style.display = mode === 'file' ? 'block' : 'none';
+            document.getElementById('pImgUrl').style.display = mode === 'url' ? 'block' : 'none';
+        }
+
+        function toggleFrpInputType(mode) {
+            activeFrpInputMode = mode;
+            document.getElementById('btnFrpFileType').classList.toggle('active', mode === 'file');
+            document.getElementById('btnFrpUrlType').classList.toggle('active', mode === 'url');
+            document.getElementById('frpDoc').style.display = mode === 'file' ? 'block' : 'none';
+            document.getElementById('frpDocUrl').style.display = mode === 'url' ? 'block' : 'none';
+        }
+
+        function openSidebar() { 
+            if(!currentUser){ 
+                document.getElementById('authModal').style.display='flex'; 
+                return; 
+            } 
+            document.getElementById('addProductSidebar').classList.add('open'); 
+        }
         function closeSidebar() { document.getElementById('addProductSidebar').classList.remove('open'); }
         function openFrpRequestModal() { if(!currentUser){ document.getElementById('authModal').style.display='flex'; return;} document.getElementById('frpRequestModal').style.display = 'flex'; updateUserUI(); }
         function closeFrpRequestModal() { document.getElementById('frpRequestModal').style.display = 'none'; }
-        function openAdminGate() { if(isAdminSession) switchToTab('admin'); else document.getElementById('adminGateModal').style.display = 'flex'; }
+        
+        function openAdminGate() { 
+            if(isAdminSession) switchToTab('admin'); 
+            else document.getElementById('adminGateModal').style.display = 'flex'; 
+        }
         
         function submitAdminGate() {
             var inputPass = document.getElementById('adminPassField').value;
-            if(inputPass === 'AmjadAacchh11') {
+            if(inputPass === getSecureKey()) {
                 isAdminSession = true; sessionStorage.setItem('mb_admin_active', 'true');
                 document.getElementById('adminGateModal').style.display = 'none';
+                document.getElementById('adminPassField').value = '';
                 switchToTab('admin'); renderAdminPanel();
             } else { showToast("الرمز السري خطأ!"); }
         }
@@ -340,23 +412,50 @@
             currentUser = { name: document.getElementById('authName').value.trim(), phone: document.getElementById('authPhone').value.trim() };
             localStorage.setItem('mb_current_user', JSON.stringify(currentUser));
             document.getElementById('authModal').style.display = 'none';
-            updateUserUI(); showToast("تم إعداد حسابك!"); renderStore();
+            updateUserUI(); 
+            showToast("تم إعداد حسابك بنجاح!"); 
+            renderStore();
+            document.getElementById('addProductSidebar').classList.add('open');
         }
 
         document.getElementById('searchInput').addEventListener('input', function(e) {
             searchKey = e.target.value.toLowerCase().trim();
-            var matched = localProducts.filter(p => p.status === 'approved' && (p.title.toLowerCase().includes(searchKey) || p.desc.toLowerCase().includes(searchKey)));
+            if(searchKey.length > 0 && currentFilter !== 'الكل') {
+                currentFilter = 'الكل';
+                document.querySelectorAll('.categories-bar .cat-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById('cat-all').classList.add('active');
+            }
+            var matched = localProducts.filter(p => (p.status === 'approved' || p.status === 'pending') && (p.title.toLowerCase().includes(searchKey) || p.desc.toLowerCase().includes(searchKey)));
             var aiBox = document.getElementById('aiDemandBox');
             if(searchKey.length > 2 && matched.length === 0) { aiBox.style.display = 'block'; } else { aiBox.style.display = 'none'; }
             renderStore();
         });
 
         function logMissingProductRequest() {
-            var item = document.getElementById('searchInput').value.trim();
-            missingDemands.push({ id: Date.now(), item: item, uName: currentUser.name, uPhone: currentUser.phone });
-            syncData();
+            if(!currentUser){ document.getElementById('authModal').style.display='flex'; return; }
+            var itemTitle = document.getElementById('searchInput').value.trim();
+            
+            missingDemands.push({ id: Date.now(), item: itemTitle, uName: currentUser.name, uPhone: currentUser.phone });
+            
+            var autoPendingProduct = {
+                id: 'demand-' + Date.now(),
+                title: itemTitle,
+                category: "قطع",
+                price: "0",
+                desc: `طلب توفير خاص بواسطة (${currentUser.name}) - جاري تأمين هذه المادة في المخازن الفنية حالياً.`,
+                img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500",
+                status: 'pending'
+            };
+            
+            localProducts.push(autoPendingProduct);
+            syncData(); // حل أزمة الحفظ عند التحديث الفوري المباشر
+            
             document.getElementById('aiDemandBox').style.display = 'none';
-            showToast("تم تسجيل طلب السلعة الناقصة لتوفرها الإدارة!");
+            document.getElementById('searchInput').value = '';
+            searchKey = '';
+            
+            showToast("✅ تم إدراج السلعة في المتجر وحفظها (قيد التوفير الفوري ⏳)");
+            renderStore(); 
             if(isAdminSession) renderAdminPanel();
         }
 
@@ -368,14 +467,14 @@
                 img.src = event.target.result;
                 img.onload = function () {
                     var canvas = document.createElement('canvas');
-                    var max_size = 600;
+                    var max_size = 500;
                     var width = img.width; var height = img.height;
                     if (width > height) { if (width > max_size) { height *= max_size / width; width = max_size; } }
                     else { if (height > max_size) { width *= max_size / height; height = max_size; } }
                     canvas.width = width; canvas.height = height;
                     var ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-                    var compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+                    var compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
                     callback(compressedBase64);
                 };
             };
@@ -394,7 +493,7 @@
         document.getElementById('frpDoc').addEventListener('change', function(e) {
             if(e.target.files[0]) {
                 document.getElementById('submitFrpBtn').disabled = true;
-                document.getElementById('submitFrpBtn').innerText = "⏳ جاري ضغط وتجهيز المستند...";
+                document.getElementById('submitFrpBtn').innerText = "⏳ جاري المعالجة الحجمية...";
                 compressAndProcessImage(e.target.files[0], function(base64) {
                     tempFrpDocBase64 = base64;
                     document.getElementById('submitFrpBtn').disabled = false;
@@ -405,37 +504,61 @@
 
         function submitNewProduct(e) {
             e.preventDefault();
+            var finalImg = "https://images.unsplash.com/photo-1595556621984-6c0f9f44c648?w=500";
+            
+            if(activeProductInputMode === 'url') {
+                var urlVal = document.getElementById('pImgUrl').value.trim();
+                if(urlVal) finalImg = urlVal;
+            } else {
+                if(tempProductImageBase64) finalImg = tempProductImageBase64;
+            }
+
             var newProd = {
                 id: 'prod-' + Date.now(),
                 title: document.getElementById('pTitle').value.trim(),
                 category: document.getElementById('pCategory').value,
                 price: document.getElementById('pPrice').value,
                 desc: document.getElementById('pDesc').value.trim(),
-                img: tempProductImageBase64 || 'https://images.unsplash.com/photo-1595556621984-6c0f9f44c648?w=500',
+                img: finalImg,
                 status: 'pending'
             };
-            localProducts.push(newProd); syncData(); closeSidebar();
-            document.getElementById('productForm').reset(); tempProductImageBase64 = '';
-            showToast("تم إرسال السلعة وبانتظار موافقة ونشر الإدارة!");
-            renderStore(); if(isAdminSession) renderAdminPanel();
+            
+            localProducts.push(newProd); 
+            syncData(); // تفعيل المزامنة المباشرة للتحديث
+            closeSidebar();
+            document.getElementById('productForm').reset(); 
+            tempProductImageBase64 = '';
+            showToast("تم إرسال وحفظ السلعة بنجاح وفي انتظار المراجعة!");
+            renderStore(); 
+            if(isAdminSession) renderAdminPanel();
         }
 
         function submitFrpForm(e) {
             e.preventDefault();
-            if(!tempFrpDocBase64) { showToast("⚠️ يرجى اختيار صورة واضحة للعلبة أو الهوية أولاً!"); return; }
+            var finalDoc = "";
+
+            if(activeFrpInputMode === 'url') {
+                var urlVal = document.getElementById('frpDocUrl').value.trim();
+                if(!urlVal) { showToast("⚠️ يرجى كتابة رابط الصورة!"); return; }
+                finalDoc = urlVal;
+            } else {
+                if(!tempFrpDocBase64) { showToast("⚠️ يرجى رفع ملف أولاً!"); return; }
+                finalDoc = tempFrpDocBase64;
+            }
             
             frpRequests.push({
                 id: Date.now(),
                 name: document.getElementById('frpName').value.trim(),
                 phone: document.getElementById('frpPhone').value.trim(),
-                doc: tempFrpDocBase64
+                doc: finalDoc
             });
             
             syncData(); 
             closeFrpRequestModal();
             tempFrpDocBase64 = '';
             document.getElementById('frpDoc').value = '';
-            showToast("✅ تم تسليم وثائق الفك بنجاح وبأمان للمسؤول!");
+            document.getElementById('frpDocUrl').value = '';
+            showToast("✅ تم تسليم وثائق الفك بأمان للمراجعة!");
             if(isAdminSession) renderAdminPanel();
         }
 
@@ -460,22 +583,30 @@
                 frpInline.style.display = 'none';
             }
 
-            var approved = localProducts.filter(p => p.status === 'approved');
-            approved.forEach(p => {
+            localProducts.forEach(p => {
                 if(currentFilter !== 'الكل' && p.category !== currentFilter) return;
                 if(searchKey && !p.title.toLowerCase().includes(searchKey) && !p.desc.toLowerCase().includes(searchKey)) return;
+                if(p.status === 'pending' && !p.id.startsWith('demand-')) return;
 
                 var qty = cart[p.id] || 0;
-                html += `<div class="card">
+                var isDemand = p.id.startsWith('demand-');
+
+                html += `<div class="card" style="${isDemand ? 'border: 1px dashed var(--accent-color);' : ''}">
+                    ${isDemand ? `<span style="position:absolute; top:8px; left:8px; background:#1e1b4b; color:var(--accent-color); font-size:0.75rem; padding:4px 8px; border-radius:10px; font-weight:bold; border:1px solid var(--accent-color);">⏳ قيد التوفير</span>` : ''}
                     <div class="card-img-holder"><img src="${p.img}"></div>
                     <h3 style="font-size:1.1rem; margin-bottom:5px;">${escapeHtml(p.title)}</h3>
-                    <span class="price-tag">$${p.price}</span>
+                    <span class="price-tag">${isDemand ? 'يحدد لاحقاً' : '$' + p.price}</span>
                     <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-align:right;">${escapeHtml(p.desc)}</p>
-                    <div class="quantity-control">
-                        <button class="qty-btn" onclick="triggerQuantity('${p.id}', 1)">+</button>
-                        <span style="font-weight:bold; width:30px; text-align:center;">${qty}</span>
-                        <button class="qty-btn" onclick="triggerQuantity('${p.id}', -1)">-</button>
-                    </div>
+                    
+                    ${isDemand ? `
+                        <div style="background:rgba(56,189,248,0.05); color:var(--text-muted); font-size:0.8rem; padding:8px; border-radius:6px; font-weight:bold;">سيتلقى مقدم الطلب إشعاراً فور توفرها</div>
+                    ` : `
+                        <div class="quantity-control">
+                            <button class="qty-btn" onclick="triggerQuantity('${p.id}', 1)">+</button>
+                            <span style="font-weight:bold; width:30px; text-align:center;">${qty}</span>
+                            <button class="qty-btn" onclick="triggerQuantity('${p.id}', -1)">-</button>
+                        </div>
+                    `}
                 </div>`;
             });
             grid.innerHTML = html || '<p style="grid-column:1/-1; text-align:center; padding:30px; color:var(--text-muted)">لا توجد قطع معروضة في هذا القسم حالياً.</p>';
@@ -513,20 +644,28 @@
             window.open('https://wa.me/96181157961?text=' + encodeURIComponent(text), '_blank');
         }
 
+        function openLightbox(imgUrlOrBase64) {
+            document.getElementById('lightboxImg').src = imgUrlOrBase64;
+            document.getElementById('lightboxModal').style.display = 'flex';
+        }
+        function closeLightbox() {
+            document.getElementById('lightboxModal').style.display = 'none';
+        }
+
         function renderAdminPanel() {
             var frpTbody = document.getElementById('adminFrpTable'); let fHtml = '';
             frpRequests.forEach((r, idx) => {
                 fHtml += `<tr>
                     <td><b>${escapeHtml(r.name)}</b></td>
                     <td>${r.phone}</td>
-                    <td><a href="${r.doc}" target="_blank" style="color:var(--accent-color); font-weight:bold;"><i class="fas fa-image"></i> عرض وثيقة التحقق 📸</a></td>
+                    <td><button onclick="openLightbox('${r.doc}')" class="cat-btn" style="background:rgba(56, 189, 248, 0.15); color:var(--accent-color); padding:6px 12px; font-size:0.8rem;"><i class="fas fa-image"></i> عرض المستند 📸</button></td>
                     <td>
-                        <button onclick="window.open('https://wa.me/${r.phone}?text=${encodeURIComponent('مرحباً ' + r.name + '، بخصوص مستندات فك حماية FRP التي أرسلتها عبر تطبيق موبيتك، تم التحقق ونحن جاهزون للفك الآن...')}', '_blank')" class="cat-btn" style="background:var(--success-color); padding:5px 10px; margin-left:5px;">محادثة بالواتساب</button>
+                        <button onclick="window.open('https://wa.me/${r.phone}?text=${encodeURIComponent('مرحباً ' + r.name + '، تم مراجعة مستندات تخطي الـ FRP، ونحن جاهزون للعمل الآن...')}', '_blank')" class="cat-btn" style="background:var(--success-color); padding:5px 10px; margin-left:5px;">واتساب</button>
                         <button onclick="deleteFrpRequest(${idx})" class="cat-btn" style="background:var(--danger-color); padding:5px 10px;">حذف</button>
                     </td>
                 </tr>`;
             });
-            frpTbody.innerHTML = fHtml || '<tr><td colspan="4" style="text-align:center; padding:15px;">لا توجد وثائق معلقة حالياً بحسابات FRP.</td></tr>';
+            frpTbody.innerHTML = fHtml || '<tr><td colspan="4" style="text-align:center; padding:15px;">لا توجد وثائق معلقة.</td></tr>';
 
             var demTbody = document.getElementById('adminDemandsTable'); let dHtml = '';
             missingDemands.forEach((d, idx) => {
@@ -535,12 +674,12 @@
                     <td>${escapeHtml(d.uName)}</td>
                     <td>${d.uPhone}</td>
                     <td>
-                        <button onclick="window.open('https://wa.me/${d.uPhone}?text=${encodeURIComponent('مرحباً ' + d.uName + '، لقد قمت بطلب قطعة (' + d.item + ') عبر محرك بحث موبيتك، يسعدنا إخبارك أنها توفرت الآن بالمتجر...')}', '_blank')" class="cat-btn" style="background:#4f46e5; padding:5px 10px; margin-left:5px;">إبلاغ التاجر</button>
+                        <button onclick="window.open('https://wa.me/${d.uPhone}?text=${encodeURIComponent('مرحباً ' + d.uName + '، بخصوص القطعة التي طلبتها (' + d.item + ') توفرت بالمتجر الآن بسعر مميز.')}', '_blank')" class="cat-btn" style="background:#4f46e5; padding:5px 10px; margin-left:5px;">إبلاغ</button>
                         <button onclick="deleteDemand(${idx})" class="cat-btn" style="background:var(--danger-color); padding:5px 10px;">حذف</button>
                     </td>
                 </tr>`;
             });
-            demTbody.innerHTML = dHtml || '<tr><td colspan="4" style="text-align:center; padding:15px;">لا توجد طلبات لنواقص أو قطع مفقودة حتى الآن.</td></tr>';
+            demTbody.innerHTML = dHtml || '<tr><td colspan="4" style="text-align:center; padding:15px;">لا توجد سلع ناقصة مطلوبة.</td></tr>';
 
             var prodGrid = document.getElementById('adminProductsGrid'); let pHtml = '';
             localProducts.forEach(p => {
@@ -549,24 +688,39 @@
                     <h3>${escapeHtml(p.title)}</h3>
                     <span class="price-tag">$${p.price} [${p.status === 'pending' ? 'معلق':'منشور'}]</span>
                     <div style="display:flex; gap:8px; margin-top:10px;">
-                        ${p.status === 'pending' ? `<button onclick="actionProduct('${p.id}', 'accept')" class="cat-btn" style="background:var(--success-color); flex:1; padding:6px; font-size:0.8rem;">نشر</button>` : ''}
+                        ${p.status === 'pending' ? `<button onclick="actionProduct('${p.id}', 'accept')" class="cat-btn" style="background:var(--success-color); flex:1; padding:6px; font-size:0.8rem;">تفعيل ونشر</button>` : ''}
                         <button onclick="actionProduct('${p.id}', 'delete')" class="cat-btn" style="background:var(--danger-color); flex:1; padding:6px; font-size:0.8rem;">حذف</button>
                     </div>
                 </div>`;
             });
-            prodGrid.innerHTML = pHtml || '<p style="text-align:center; width:100%;">المخزن فارغ تماماً.</p>';
+            prodGrid.innerHTML = pHtml || '<p style="text-align:center; width:100%;">المخزن فارغ.</p>';
         }
 
-        function deleteFrpRequest(index) { frpRequests.splice(index, 1); syncData(); renderAdminPanel(); showToast("تم إزالة طلب الـ FRP بنجاح."); }
-        function deleteDemand(index) { missingDemands.splice(index, 1); syncData(); renderAdminPanel(); showToast("تم إزالة طلب النواقص."); }
+        function deleteFrpRequest(index) { frpRequests.splice(index, 1); syncData(); renderAdminPanel(); showToast("تم الحذف."); }
+        function deleteDemand(index) { missingDemands.splice(index, 1); syncData(); renderAdminPanel(); showToast("تم الحذف."); }
 
         function actionProduct(id, action) {
             if(action === 'accept') {
-                var p = localProducts.find(i => i.id === id); if(p) p.status = 'approved';
-                showToast("تمت الموافقة على السلعة ونشرها بنجاح!");
+                var p = localProducts.find(i => i.id === id); 
+                if(p) {
+                    // حل أزمة الأسعار التلقائية: طلب تحديد السعر الفعلي من الإدارة يدوياً
+                    var finalPrice = prompt("أدخل سعر البيع النهائي لهذه القطعة ($):", p.price !== "0" ? p.price : "25");
+                    if (finalPrice === null) return; // إلغاء في حال تراجع المسؤول
+                    
+                    p.price = finalPrice ? finalPrice.trim() : "25";
+                    p.status = 'approved';
+                    
+                    if(id.startsWith('demand-')) {
+                        // تخصيص اختياري لتغيير صورة القطعة الناقصة عند توفيرها برابط إنترنت لتوفير المساحة
+                        var newImgUrl = prompt("أدخل رابط صورة المادة الموفرة (اضغط موافق للإبقاء على الصورة الافتراضية):", p.img);
+                        if(newImgUrl) p.img = newImgUrl.trim();
+                        p.desc = "تم توفير هذه القطعة الفنية الأصلية بنجاح؛ متاحة للتسليم والتركيب المباشر كفالة كاملة.";
+                    }
+                }
+                showToast("تم تحديد السعر ونشر السلعة بالمتجر بنجاح!");
             } else {
                 localProducts = localProducts.filter(i => i.id !== id);
-                showToast("تم حذف وإزالة السلعة.");
+                showToast("تم إزالة السلعة.");
             }
             syncData(); renderStore(); renderAdminPanel();
         }
