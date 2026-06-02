@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobitech | المنصة الذكية المتكاملة (نسخة محسنة)</title>
+    <title>Mobitech | المنصة الذكية المتكاملة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -17,7 +17,7 @@
             --text-muted: #9ca3af;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; padding-bottom: 90px; }
         
         nav {
             background-color: rgba(21, 28, 44, 0.8);
@@ -35,9 +35,9 @@
         .nav-links a:hover { color: var(--accent-color); }
 
         .hero { padding: 50px 5% 30px; text-align: center; background: radial-gradient(circle at top, rgba(56, 189, 248, 0.15), transparent 60%); }
-        .hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 10px; }
+        .hero h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; }
         .hero h1 span { color: var(--accent-color); }
-        .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 20px; }
+        .hero p { font-size: 1.3rem; color: #e5e7eb; font-weight: 700; max-width: 800px; margin: 0 auto 25px; line-height: 1.8; }
         
         .interactive-modes { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); max-width: 500px; margin: 0 auto 25px; }
         .mode-title { width: 100%; text-align: center; font-size: 0.95rem; color: var(--accent-color); margin-bottom: 10px; display: block; }
@@ -66,9 +66,17 @@
         .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 20px 5%; }
         .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 20px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; position: relative; }
         .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; background: #0f1420; }
-        .card h3 { margin-bottom: 10px; font-size: 1.25rem; color: #fff; }
+        .card h3 { margin-bottom: 5px; font-size: 1.25rem; color: #fff; }
+        
+        .price-tag { color: var(--success-color); font-size: 1.3rem; font-weight: 900; margin-bottom: 10px; display: block; }
         .card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px; flex-grow: 1; }
-        .badge { padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; background-color: rgba(56, 189, 248, 0.1); color: var(--accent-color); align-self: center; }
+        .badge { padding: 4px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; background-color: rgba(56, 189, 248, 0.1); color: var(--accent-color); align-self: center; margin-bottom: 12px; }
+
+        /* أزرار زيادة ونقصان الكمية المعروضة بجانب الرقم */
+        .quantity-control { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 12px; background: rgba(0,0,0,0.2); padding: 6px; border-radius: 8px; }
+        .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: #2563eb; color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .qty-btn.minus { background: #475569; }
+        .qty-number { font-size: 1.1rem; font-weight: bold; width: 30px; text-align: center; }
 
         .dynamic-section { background-color: var(--card-bg); max-width: 650px; margin: 30px auto; padding: 25px; border-radius: 15px; border: 1px solid rgba(56, 189, 248, 0.2); display: none; }
         .form-group { margin-bottom: 18px; display: flex; flex-direction: column; text-align: right; }
@@ -83,7 +91,21 @@
         .frp-box { background: linear-gradient(135deg, #1e1b4b, #151c2c); border: 1px solid rgba(139, 92, 246, 0.3); padding: 20px; border-radius: 12px; text-align: center; }
         .frp-status { display: inline-block; padding: 5px 15px; background: rgba(16, 185, 129, 0.2); color: #34d399; border-radius: 20px; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem; }
 
-        .toast-notify { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) scale(0.9); background: #1e293b; backdrop-filter: blur(12px); padding: 12px 24px; border-radius: 50px; display: flex; align-items: center; gap: 12px; z-index: 2000; border-right: 4px solid var(--accent-color); opacity: 0; transition: 0.2s; pointer-events: none; font-weight: 500; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        /* سلة المشتريات العائمة التفاعلية في الأسفل */
+        .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; border-top: 2px solid var(--accent-color); padding: 15px 5%; display: none; justify-content: space-between; align-items: center; z-index: 2500; box-shadow: 0 -4px 15px rgba(0,0,0,0.5); }
+        .cart-info { display: flex; align-items: center; gap: 15px; }
+        .cart-count { background: var(--accent-color); color: #0b0f19; font-weight: bold; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+        .cart-total { font-size: 1.2rem; font-weight: bold; color: var(--success-color); }
+
+        /* نافذة الفاتورة المنبثقة للطباعة أو الإرسال */
+        .invoice-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 4000; padding: 15px; overflow-y: auto; }
+        .invoice-box { background: white; color: black; padding: 30px; border-radius: 8px; width: 100%; max-width: 550px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); text-align: right; direction: rtl; }
+        .invoice-header { text-align: center; border-bottom: 2px dashed #ccc; padding-bottom: 15px; margin-bottom: 15px; }
+        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .invoice-table th, .invoice-table td { border-bottom: 1px solid #ddd; padding: 10px; text-align: right; }
+        .invoice-table th { background: #f4f4f4; font-weight: bold; }
+
+        .toast-notify { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) scale(0.9); background: #1e293b; backdrop-filter: blur(12px); padding: 12px 24px; border-radius: 50px; display: flex; align-items: center; gap: 12px; z-index: 2000; border-right: 4px solid var(--accent-color); opacity: 0; transition: 0.2s; pointer-events: none; font-weight: 500; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
         .toast-notify.show { opacity: 1; transform: translateX(-50%) scale(1); }
 
         footer { background-color: #070a10; padding: 25px 5%; text-align: center; margin-top: 50px; border-top: 1px solid rgba(255, 255, 255, 0.05); color: var(--text-muted); font-size: 0.9rem; }
@@ -108,7 +130,7 @@
 
     <section class="hero">
         <h1>منصة <span>Mobitech</span> الذكية</h1>
-        <p>المكتب والمنصة المتكاملة لصيانة الهواتف، الأجهزة الذكية، وتأمين قطع الغيار والأكسسوارات الاحترافية حياً.</p>
+        <p>المنصة المتكاملة لصيانة الهواتف وتأمين قطع الغيار والأكسسوارات</p>
         
         <div class="interactive-modes">
             <div style="width:100%">
@@ -177,6 +199,46 @@
         <div class="grid-container" id="store-grid"></div>
     </section>
 
+    <div class="cart-bar" id="cartBar">
+        <div class="cart-info">
+            <div class="cart-count" id="cartCount">0</div>
+            <div>
+                <span style="font-size: 0.9rem; color: var(--text-muted); display:block;">سلة المشتريات</span>
+                <span class="cart-total" id="cartTotal">الإجمالي: $0</span>
+            </div>
+        </div>
+        <button class="btn btn-admin" style="background:#10b981; color:white; border-radius:8px;" onclick="openInvoice()"><i class="fas fa-file-invoice-dollar"></i> عرض الفاتورة</button>
+    </div>
+
+    <div class="invoice-modal" id="invoiceModal">
+        <div class="invoice-box">
+            <div class="invoice-header">
+                <h2>Mobitech</h2>
+                <p>فاتورة شراء مبدئية للمواد المختارة</p>
+                <small id="invoiceDate"></small>
+            </div>
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>المادة</th>
+                        <th>السعر</th>
+                        <th>الكمية</th>
+                        <th>المجموع</th>
+                    </tr>
+                </thead>
+                <tbody id="invoiceItems"></tbody>
+            </table>
+            <div style="text-align: left; font-size: 1.3rem; font-weight: bold; margin-bottom: 20px;">
+                صافي الإجمالي المطلوب: <span style="color:#10b981;" id="invoiceTotalSum"></span>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button onclick="window.print()" class="btn" style="background:#475569; color:white; flex:1; border-radius:6px; justify-content:center;"><i class="fas fa-print"></i> طباعة الفاتورة</button>
+                <button onclick="sendInvoiceWhatsApp()" class="btn" style="background:#25d366; color:white; flex:1; border-radius:6px; justify-content:center;"><i class="fab fa-whatsapp"></i> تأكيد عبر واتساب</button>
+                <button onclick="closeInvoice()" class="btn" style="background:#ef4444; color:white; border-radius:6px;">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
     <section id="client-section" class="dynamic-section">
         <h2 style="text-align: center; margin-bottom: 15px; color: var(--accent-color);">
             <i class="fas fa-plus-circle"></i> إضافة مادة وعرضها للبيع (زبون)
@@ -196,8 +258,12 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>المواصفات الفنية والسعر المطلوب:</label>
-                <textarea id="pDesc" rows="3" placeholder="اكتب حالة السلعة والسعر المطلوب بوضوح..." required></textarea>
+                <label>السعر المطلوب بالدولار الأمريكي ($):</label>
+                <input type="number" id="pPrice" placeholder="مثال: 50" min="0" required>
+            </div>
+            <div class="form-group">
+                <label>المواصفات الفنية وحالة السلعة:</label>
+                <textarea id="pDesc" rows="3" placeholder="اكتب حالة السلعة والملاحظات بوضوح..." required></textarea>
             </div>
             <div class="form-group">
                 <label>تحميل صورة السلعة مباشرة (من ملفات هاتفك):</label>
@@ -232,6 +298,7 @@
 
     <script>
         var allItems = [];
+        var cart = {}; // كائن داخلي لحفظ كمية كل منتج تم اختياره
         var currentFilter = 'الكل';
         var searchQuery = '';
         var isAdminVerified = false; 
@@ -320,6 +387,85 @@
             refreshStoreUI();
         }
 
+        // دالة إدارة الـ + و - والكميات في الواجهة والتعديل الحي للسلة
+        function adjustQty(id, change) {
+            if (!cart[id]) cart[id] = 0;
+            cart[id] += change;
+            if (cart[id] <= 0) delete cart[id];
+            
+            document.getElementById('qty-' + id).innerText = cart[id] || 0;
+            updateCartBar();
+        }
+
+        function updateCartBar() {
+            var totalCount = 0;
+            var totalPrice = 0;
+            
+            for (var id in cart) {
+                var item = allItems.find(i => i.id === id);
+                if (item) {
+                    totalCount += cart[id];
+                    totalPrice += (parseFloat(item.price) || 0) * cart[id];
+                }
+            }
+            
+            var bar = document.getElementById('cartBar');
+            if (totalCount > 0) {
+                bar.style.display = 'flex';
+                document.getElementById('cartCount').innerText = totalCount;
+                document.getElementById('cartTotal').innerText = 'الإجمالي: $' + totalPrice;
+            } else {
+                bar.style.display = 'none';
+            }
+        }
+
+        function openInvoice() {
+            var modal = document.getElementById('invoiceModal');
+            var tbody = document.getElementById('invoiceItems');
+            var totalSumLabel = document.getElementById('invoiceTotalSum');
+            
+            document.getElementById('invoiceDate').innerText = 'التاريخ: ' + new Date().toLocaleString('ar-LB');
+            let html = '';
+            let totalSum = 0;
+
+            for (var id in cart) {
+                var item = allItems.find(i => i.id === id);
+                if (item) {
+                    var subtotal = (parseFloat(item.price) || 0) * cart[id];
+                    totalSum += subtotal;
+                    html += '<tr>' +
+                        '<td>' + escapeHtml(item.title) + '</td>' +
+                        '<td>$' + item.price + '</td>' +
+                        '<td>' + cart[id] + '</td>' +
+                        '<td>$' + subtotal + '</td>' +
+                        '</tr>';
+                }
+            }
+            
+            tbody.innerHTML = html;
+            totalSumLabel.innerText = '$' + totalSum;
+            modal.style.display = 'flex';
+        }
+
+        function closeInvoice() {
+            document.getElementById('invoiceModal').style.display = 'none';
+        }
+
+        function sendInvoiceWhatsApp() {
+            let msg = '👋 مرحبا Mobitech، أود تأمين الطلبية التالية عبر الفاتورة الحية:\n\n';
+            let totalSum = 0;
+            for (var id in cart) {
+                var item = allItems.find(i => i.id === id);
+                if (item) {
+                    var subtotal = (parseFloat(item.price) || 0) * cart[id];
+                    totalSum += subtotal;
+                    msg += `▪️ ${item.title}\n   الكمية: ${cart[id]} | السعر: $${item.price} | المجموع: $${subtotal}\n\n`;
+                }
+            }
+            msg += `💰 صافي الحساب الكلي: $${totalSum}\n📍 يرجى التواصل لتأكيد التسليم أو الصيانة والقطع.`;
+            window.open('https://wa.me/96181157961?text=' + encodeURIComponent(msg), '_blank');
+        }
+
         function refreshStoreUI() {
             var storeGrid = document.getElementById('store-grid');
             var storeHTML = '';
@@ -329,11 +475,22 @@
                 if (currentFilter !== 'الكل' && item.category !== currentFilter) return;
                 if (searchQuery.trim() !== '' && !item.title.includes(searchQuery) && !item.desc.includes(searchQuery)) return;
                 
+                var currentQty = cart[item.id] || 0;
+
                 storeHTML += '<div class="card">' +
                     '<img src="' + item.img + '" onerror="this.src=\'https://images.unsplash.com/photo-1595556621984-6c0f9f44c648?w=500\'">' +
                     '<h3>' + escapeHtml(item.title) + '</h3>' +
+                    '<span class="price-tag">$' + (item.price || '0') + '</span>' +
                     '<p>' + escapeHtml(item.desc) + '</p>' +
                     '<span class="badge">' + item.category + '</span>' +
+                    
+                    // أزرار تحديد كمية المواد المطلوبة (+ ورقم بجانبها) للعميل
+                    '<div class="quantity-control">' +
+                    '<button class="qty-btn" onclick="adjustQty(\'' + item.id + '\', 1)">+</button>' +
+                    '<span class="qty-number" id="qty-' + item.id + '">' + currentQty + '</span>' +
+                    '<button class="qty-btn minus" onclick="adjustQty(\'' + item.id + '\', -1)">-</button>' +
+                    '</div>' +
+
                     '</div>';
             });
             
@@ -354,6 +511,7 @@
                 pendHtml += '<div class="card" style="border: 1px dashed #f59e0b;">' +
                     '<img src="' + p.img + '">' +
                     '<h3>' + escapeHtml(p.title) + '</h3>' +
+                    '<span class="price-tag">السعر المقترح: $' + p.price + '</span>' +
                     '<p>' + escapeHtml(p.desc) + '</p>' +
                     '<span class="badge" style="margin-bottom:10px;">' + p.category + '</span>' +
                     '<div class="admin-actions">' +
@@ -368,6 +526,7 @@
                 appHtml += '<div class="card" style="border: 1px solid rgba(16, 185, 129, 0.2);">' +
                     '<img src="' + a.img + '">' +
                     '<h3>' + escapeHtml(a.title) + '</h3>' +
+                    '<span class="price-tag">$' + a.price + '</span>' +
                     '<p>' + escapeHtml(a.desc) + '</p>' +
                     '<span class="badge" style="margin-bottom:10px;">' + a.category + '</span>' +
                     '<div class="admin-actions">' +
@@ -400,6 +559,7 @@
             var newItem = {
                 title: document.getElementById('pTitle').value,
                 category: document.getElementById('pCategory').value,
+                price: document.getElementById('pPrice').value, 
                 desc: document.getElementById('pDesc').value,
                 img: uploadedImageBase64
             };
@@ -444,6 +604,7 @@
                     body: JSON.stringify({ id, action: 'delete' })
                 });
                 showToast('تمت إزالة المادة بنجاح');
+                if (cart[id]) { delete cart[id]; updateCartBar(); }
                 fetchProductsFromServer();
             } catch(e) { showToast('حدث خطأ أثناء الحذف', true); }
         }
