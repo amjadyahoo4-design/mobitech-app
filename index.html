@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobitech | المنصة الاحترافية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mobitech | المنصة الاحترافية المتكاملة</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -19,94 +19,79 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 80px; overflow-x: hidden; }
         
-        /* الهيدر العلوي المخصص لاسم المتجر لوحده وبشكل بارز */
-        .main-header {
-            text-align: center;
-            padding: 20px 0 10px;
-            background: linear-gradient(to bottom, #111827, var(--bg-color));
-        }
-        .main-header h1 { font-size: 3rem; font-weight: 900; color: var(--accent-color); letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .main-header p { font-size: 1rem; color: var(--text-muted); margin-top: 5px; }
+        /* الهيدر العلوي */
+        .main-header { text-align: center; padding: 20px 0 10px; background: linear-gradient(to bottom, #111827, var(--bg-color)); }
+        .main-header h1 { font-size: 2.5rem; font-weight: 900; color: var(--accent-color); display: flex; align-items: center; justify-content: center; gap: 12px; }
+        .main-header p { font-size: 0.95rem; color: var(--text-muted); margin-top: 5px; }
 
-        /* شريط التنقل المتناسق */
-        nav {
-            background-color: rgba(21, 28, 44, 0.85);
-            backdrop-filter: blur(10px);
-            padding: 12px 5%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: sticky; top: 0; z-index: 1000;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
-        }
-        .nav-container { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; }
-        .nav-links { display: flex; gap: 25px; list-style: none; align-items: center; }
-        .nav-links a { color: var(--text-color); text-decoration: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+        /* شريط التنقل */
+        nav { background-color: rgba(21, 28, 44, 0.95); backdrop-filter: blur(10px); padding: 12px 5%; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(56, 189, 248, 0.1); }
+        .nav-container { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; margin: 0 auto; }
+        .nav-links { display: flex; gap: 15px; list-style: none; align-items: center; }
+        .nav-links a { color: var(--text-color); text-decoration: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.9rem; }
         .nav-links a:hover, .nav-links a.active { color: var(--accent-color); }
         
-        .user-controls { display: flex; align-items: center; gap: 15px; }
-        .user-badge { background: #1e293b; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; border: 1px solid var(--accent-color); color: var(--accent-color); font-weight: bold; display: flex; align-items: center; gap: 6px; }
-        .btn-logout { background: transparent; border: none; color: var(--danger-color); cursor: pointer; font-weight: bold; font-size: 0.9rem; display: flex; align-items: center; gap: 4px; }
+        .user-controls { display: flex; align-items: center; gap: 10px; }
+        .user-badge { background: #1e293b; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; border: 1px solid var(--accent-color); color: var(--accent-color); font-weight: bold; display: flex; align-items: center; gap: 4px; }
+        .btn-logout { background: transparent; border: none; color: var(--danger-color); cursor: pointer; font-weight: bold; font-size: 0.85rem; }
 
-        /* القائمة الجانبية المخصصة لإضافة مادة (Sidebar) */
+        /* القائمة الجانبية لإضافة السلع */
         .sidebar {
-            position: fixed; top: 0; left: -400px; width: 380px; height: 100%;
-            background-color: var(--card-bg); z-index: 3000; padding: 30px 25px;
-            box-shadow: 5px 0 25px rgba(0,0,0,0.7); transition: left 0.4s ease;
-            overflow-y: auto; border-right: 2px solid var(--accent-color);
+            position: fixed; top: 0; left: -100%; width: 100%; max-width: 380px; height: 100%;
+            background-color: var(--card-bg); z-index: 3000; padding: 25px;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.7); transition: left 0.3s ease;
+            overflow-y: auto; border-right: 3px solid var(--accent-color);
         }
         .sidebar.open { left: 0; }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 15px; }
-        .sidebar-close { background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 15px; }
+        .sidebar-close { background: transparent; border: none; color: white; font-size: 1.8rem; cursor: pointer; padding: 0 10px; }
 
-        /* تصميم الكروت والمعروضات */
-        .hero { padding: 30px 5% 15px; text-align: center; }
-        .hero p { font-size: 1.2rem; color: #e5e7eb; max-width: 600px; margin: 0 auto; }
+        .search-bar { display: flex; flex-direction: column; align-items: center; margin: 10px auto; max-width: 500px; padding: 0 5%; width: 100%; }
+        .search-bar input { width: 100%; padding: 12px 15px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.1); background: #1e293b; color: white; font-size: 0.95rem; text-align: center; outline: none; }
         
-        .categories-bar { display: flex; justify-content: center; gap: 10px; margin: 25px 0; flex-wrap: wrap; padding: 0 5%; }
-        .cat-btn { padding: 8px 18px; border-radius: 25px; border: none; background: #1e293b; color: var(--text-color); cursor: pointer; font-weight: bold; font-size: 0.9rem; }
-        .cat-btn.active { background: #2563eb; color: #fff; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+        /* صندوق الذكاء الاصطناعي لطلب النواقص */
+        .ai-demand-box { display: none; background: linear-gradient(135deg, #1e1b4b, #151c2c); border: 1px dashed var(--accent-color); border-radius: 12px; padding: 15px; margin-top: 15px; width: 100%; text-align: center; }
 
-        .search-bar { display: flex; justify-content: center; margin: 10px auto; max-width: 500px; padding: 0 5%; }
-        .search-bar input { width: 100%; padding: 12px 20px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.1); background: #1e293b; color: white; font-size: 1rem; text-align: center; }
+        .categories-bar { display: flex; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; padding: 0 5%; }
+        .cat-btn { padding: 8px 14px; border-radius: 20px; border: none; background: #1e293b; color: var(--text-color); cursor: pointer; font-weight: bold; font-size: 0.85rem; }
+        .cat-btn.active { background: #2563eb; color: #fff; }
 
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 20px 5%; max-width: 1300px; margin: 0 auto; }
-        .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 20px; text-align: center; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        .card-img-holder { width: 100%; height: 200px; border-radius: 10px; margin-bottom: 15px; background: #090d16; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; padding: 20px 5%; max-width: 1300px; margin: 0 auto; }
+        .card { background-color: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 15px; text-align: center; display: flex; flex-direction: column; overflow: hidden; }
+        .card-img-holder { width: 100%; height: 180px; border-radius: 8px; margin-bottom: 12px; background: #090d16; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .card-img-holder img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .price-tag { color: var(--success-color); font-size: 1.4rem; font-weight: 900; margin: 8px 0; display: block; }
+        .price-tag { color: var(--success-color); font-size: 1.3rem; font-weight: 900; margin: 5px 0; display: block; }
         
-        .quantity-control { display: flex; align-items: center; justify-content: center; gap: 15px; background: rgba(0,0,0,0.25); padding: 6px; border-radius: 10px; margin-top: auto; }
-        .qty-btn { width: 32px; height: 32px; border-radius: 6px; border: none; background: #2563eb; color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; }
-        
-        /* تصميم النوافذ المنبثقة والإنذارات */
+        .quantity-control { display: flex; align-items: center; justify-content: center; gap: 12px; background: rgba(0,0,0,0.25); padding: 6px; border-radius: 8px; margin-top: auto; }
+        .qty-btn { width: 30px; height: 30px; border-radius: 6px; border: none; background: #2563eb; color: white; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+
+        /* كرت خدمة FRP المماثل للمرفق */
+        .frp-premium-card { background: linear-gradient(145deg, #1e1b4b, #111827); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; padding: 25px; margin: 40px auto; max-width: 600px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .frp-status-badge { background: rgba(16, 185, 129, 0.15); color: var(--success-color); padding: 6px 15px; border-radius: 20px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; font-weight: bold; margin-bottom: 15px; }
+        .frp-status-badge::before { content: ''; width: 8px; height: 8px; background: var(--success-color); border-radius: 50%; display: inline-block; animation: pulse 1.5s infinite; }
+
+        .form-group { margin-bottom: 18px; display: flex; flex-direction: column; text-align: right; }
+        .form-group label { margin-bottom: 6px; font-weight: bold; font-size: 0.9rem; color: #e5e7eb; }
+        .form-group input, .form-group textarea, .form-group select { padding: 12px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.12); background-color: #0b0f19; color: #fff; font-size: 0.95rem; width: 100%; outline: none; }
+
         .global-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 4000; padding: 15px; }
-        .auth-card { background: var(--card-bg); border: 2px solid var(--accent-color); padding: 30px; border-radius: 15px; width: 95%; max-width: 450px; text-align: center; }
-        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; text-align: right; }
-        .form-group label { margin-bottom: 6px; font-weight: bold; font-size: 0.9rem; }
-        .form-group input, .form-group textarea, .form-group select { padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); background-color: #0b0f19; color: #fff; font-size: 1rem; width: 100%; }
-
-        .role-selector { display: flex; gap: 10px; margin-top: 5px; }
-        .role-option { flex: 1; padding: 10px; border-radius: 8px; background: #1e293b; color: var(--text-muted); cursor: pointer; font-weight: bold; text-align: center; border: 1px solid transparent; }
-        .role-option.active { background: rgba(56, 189, 248, 0.1); color: var(--accent-color); border-color: var(--accent-color); }
-
-        /* شريط السلة العائم */
-        .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; border-top: 3px solid var(--accent-color); padding: 15px 5%; display: none; justify-content: space-between; align-items: center; z-index: 2500; }
+        .auth-card { background: var(--card-bg); border: 2px solid var(--accent-color); padding: 25px; border-radius: 12px; width: 100%; max-width: 450px; text-align: center; }
         
-        /* واجهة المسؤول المنفصلة تماماً خارج المتجر */
-        .admin-page { display: none; padding: 30px 5%; max-width: 1200px; margin: 0 auto; }
-        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: right; background: #151c2c; border-radius: 10px; overflow: hidden; }
+        .admin-page { display: none; padding: 20px 5%; max-width: 1200px; margin: 0 auto; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: right; background: #151c2c; border-radius: 10px; overflow: hidden; font-size: 0.9rem; }
         .admin-table th, .admin-table td { padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .admin-table th { background: #1e293b; color: var(--accent-color); }
 
+        .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; border-top: 3px solid var(--accent-color); padding: 12px 5%; display: none; justify-content: space-between; align-items: center; z-index: 2500; }
         .toast-notify { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: #1e293b; padding: 12px 25px; border-radius: 30px; display: flex; align-items: center; gap: 10px; z-index: 5000; opacity: 0; transition: 0.3s; pointer-events: none; font-weight: bold; border-right: 4px solid var(--accent-color); }
         .toast-notify.show { opacity: 1; }
         .image-preview img { max-width: 100%; max-height: 120px; border-radius: 6px; margin-top: 10px; display: none; border: 1px solid var(--accent-color); }
+        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
     </style>
 </head>
 <body>
 
-    <header class="main-header" id="brandHeader">
+    <header class="main-header">
         <h1><i class="fas fa-bolt"></i> Mobitech</h1>
         <p>المنصة المتقدمة لقطع غيار وصيانة الهواتف الذكية</p>
     </header>
@@ -114,24 +99,25 @@
     <nav>
         <div class="nav-container">
             <ul class="nav-links">
-                <li><a id="navStoreBtn" onclick="switchToTab('store')" class="active"><i class="fas fa-store"></i> المتجر الرئيسي</a></li>
+                <li><a id="navStoreBtn" onclick="switchToTab('store')" class="active"><i class="fas fa-store"></i> المتجر</a></li>
+                <li><a id="navFrpBtn" onclick="switchToTab('frp')"><i class="fas fa-unlock-alt"></i> خدمة FRP</a></li>
                 <li><a id="navAddBtn" onclick="openSidebar()"><i class="fas fa-plus-circle"></i> إضافة سلعة</a></li>
-                <li><a id="navAdminBtn" onclick="openAdminGate()"><i class="fas fa-user-shield"></i> صفحة المسؤول</a></li>
+                <li><a id="navAdminBtn" onclick="openAdminGate()"><i class="fas fa-user-shield"></i> الإدارة</a></li>
             </ul>
             <div class="user-controls">
                 <div class="user-badge" id="userDisplayBadge"><i class="fas fa-user"></i> <span id="userLabel">زائر</span></div>
-                <button class="btn-logout" id="logoutBtn" onclick="logout()" style="display: none;"><i class="fas fa-sign-out-alt"></i> خروج</button>
+                <button class="btn-logout" id="logoutBtn" onclick="logout()" style="display: none;"><i class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
     </nav>
 
     <div id="storeTabSection">
-        <section class="hero">
-            <p>تصفح حياً جميع المواد والقطع واطلب مباشرة عبر الواتساب والتليجرام</p>
-        </section>
-
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="🔍 ابحث عن شاشات، بطاريات، إكسسوارات...">
+            <input type="text" id="searchInput" placeholder="🔍 ابحث عن قطع غيار، شاشات ومستلزمات صيانة...">
+            <div class="ai-demand-box" id="aiDemandBox">
+                <p style="font-size:0.9rem; color:#f3f4f6; margin-bottom:10px;"><i class="fas fa-robot" style="color:var(--accent-color)"></i> لم نجد هذه القطعة متوفرة حالياً في المخزن.</p>
+                <button onclick="logMissingProductRequest()" class="cat-btn" style="background:var(--accent-color); color:#0b0f19;">طلب توفير القطعة من الإدارة فوراً ⚡</button>
+            </div>
         </div>
 
         <div class="categories-bar">
@@ -145,287 +131,283 @@
         <div class="grid-container" id="productsGrid"></div>
     </div>
 
+    <div id="frpTabSection" style="display:none; padding: 0 5%;">
+        <div class="frp-premium-card">
+            <div class="frp-status-badge">الخدمة تعمل الآن بشكل فوري</div>
+            <h2 style="font-size:1.8rem; margin-bottom:12px; color:#fff;">قسم خدمات تخطي حسابات جوجل وصيانة السوفتوير (FRP)</h2>
+            <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.6; margin-bottom:20px;">نوفر حلولاً فورية ومباشرة لفك وتخطي حماية أجهزة سامسونج، شاومي، أوبو، وإنفينيكس عن بعد أو في المحل بأحدث الأدوات الرقمية المحمية.</p>
+            <button class="cat-btn" style="background:#8b5cf6; padding:12px 30px; font-size:1.1rem; border-radius:30px;" onclick="openFrpRequestModal()"><i class="fas fa-lock-open"></i> اطلب صيانة FRP الآن</button>
+        </div>
+    </div>
+
     <div id="adminTabSection" class="admin-page">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-            <h2><i class="fas fa-lock"></i> لوحة الإدارة المستقلة (خارج المتجر)</h2>
+            <h2><i class="fas fa-lock"></i> لوحة الأمان والمراجعة الشاملة</h2>
             <button class="cat-btn" onclick="switchToTab('store')" style="background: #4b5563;">العودة للمتجر</button>
         </div>
-
-        <div style="background: var(--card-bg); padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px solid rgba(56,189,248,0.2);">
-            <h3 style="color: var(--accent-color); margin-bottom: 15px;"><i class="fas fa-users"></i> مراجعة طلبات الحسابات (زبائن وتجار)</h3>
+        
+        <div style="background: var(--card-bg); padding: 20px; border-radius: 12px; margin: 25px 0; border: 1px solid rgba(139, 92, 246, 0.3);">
+            <h3 style="color: #a78bfa; margin-bottom:15px;"><i class="fas fa-id-card"></i> وثائق طلبات تخطي السوفتوير وFRP المستلمة (تراها الإدارة فقط)</h3>
             <div style="overflow-x: auto;">
                 <table class="admin-table">
                     <thead>
                         <tr>
-                            <th>الاسم</th>
+                            <th>اسم الزبون</th>
                             <th>رقم الهاتف</th>
-                            <th>النوع المطلوبة</th>
-                            <th>الحالة الحالية</th>
-                            <th>الإجراءات</th>
+                            <th>وثيقة التحقق المرفوعة (علبة/هوية)</th>
+                            <th>الإجراء والاتصال</th>
                         </tr>
                     </thead>
-                    <tbody id="adminUsersTable"></tbody>
+                    <tbody id="adminFrpTable"></tbody>
                 </table>
             </div>
         </div>
 
-        <div style="margin-bottom: 30px;">
-            <h3 style="color: #f59e0b; margin-bottom: 10px;">⏳ سلع بانتظار الموافقة والنشر</h3>
-            <div class="grid-container" id="adminPendingGrid" style="padding:0;"></div>
+        <div style="background: var(--card-bg); padding: 20px; border-radius: 12px; margin: 25px 0; border: 1px solid rgba(245, 158, 11, 0.3);">
+            <h3 style="color: #f59e0b; margin-bottom:15px;"><i class="fas fa-brain"></i> طلبات النواقص الذكية المستلمة من محرك البحث</h3>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>اسم السلعة المطلوبة</th>
+                            <th>اسم الطالب</th>
+                            <th>رقم الهاتف</th>
+                            <th>تأكيد توفرها</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminDemandsTable"></tbody>
+                </table>
+            </div>
         </div>
-        <div>
-            <h3 style="color: var(--success-color); margin-bottom: 10px;">✅ المواد المعروضة على المتجر</h3>
-            <div class="grid-container" id="adminApprovedGrid" style="padding:0;"></div>
+
+        <div style="margin-top:30px;">
+            <h3 style="color:var(--success-color); margin-bottom:10px;">⏳ مراجعة ونشر المنتجات العادية</h3>
+            <div class="grid-container" id="adminProductsGrid" style="padding:0;"></div>
+        </div>
+    </div>
+
+    <div class="global-modal" id="frpRequestModal">
+        <div class="auth-card">
+            <h3><i class="fas fa-shield-alt" style="color:#8b5cf6"></i> تقديم طلب تخطي حماية FRP وعزل الهوية</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">يجب رفع الوثيقة المطلوبة لضمان ملكية الجهاز وحمايتك قانونياً</p>
+            <form onsubmit="submitFrpForm(event)">
+                <div class="form-group">
+                    <label>الاسم الكامل لمقدم الطلب:</label>
+                    <input type="text" id="frpName" required placeholder="أدخل اسمك بالكامل">
+                </div>
+                <div class="form-group">
+                    <label>رقم هاتف الواتساب للمتابعة:</label>
+                    <input type="tel" id="frpPhone" required placeholder="مثال: 961XXXXXXXX">
+                </div>
+                <div class="form-group">
+                    <label>صورة علبة الهاتف أو هوية المالك الشخصية:</label>
+                    <input type="file" id="frpDoc" accept="image/*" required>
+                </div>
+                <button type="submit" class="cat-btn" style="width:100%; background:#8b5cf6; padding:12px; font-size:1rem; color:white;">إرسال المستندات بأمان للمسؤول</button>
+                <button type="button" class="btn-logout" style="margin-top:10px; display:block; width:100%; text-align:center;" onclick="closeFrpRequestModal()">إلغاء</button>
+            </form>
         </div>
     </div>
 
     <div class="sidebar" id="addProductSidebar">
         <div class="sidebar-header">
-            <h3><i class="fas fa-box-open" style="color:var(--accent-color)"></i> إضافة سلعة جديدة</h3>
+            <h3>إضافة سلعة جديدة للمتجر</h3>
             <button class="sidebar-close" onclick="closeSidebar()">×</button>
         </div>
-        <p id="sidebarRestrictionNotice" style="font-size:0.85rem; color:#f59e0b; margin-bottom:15px; display:none;"></p>
         <form id="productForm" onsubmit="submitNewProduct(event)">
-            <div class="form-group">
-                <label>اسم المادة بالكامل:</label>
-                <input type="text" id="pTitle" placeholder="مثال: شاشة اوبو A38 أصلية" required>
-            </div>
+            <div class="form-group"><label>اسم المادة بالكامل:</label><input type="text" id="pTitle" required placeholder="مثال: شاشة اوبو A38 أصلية"></div>
             <div class="form-group">
                 <label>القسم التابع له:</label>
                 <select id="pCategory">
-                    <option value="شاشات" id="opt-screens">شاشات</option>
-                    <option value="أكسسوارات" id="opt-acc">أكسسوارات</option>
-                    <option value="قطع" id="opt-parts">قطع غيار</option>
-                    <option value="هواتف مستعملة" id="opt-used">هواتف مستعملة</option>
+                    <option value="شاشات">شاشات</option>
+                    <option value="أكسسوارات">أكسسوارات</option>
+                    <option value="قطع">قطع غيار</option>
+                    <option value="هواتف مستعملة">هواتف مستعملة</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>السعر المقترح ($):</label>
-                <input type="number" id="pPrice" placeholder="السعر بالدولار" required>
-            </div>
-            <div class="form-group">
-                <label>تفاصيل وحالة القطعة للزبون:</label>
-                <textarea id="pDesc" rows="3" placeholder="اكتب المواصفات بدقة..." required></textarea>
-            </div>
-            <div class="form-group">
-                <label>صورة السلعة حية:</label>
-                <input type="file" id="pImg" accept="image/*" required>
-                <div class="image-preview"><img id="pImgPreview" alt="Preview"></div>
-            </div>
-            <button type="submit" class="cat-btn" style="width:100%; background:var(--accent-color); color:#0b0f19; font-size:1rem; padding:12px; border-radius:8px;">إرسال للتحقق والموافقة</button>
+            <div class="form-group"><label>السعر بالدولار ($):</label><input type="number" id="pPrice" required placeholder="السعر"></div>
+            <div class="form-group"><label>المواصفات والتفاصيل الفنية:</label><textarea id="pDesc" rows="3" required placeholder="اكتب المواصفات والضمان..."></textarea></div>
+            <div class="form-group"><label>صورة السلعة:</label><input type="file" id="pImg" accept="image/*" required></div>
+            <button type="submit" class="cat-btn" style="width:100%; background:var(--accent-color); color:#0b0f19; padding:12px; font-weight:bold;">إرسال المادة للمراجعة</button>
         </form>
     </div>
 
     <div class="global-modal" id="authModal">
         <div class="auth-card">
-            <h3 style="margin-bottom: 10px;"><i class="fas fa-user-lock" style="color:var(--accent-color)"></i> إكمال الحساب مطلوب لتأكيد الطلب</h3>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom:20px;">الرجاء تزويدنا باسمك ورقمك لإرسال الفاتورة عبر الواتساب وتأكيد هويتك</p>
+            <h3><i class="fas fa-user-lock"></i> إكمال إعداد الحساب مطلوب</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">سجل بياناتك مرة واحدة لتتمكن من إضافة السلع والطلب</p>
             <form onsubmit="handleAuthSubmit(event)">
-                <div class="form-group">
-                    <label>الاسم الكامل أو اسم المحل:</label>
-                    <input type="text" id="authName" required placeholder="مثال: أمجد هادي (موبيتك)">
-                </div>
-                <div class="form-group">
-                    <label>رقم هاتف الواتساب الفعال:</label>
-                    <input type="tel" id="authPhone" required placeholder="مثال: 96181157961">
-                </div>
-                <div class="form-group">
-                    <label>تسجيل الدخول بصفتك:</label>
-                    <div class="role-selector">
-                        <div class="role-option active" id="roleClient" onclick="setRoleSelection('زبون')">زبون عادي</div>
-                        <div class="role-option" id="roleTrader" onclick="setRoleSelection('تاجر')">تاجر قطع معتمد</div>
-                    </div>
-                </div>
-                <button type="submit" class="cat-btn" style="width:100%; background:var(--success-color); color:white; padding:12px; font-size:1rem; margin-top:10px;">حفظ وتأكيد الطلب</button>
-                <button type="button" class="btn-logout" style="margin: 15px auto 0; text-align:center;" onclick="closeAuthModal()">إلغاء والتصفح فقط</button>
+                <div class="form-group"><label>الاسم الكامل:</label><input type="text" id="authName" required placeholder="اسمك أو اسم محلك"></div>
+                <div class="form-group"><label>رقم هاتف الواتساب المعتمد:</label><input type="tel" id="authPhone" required placeholder="961XXXXXXXX"></div>
+                <button type="submit" class="cat-btn" style="width:100%; background:var(--success-color); padding:12px; color:white; font-size:1rem;">حفظ وبيانات الحساب</button>
             </form>
         </div>
     </div>
 
     <div class="global-modal" id="adminGateModal">
         <div class="auth-card" style="max-width:380px;">
-            <h3 style="color:#f59e0b; margin-bottom:15px;"><i class="fas fa-shield-alt"></i> كلمة مرور الإدارة</h3>
-            <div class="form-group">
-                <input type="password" id="adminPassField" placeholder="أدخل رمز الدخول السرّي" style="text-align:center;">
-            </div>
-            <div style="display:flex; gap:10px; margin-top:15px;">
+            <h3><i class="fas fa-user-shield" style="color:#f59e0b"></i> رمز الإدارة السري</h3>
+            <input type="password" id="adminPassField" style="text-align:center; margin:15px 0;" class="form-group" placeholder="أدخل الرمز السري">
+            <div style="display:flex; gap:10px;">
                 <button onclick="submitAdminGate()" class="cat-btn" style="background:var(--success-color); flex:1;">دخول</button>
-                <button onclick="closeAdminGate()" class="cat-btn" style="background:var(--danger-color); flex:1;">إلغاء</button>
+                <button onclick="document.getElementById('adminGateModal').style.display='none'" class="cat-btn" style="background:var(--danger-color); flex:1;">إلغاء</button>
             </div>
         </div>
     </div>
 
     <div class="cart-bar" id="cartBar">
-        <div>
-            <span style="font-size:0.85rem; color:var(--text-muted); display:block;">السلة المبدئية</span>
-            <span id="cartTotalText" style="font-size:1.2rem; font-weight:900; color:var(--success-color)">الإجمالي: $0</span>
-        </div>
-        <button class="cat-btn" style="background:#10b981; color:white;" onclick="processOrderCheckout()"> تأكيد الطلب بالواتساب <i class="fab fa-whatsapp"></i></button>
+        <span id="cartTotalText" style="font-size:1.1rem; font-weight:900; color:var(--success-color)">الإجمالي: $0</span>
+        <button class="cat-btn" style="background:#10b981; color:white; padding:10px 20px;" onclick="processOrderCheckout()"> تأكيد الفاتورة بالواتساب <i class="fab fa-whatsapp"></i></button>
     </div>
 
-    <div id="toast" class="toast-notify"><span>تنبيه</span></div>
+    <div id="toast" class="toast-notify">تنبيه</div>
 
     <script>
-        // الذاكرة الثابتة لعدم ضياع البيانات عند تحديث السيرفر
         var localProducts = JSON.parse(localStorage.getItem('mb_products')) || [
             { id: "d1", title: "شاشات بديلة مفحوصة (OLED & LCD)", category: "شاشات", price: "45", desc: "شاشات وبطاريات عالية الجودة مع الضمان الكامل للأداء واللمس المتعدد.", img: "https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?w=500", status: "approved" },
             { id: "d2", title: "شاحن سريع أصلي بقوة 45 واط", category: "أكسسوارات", price: "15", desc: "شواحن معتمدة تدعم الشحن السريع الآمن لكافة الهواتف.", img: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500", status: "approved" }
         ];
-        var localUsers = JSON.parse(localStorage.getItem('mb_users')) || [];
-
+        var frpRequests = JSON.parse(localStorage.getItem('mb_frp_reqs')) || [];
+        var missingDemands = JSON.parse(localStorage.getItem('mb_missing_demands')) || [];
+        var currentUser = JSON.parse(localStorage.getItem('mb_current_user')) || null;
+        var isAdminSession = sessionStorage.getItem('mb_admin_active') === 'true';
+        
         var cart = {};
         var currentFilter = 'الكل';
         var searchKey = '';
-        var selectedRole = 'زبون';
-        
-        // جلسة العميل الحالية المباشرة
-        var currentUser = JSON.parse(localStorage.getItem('mb_current_user')) || null;
-        var isAdminSession = sessionStorage.getItem('mb_admin_active') === 'true';
+        var tempProductImageBase64 = '';
+        var tempFrpDocBase64 = '';
 
-        function showToast(msg, isErr = false) {
-            var t = document.getElementById('toast');
-            t.innerText = msg;
-            t.style.borderRightColor = isErr ? '#ef4444' : '#38bdf8';
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2500);
+        function showToast(msg) {
+            var t = document.getElementById('toast'); t.innerText = msg;
+            t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500);
         }
 
-        function syncStorage() {
+        function syncData() {
             localStorage.setItem('mb_products', JSON.stringify(localProducts));
-            localStorage.setItem('mb_users', JSON.stringify(localUsers));
+            localStorage.setItem('mb_frp_reqs', JSON.stringify(frpRequests));
+            localStorage.setItem('mb_missing_demands', JSON.stringify(missingDemands));
         }
 
         function initApp() {
-            syncStorage();
+            syncData();
             updateUserUI();
             renderStore();
-            if(isAdminSession) renderAdminPanelData();
+            if(isAdminSession) renderAdminPanel();
         }
 
         function updateUserUI() {
-            var label = document.getElementById('userLabel');
-            var logoutBtn = document.getElementById('logoutBtn');
-            if(currentUser) {
-                label.innerText = currentUser.name + ` (${currentUser.role})`;
-                logoutBtn.style.display = 'block';
-                
-                // تطبيق القيود الفورية على فورم الإضافة بناءً على نوع الحساب
-                var notice = document.getElementById('sidebarRestrictionNotice');
-                if(currentUser.role === 'زبون') {
-                    notice.innerText = "⚠️ كزبون، يُسمح لك برفع الهواتف المستعملة فقط لعرضها.";
-                    notice.style.display = "block";
-                    document.getElementById('pCategory').value = 'هواتف مستعملة';
-                    document.getElementById('opt-screens').disabled = true;
-                    document.getElementById('opt-acc').disabled = true;
-                    document.getElementById('opt-parts').disabled = true;
-                } else {
-                    notice.style.display = "none";
-                    document.getElementById('opt-screens').disabled = false;
-                    document.getElementById('opt-acc').disabled = false;
-                    document.getElementById('opt-parts').disabled = false;
-                }
-            } else {
-                label.innerText = 'زائر';
-                logoutBtn.style.display = 'none';
-                document.getElementById('sidebarRestrictionNotice').style.display = "none";
-            }
+            var lbl = document.getElementById('userLabel');
+            lbl.innerText = currentUser ? currentUser.name : 'زائر';
+            document.getElementById('logoutBtn').style.display = currentUser ? 'block' : 'none';
+        }
+
+        function logout() {
+            currentUser = null; localStorage.removeItem('mb_current_user');
+            cart = {}; updateCartBar(); updateUserUI(); renderStore(); showToast("تم تسجيل الخروج");
         }
 
         function switchToTab(tab) {
-            document.getElementById('navStoreBtn').classList.remove('active');
-            document.getElementById('navAdminBtn').classList.remove('active');
+            document.getElementById('storeTabSection').style.display = (tab === 'store') ? 'block' : 'none';
+            document.getElementById('frpTabSection').style.display = (tab === 'frp') ? 'block' : 'none';
+            document.getElementById('adminTabSection').style.display = (tab === 'admin') ? 'block' : 'none';
             
-            if(tab === 'store') {
-                document.getElementById('navStoreBtn').classList.add('active');
-                document.getElementById('storeTabSection').style.display = 'block';
-                document.getElementById('adminTabSection').style.display = 'none';
-                document.getElementById('brandHeader').style.display = 'block';
-            } else if (tab === 'admin') {
-                document.getElementById('navAdminBtn').classList.add('active');
-                document.getElementById('storeTabSection').style.display = 'none';
-                document.getElementById('adminTabSection').style.display = 'block';
-                document.getElementById('brandHeader').style.display = 'none'; // إخفاء اسم المتجر فقط داخل لوحة الإدارة المستقلة لراحة العمل
-            }
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            if(tab === 'store') document.getElementById('navStoreBtn').classList.add('active');
+            if(tab === 'frp') document.getElementById('navFrpBtn').classList.add('active');
+            if(tab === 'admin') document.getElementById('navAdminBtn').classList.add('active');
         }
 
-        // التحكم في القائمة الجانبية (Sidebar)
-        function openSidebar() { document.getElementById('addProductSidebar').classList.add('open'); }
+        function openSidebar() { if(!currentUser){ document.getElementById('authModal').style.display='flex'; return; } document.getElementById('addProductSidebar').classList.add('open'); }
         function closeSidebar() { document.getElementById('addProductSidebar').classList.remove('open'); }
-
-        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
-        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
-
-        function setRoleSelection(role) {
-            selectedRole = role;
-            document.getElementById('roleClient').classList.remove('active');
-            document.getElementById('roleTrader').classList.remove('active');
-            if(role === 'زبون') document.getElementById('roleClient').classList.add('active');
-            else document.getElementById('roleTrader').classList.add('active');
+        function openFrpRequestModal() { if(!currentUser){ document.getElementById('authModal').style.display='flex'; return;} document.getElementById('frpRequestModal').style.display = 'flex'; }
+        function closeFrpRequestModal() { document.getElementById('frpRequestModal').style.display = 'none'; }
+        function openAdminGate() { if(isAdminSession) switchToTab('admin'); else document.getElementById('adminGateModal').style.display = 'flex'; }
+        
+        function submitAdminGate() {
+            if(document.getElementById('adminPassField').value === 'admin123') {
+                isAdminSession = true; sessionStorage.setItem('mb_admin_active', 'true');
+                document.getElementById('adminGateModal').style.display = 'none';
+                switchToTab('admin'); renderAdminPanel();
+            } else { showToast("الرمز السري خطأ!"); }
         }
 
         function handleAuthSubmit(e) {
             e.preventDefault();
-            var name = document.getElementById('authName').value.trim();
-            var phone = document.getElementById('authPhone').value.trim();
-            
-            var userObj = { id: 'usr-' + Date.now(), name, phone, role: selectedRole, status: 'pending' };
-            
-            // التثبيت المحلي والسيرفر
-            var existing = localUsers.find(u => u.phone === phone);
-            if(!existing) {
-                localUsers.push(userObj);
-            } else {
-                userObj = existing;
-            }
-            
-            currentUser = userObj;
+            currentUser = { name: document.getElementById('authName').value.trim(), phone: document.getElementById('authPhone').value.trim() };
             localStorage.setItem('mb_current_user', JSON.stringify(currentUser));
-            syncStorage();
-            updateUserUI();
-            closeAuthModal();
-            showToast("تم حفظ حسابك بنجاح!");
+            document.getElementById('authModal').style.display = 'none';
+            updateUserUI(); showToast("تم تسجيل الدخول بنجاح!"); renderStore();
+        }
+
+        // محرك البحث المدعوم بنظام طلب النواقص الذكي في حال عدم توفر السلعة
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            searchKey = e.target.value.toLowerCase().trim();
+            var matched = localProducts.filter(p => p.status === 'approved' && (p.title.toLowerCase().includes(searchKey) || p.desc.toLowerCase().includes(searchKey)));
+            var aiBox = document.getElementById('aiDemandBox');
             
-            fetch('/api/users/register', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ name, phone, role: selectedRole })
-            }).catch(()=>{});
-
-            if(Object.keys(cart).length > 0) {
-                processOrderCheckout();
-            }
-        }
-
-        function logout() {
-            currentUser = null;
-            localStorage.removeItem('mb_current_user');
-            updateUserUI();
-            cart = {};
-            updateCartBar();
-            renderStore();
-            showToast("تم تسجيل الخروج");
-        }
-
-        function openAdminGate() {
-            if(isAdminSession) switchToTab('admin');
-            else document.getElementById('adminGateModal').style.display = 'flex';
-        }
-        function closeAdminGate() { document.getElementById('adminGateModal').style.display = 'none'; }
-        function submitAdminGate() {
-            var pass = document.getElementById('adminPassField').value;
-            if(pass === 'admin123') {
-                isAdminSession = true;
-                sessionStorage.setItem('mb_admin_active', 'true');
-                closeAdminGate();
-                switchToTab('admin');
-                renderAdminPanelData();
-                showToast("أهلاً بك يا مسؤول المنصة");
+            if(searchKey.length > 2 && matched.length === 0) {
+                aiBox.style.display = 'block';
             } else {
-                showToast("الرمز السري غير صحيح!", true);
+                aiBox.style.display = 'none';
             }
+            renderStore();
+        });
+
+        function logMissingProductRequest() {
+            var item = document.getElementById('searchInput').value.trim();
+            missingDemands.push({ id: Date.now(), item: item, uName: currentUser.name, uPhone: currentUser.phone });
+            syncData();
+            document.getElementById('aiDemandBox').style.display = 'none';
+            showToast("تم تسجيل طلب السلعة النامصة، ستعمل الإدارة على توفيرها فوراً!");
+            if(isAdminSession) renderAdminPanel();
         }
 
-        // فلترة وعرض السلع في المتجر المفتوح للجميع
+        // تحويل صورة السلعة العادية المرفوعة لـ Base64
+        document.getElementById('pImg').addEventListener('change', function(e) {
+            var reader = new FileReader();
+            reader.onload = function(ev) { tempProductImageBase64 = ev.target.result; };
+            reader.readAsDataURL(e.target.files[0]);
+        });
+
+        function submitNewProduct(e) {
+            e.preventDefault();
+            var newProd = {
+                id: 'prod-' + Date.now(),
+                title: document.getElementById('pTitle').value.trim(),
+                category: document.getElementById('pCategory').value,
+                price: document.getElementById('pPrice').value,
+                desc: document.getElementById('pDesc').value.trim(),
+                img: tempProductImageBase64 || 'https://images.unsplash.com/photo-1595556621984-6c0f9f44c648?w=500',
+                status: 'pending'
+            };
+            localProducts.push(newProd); syncData(); closeSidebar();
+            document.getElementById('productForm').reset(); tempProductImageBase64 = '';
+            showToast("تم إرسال السلعة وبانتظار موافقة ونشر الإدارة!");
+            renderStore(); if(isAdminSession) renderAdminPanel();
+        }
+
+        // تحويل وثيقة الـ FRP لـ Base64 لضمان الحفظ والأمن والسرية
+        document.getElementById('frpDoc').addEventListener('change', function(e) {
+            var reader = new FileReader();
+            reader.onload = function(ev) { tempFrpDocBase64 = ev.target.result; };
+            reader.readAsDataURL(e.target.files[0]);
+        });
+
+        function submitFrpForm(e) {
+            e.preventDefault();
+            frpRequests.push({
+                id: Date.now(),
+                name: document.getElementById('frpName').value.trim(),
+                phone: document.getElementById('frpPhone').value.trim(),
+                doc: tempFrpDocBase64 || ''
+            });
+            syncData(); closeFrpRequestModal();
+            document.getElementById('frpDoc').value = ''; tempFrpDocBase64 = '';
+            showToast("تم تسليم وثائق الفك بأمان للمسؤول!");
+            if(isAdminSession) renderAdminPanel();
+        }
+
         function filterCategory(cat, e) {
             currentFilter = cat;
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -433,14 +415,8 @@
             renderStore();
         }
 
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            searchKey = e.target.value.toLowerCase();
-            renderStore();
-        });
-
         function renderStore() {
-            var grid = document.getElementById('productsGrid');
-            var html = '';
+            var grid = document.getElementById('productsGrid'); let html = '';
             var approved = localProducts.filter(p => p.status === 'approved');
 
             approved.forEach(p => {
@@ -449,7 +425,7 @@
 
                 var qty = cart[p.id] || 0;
                 html += `<div class="card">
-                    <div class="card-img-holder"><img src="${p.img}" onerror="this.src='https://images.unsplash.com/photo-1595556621984-6c0f9f44c648?w=500'"></div>
+                    <div class="card-img-holder"><img src="${p.img}"></div>
                     <h3 style="font-size:1.1rem; margin-bottom:5px;">${escapeHtml(p.title)}</h3>
                     <span class="price-tag">$${p.price}</span>
                     <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-align:right;">${escapeHtml(p.desc)}</p>
@@ -460,193 +436,91 @@
                     </div>
                 </div>`;
             });
-            grid.innerHTML = html || '<p style="grid-column:1/-1; text-align:center; padding:30px; color:var(--text-muted)">لا توجد مواد متوفرة ضمن هذا القسم حالياً.</p>';
+            grid.innerHTML = html || '<p style="grid-column:1/-1; text-align:center; padding:30px; color:var(--text-muted)">لا توجد مواد متوفرة هنا حالياً في هذا القسم.</p>';
         }
 
         function triggerQuantity(id, change) {
-            if(!currentUser) {
-                openAuthModal();
-                return;
-            }
+            if(!currentUser) { document.getElementById('authModal').style.display='flex'; return; }
             if(!cart[id]) cart[id] = 0;
             cart[id] += change;
             if(cart[id] <= 0) delete cart[id];
-            renderStore();
-            updateCartBar();
+            renderStore(); updateCartBar();
         }
 
         function updateCartBar() {
             var bar = document.getElementById('cartBar');
-            var total = 0;
-            var count = 0;
+            var total = 0, count = 0;
             for(let id in cart) {
                 var p = localProducts.find(i => i.id === id);
-                if(p) {
-                    total += (parseFloat(p.price) || 0) * cart[id];
-                    count += cart[id];
-                }
+                if(p) { total += parseFloat(p.price) * cart[id]; count += cart[id]; }
             }
             if(count > 0) {
                 bar.style.display = 'flex';
-                document.getElementById('cartTotalText').innerText = `المواد: ${count} | الإجمالي الكلي: $${total}`;
-            } else {
-                bar.style.display = 'none';
-            }
+                document.getElementById('cartTotalText').innerText = `المواد المطلوبة: ${count} | الإجمالي: $${total}`;
+            } else { bar.style.display = 'none'; }
         }
 
         function processOrderCheckout() {
-            if(!currentUser) { openAuthModal(); return; }
-            let text = `👋 طلب صيانة وشراء جديد من منصة Mobitech الرقمية:\n\n`;
+            let text = `👋 طلب شراء جديد من منصة وعبر تطبيق Mobitech:\n\n`;
             let total = 0;
             for(let id in cart) {
                 var p = localProducts.find(i => i.id === id);
-                if(p) {
-                    let sub = parseFloat(p.price) * cart[id];
-                    total += sub;
-                    text += `▪️ ${p.title} (عدد ${cart[id]}) -> المجموع: $${sub}\n`;
-                }
+                if(p) { total += parseFloat(p.price) * cart[id]; text += `▪️ ${p.title} (عدد ${cart[id]})\n`; }
             }
-            text += `\n💰 الصافي النهائي المطلوب: $${total}\n👤 اسم العميل: ${currentUser.name}\n📞 رقم الهاتف: ${currentUser.phone}`;
+            text += `\n💰 إجمالي الفاتورة: $${total}\n👤 مقدم الطلب: ${currentUser.name}\n📞 رقم هاتف الواتساب: ${currentUser.phone}`;
             window.open('https://wa.me/96181157961?text=' + encodeURIComponent(text), '_blank');
         }
 
-        // معالجة رفع الصور الفوتوغرافية وتحويلها لقاعدة البيانات
-        var tempImageBase64 = '';
-        document.getElementById('pImg').addEventListener('change', function(e) {
-            var file = e.target.files[0];
-            if(file) {
-                var reader = new FileReader();
-                reader.onload = function(evt) {
-                    tempImageBase64 = evt.target.result;
-                    var preview = document.getElementById('pImgPreview');
-                    preview.src = tempImageBase64;
-                    preview.style.display = 'block';
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-
-        function submitNewProduct(e) {
-            e.preventDefault();
-            if(!currentUser) { showToast("يرجى تسجيل الدخول أولاً لرفع المواد!", true); openAuthModal(); return; }
-            
-            var title = document.getElementById('pTitle').value;
-            var category = document.getElementById('pCategory').value;
-            var price = document.getElementById('pPrice').value;
-            var desc = document.getElementById('pDesc').value;
-
-            // تطبيق قيد حظر الإدخال الخاطئ من الفرونت اند للأمان
-            if(currentUser.role === 'زبون' && category !== 'هواتف مستعملة') {
-                showToast("خطأ: يسمح لك برفع قسم الهواتف المستعملة فقط", true);
-                return;
-            }
-
-            var newProd = {
-                id: 'prod-' + Date.now(),
-                title, category, price, desc, img: tempImageBase64 || 'https://images.unsplash.com/photo-1595556621984-6c0f9f44c648?w=500',
-                status: 'pending' // معلق بانتظار المسؤول
-            };
-
-            localProducts.push(newProd);
-            syncStorage();
-            closeSidebar();
-            document.getElementById('productForm').reset();
-            document.getElementById('pImgPreview').style.display = 'none';
-            tempImageBase64 = '';
-            
-            showToast("تم إرسال المادة بنجاح! ستظهر فور قبول المسؤول لها.");
-            renderStore();
-            if(isAdminSession) renderAdminPanelData();
-
-            fetch('/api/products', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(newProd)
-            }).catch(()=>{});
-        }
-
-        // إدارة وعرض بيانات صفحة المسؤول المنفصلة تماماً خارج المتجر
-        function renderAdminPanelData() {
-            // 1. جدول المستخدمين والتجار الجدد
-            var userBody = document.getElementById('adminUsersTable');
-            let uHtml = '';
-            localUsers.forEach(u => {
-                let statusBadge = u.status === 'approved' ? '<span style="color:#10b981">نشط ومقبول</span>' : '<span style="color:#f59e0b">بانتظار الموافقة</span>';
-                let btn = u.status === 'pending' ? 
-                    `<button onclick="actionUser('${u.id}', 'accept')" class="cat-btn" style="background:var(--success-color); padding:4px 10px; font-size:0.8rem;">قبول وتفعيل</button>` : 
-                    `<button onclick="actionUser('${u.id}', 'delete')" class="cat-btn" style="background:var(--danger-color); padding:4px 10px; font-size:0.8rem;"><i class="fas fa-trash"></i></button>`;
-                
-                uHtml += `<tr>
-                    <td><b>${escapeHtml(u.name)}</b></td>
-                    <td><a href="https://wa.me/${u.phone}" target="_blank" style="color:var(--accent-color); text-decoration:none;"><i class="fab fa-whatsapp"></i> ${u.phone}</a></td>
-                    <td><span class="user-badge" style="display:inline-block; padding:2px 8px;">${u.role}</span></td>
-                    <td>${statusBadge}</td>
-                    <td>${btn}</td>
+        function renderAdminPanel() {
+            // 1. جدول مستندات الـ FRP وتخطي السوفتوير
+            var frpTbody = document.getElementById('adminFrpTable'); let fHtml = '';
+            frpRequests.forEach(r => {
+                fHtml += `<tr>
+                    <td><b>${escapeHtml(r.name)}</b></td>
+                    <td>${r.phone}</td>
+                    <td><a href="${r.doc}" target="_blank" style="color:var(--accent-color); font-weight:bold;"><i class="fas fa-image"></i> عرض وثيقة العلبة/الهوية المرفوعة حياً</a></td>
+                    <td><button onclick="window.open('https://wa.me/${r.phone}?text=${encodeURIComponent('مرحباً ' + r.name + '، بخصوص مستندات فك حماية FRP التي أرسلتها عبر متجر موبيتك، تم التحقق وجاهزون للفك فوراً...')}', '_blank')" class="cat-btn" style="background:var(--success-color); padding:5px 10px;">تحويل للواتساب وبدء الفك</button></td>
                 </tr>`;
             });
-            userBody.innerHTML = uHtml || '<tr><td colspan="5" style="text-align:center; padding:15px;">لا يوجد مستخدمون مسجلون حالياً في النظام المحلي.</td></tr>';
+            frpTbody.innerHTML = fHtml || '<tr><td colspan="4" style="text-align:center; padding:15px;">لا توجد وثائق معلقة حالياً بحسابات FRP.</td></tr>';
 
-            // 2. إدارة السلع المعلقة والمقبولة
-            var pendingGrid = document.getElementById('adminPendingGrid');
-            var approvedGrid = document.getElementById('adminApprovedGrid');
-            
-            let pendHtml = '';
-            let apprHtml = '';
-
-            localProducts.forEach(p => {
-                let cardMarkup = `
-                    <div class="card" style="border-color: ${p.status === 'pending' ? '#f59e0b':'rgba(16,185,129,0.3)'}">
-                        <div class="card-img-holder"><img src="${p.img}"></div>
-                        <h3>${escapeHtml(p.title)}</h3>
-                        <span class="price-tag">$${p.price}</span>
-                        <p style="font-size:0.8rem; color:var(--text-muted); text-align:right;">${escapeHtml(p.desc)}</p>
-                        <span class="user-badge" style="align-self:center; margin:5px 0;">${p.category}</span>
-                        <div style="display:flex; gap:10px; margin-top:10px;">
-                            ${p.status === 'pending' ? `<button onclick="actionProduct('${p.id}', 'accept')" class="cat-btn" style="background:var(--success-color); flex:1; padding:6px;">قبول ونشر</button>`:''}
-                            <button onclick="actionProduct('${p.id}', 'delete')" class="cat-btn" style="background:var(--danger-color); ${p.status==='approved'?'flex:1':''}; padding:6px;"><i class="fas fa-trash-alt"></i> إزالة</button>
-                        </div>
-                    </div>`;
-                if(p.status === 'pending') pendHtml += cardMarkup;
-                else apprHtml += cardMarkup;
+            // 2. جدول طلبات النواقص الذكية المستلمة من محرك البحث عبر الـ AI
+            var demTbody = document.getElementById('adminDemandsTable'); let dHtml = '';
+            missingDemands.forEach(d => {
+                dHtml += `<tr>
+                    <td style="color:var(--accent-color); font-weight:bold;">${escapeHtml(d.item)}</td>
+                    <td>${escapeHtml(d.uName)}</td>
+                    <td>${d.uPhone}</td>
+                    <td><button onclick="window.open('https://wa.me/${d.uPhone}?text=${encodeURIComponent('مرحباً ' + d.uName + '، لقد قمت بطلب قطعة (' + d.item + ') المفقودة في محرك بحث موبيتك، يسعدنا إخبارك أنها توفرت الآن بالمتجر...')}', '_blank')" class="cat-btn" style="background:#4f46e5; padding:5px 10px;">إرسال رسالة توفرها بالواتساب</button></td>
+                </tr>`;
             });
+            demTbody.innerHTML = dHtml || '<tr><td colspan="4" style="text-align:center; padding:15px;">لا توجد طلبات لنواقص أو قطع مفقودة حتى الآن.</td></tr>';
 
-            pendingGrid.innerHTML = pendHtml || '<p style="text-align:center; width:100%; color:var(--text-muted)">لا توجد طلبات سلع معلقة.</p>';
-            approvedGrid.innerHTML = apprHtml || '<p style="text-align:center; width:100%; color:var(--text-muted)">المتجر خالي من المنتجات حالياً.</p>';
-        }
-
-        function actionUser(id, action) {
-            if(action === 'accept') {
-                var u = localUsers.find(i => i.id === id);
-                if(u) u.status = 'approved';
-                showToast("تم قبول الحساب وتفعيله بنجاح!");
-            } else {
-                localUsers = localUsers.filter(i => i.id !== id);
-                showToast("تمت إزالة الحساب بنجاح");
-            }
-            syncStorage();
-            updateUserUI();
-            renderAdminPanelData();
+            // 3. كروت المنتجات العادية لمراجعتها (قبول ونشر / حذف)
+            var prodGrid = document.getElementById('adminProductsGrid'); let pHtml = '';
+            localProducts.forEach(p => {
+                pHtml += `<div class="card">
+                    <div class="card-img-holder"><img src="${p.img}"></div>
+                    <h3>${escapeHtml(p.title)}</h3>
+                    <span class="price-tag">$${p.price} [${p.status === 'pending' ? 'معلق':'منشور'}]</span>
+                    <div style="display:flex; gap:8px; margin-top:10px;">
+                        ${p.status === 'pending' ? `<button onclick="actionProduct('${p.id}', 'accept')" class="cat-btn" style="background:var(--success-color); flex:1; padding:6px; font-size:0.8rem;">نشر</button>` : ''}
+                        <button onclick="actionProduct('${p.id}', 'delete')" class="cat-btn" style="background:var(--danger-color); flex:1; padding:6px; font-size:0.8rem;">حذف</button>
+                    </div>
+                </div>`;
+            });
+            prodGrid.innerHTML = pHtml || '<p style="text-align:center; width:100%;">المخزن فارغ تماماً.</p>';
         }
 
         function actionProduct(id, action) {
             if(action === 'accept') {
-                var p = localProducts.find(i => i.id === id);
-                if(p) p.status = 'approved';
-                showToast("تمت الموافقة الفورية ونشر السلعة بالمتجر!");
+                var p = localProducts.find(i => i.id === id); if(p) p.status = 'approved';
+                showToast("تمت الموافقة على السلعة ونشرها بنجاح!");
             } else {
                 localProducts = localProducts.filter(i => i.id !== id);
-                if(cart[id]) { delete cart[id]; updateCartBar(); }
-                showToast("تم حذف وإزالة المادة بالكامل");
+                showToast("تم حذف وإزالة السلعة.");
             }
-            syncStorage();
-            renderStore();
-            renderAdminPanelData();
-            
-            fetch('/api/products/action', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ id, action })
-            }).catch(()=>{});
+            syncData(); renderStore(); renderAdminPanel();
         }
 
         function escapeHtml(str) {
