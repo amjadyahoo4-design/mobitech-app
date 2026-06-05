@@ -2,11 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام Mobitech المطور</title>
+    <title>Mobitech | متجر خدمات الهواتف</title>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDyXyMSyLAIgyMUIjP6Is9zgxG3sJv0F5A",
@@ -20,72 +20,40 @@
         window.db = getFirestore(app);
         window.auth = getAuth(app);
         window.productsCol = collection(window.db, "mobitech");
+        window.requestsCol = collection(window.db, "merchant_requests");
     </script>
     <style>
-        :root { --main: #38bdf8; --bg: #0b0f19; }
-        body { background: var(--bg); color: #fff; font-family: sans-serif; padding: 20px; }
-        .auth-box, .admin-box { background: #151c2c; padding: 20px; border-radius: 15px; margin: 10px 0; border: 1px solid #1e293b; }
-        .product-card { background: #1e293b; padding: 15px; border-radius: 10px; margin: 10px; display: inline-block; width: 200px; }
-        input, button { padding: 10px; margin: 5px; border-radius: 5px; border: none; }
-        button { background: var(--main); font-weight: bold; cursor: pointer; }
+        body { background: #0b0f19; color: #fff; font-family: sans-serif; padding: 20px; }
+        .product-card { background: #151c2c; padding: 15px; border-radius: 10px; margin: 10px; display: inline-block; width: 200px; }
+        .panel { background: #1e293b; padding: 20px; border-radius: 10px; margin-top: 20px; }
+        button { background: #38bdf8; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <header style="text-align:center;">
-        <h1>Mobitech - نظام متكامل</h1>
-    </header>
-
-    <div class="auth-box">
-        <h3>تسجيل دخول الزبائن</h3>
-        <input type="email" id="email" placeholder="البريد الإلكتروني">
-        <input type="password" id="password" placeholder="كلمة المرور">
-        <button onclick="loginUser()">دخول</button>
-        <button onclick="registerUser()" style="background:#22c55e;">حساب جديد</button>
-    </div>
-
+    <h1 style="text-align:center;">مرحباً بكم في Mobitech</h1>
+    
     <div id="productGrid"></div>
 
-    <div class="admin-box">
+    <div class="panel">
+        <h3>هل أنت تاجر؟ اطلب صلاحية الإضافة</h3>
+        <input type="text" id="merchantEmail" placeholder="بريدك الإلكتروني">
+        <button onclick="requestMerchant()">إرسال طلب للمسؤول</button>
+    </div>
+
+    <div class="panel">
         <h3>لوحة إدارة المسؤول</h3>
-        <input type="password" id="adminPass" placeholder="كلمة مرور المسؤول">
+        <input type="password" id="adminPass" placeholder="كلمة المرور">
         <button onclick="adminLogin()">دخول المسؤول</button>
-        <div id="adminPanel" style="display:none;">
-            <input id="pTitle" placeholder="اسم القطعة">
+        <div id="adminControls" style="display:none;">
+            <input id="pTitle" placeholder="اسم المنتج">
             <input id="pPrice" placeholder="السعر">
-            <button onclick="addItem()" style="background:#f59e0b;">إضافة للمتجر</button>
+            <button onclick="addProduct()">نشر المنتج</button>
         </div>
     </div>
 
     <script>
-        // دالة تسجيل الدخول
-        async function loginUser() {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            try {
-                await signInWithEmailAndPassword(window.auth, email, pass);
-                alert("تم تسجيل الدخول بنجاح!");
-            } catch(e) { alert("خطأ: " + e.message); }
-        }
-
-        // دالة تسجيل جديد
-        async function registerUser() {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
-            try {
-                await createUserWithEmailAndPassword(window.auth, email, pass);
-                alert("تم إنشاء الحساب، يمكنك الدخول الآن!");
-            } catch(e) { alert("خطأ: " + e.message); }
-        }
-
-        // دالة الإدارة
-        function adminLogin() {
-            if(document.getElementById('adminPass').value === "1234") {
-                document.getElementById('adminPanel').style.display = "block";
-            } else { alert("كلمة سر المسؤول خاطئة"); }
-        }
-
-        // جلب المنتجات
+        // عرض المنتجات تلقائياً للجميع
         onSnapshot(window.productsCol, (snap) => {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = "";
@@ -94,18 +62,31 @@
                 grid.innerHTML += `<div class="product-card">
                     <h4>${p.title}</h4>
                     <p>${p.price}$</p>
-                    <button onclick='alert("تم الطلب")'>طلب</button>
                 </div>`;
             });
         });
 
-        // إضافة منتج
-        async function addItem() {
+        // طلب صلاحية تاجر
+        async function requestMerchant() {
+            const email = document.getElementById('merchantEmail').value;
+            await addDoc(window.requestsCol, { email: email, status: "pending" });
+            alert("تم إرسال طلبك! سيتواصل معك المسؤول قريباً.");
+        }
+
+        // دخول المسؤول
+        function adminLogin() {
+            if(document.getElementById('adminPass').value === "1234") {
+                document.getElementById('adminControls').style.display = "block";
+            } else { alert("كلمة السر خطأ"); }
+        }
+
+        // إضافة منتج (متاحة للمسؤول فقط)
+        async function addProduct() {
             await addDoc(window.productsCol, { 
                 title: document.getElementById('pTitle').value, 
                 price: document.getElementById('pPrice').value 
             });
-            alert("تمت الإضافة!");
+            alert("تم إضافة المنتج للمتجر بنجاح!");
         }
     </script>
 </body>
