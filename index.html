@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>متجر Mobitech</title>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -18,31 +19,29 @@
         const app = initializeApp(firebaseConfig);
         window.db = getFirestore(app);
         window.productsCol = collection(window.db, "mobitech");
-        window.requestsCol = collection(window.db, "merchant_requests");
     </script>
     <style>
         body { background: #0b0f19; color: #fff; font-family: sans-serif; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .product-card { background: #151c2c; padding: 15px; border-radius: 10px; border: 1px solid #38bdf8; }
-        .section { background: #1e293b; padding: 20px; border-radius: 10px; margin-top: 30px; }
-        button { background: #38bdf8; padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+        .product-card { background: #151c2c; padding: 15px; border-radius: 12px; border: 1px solid #38bdf8; text-align: center; }
+        .merchant-section { background: #1e293b; padding: 20px; border-radius: 10px; margin-top: 40px; }
+        button { background: #38bdf8; color: #000; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <h1 style="text-align:center;">متجر Mobitech</h1>
+    <h1 style="text-align:center;">منتجات Mobitech</h1>
     
-    <div id="productGrid" class="grid"></div>
+    <div id="productGrid" class="grid">جاري تحميل المنتجات...</div>
 
-    <hr>
-
-    <div class="section">
+    <div class="merchant-section">
         <h3>هل أنت تاجر؟</h3>
-        <button onclick="document.getElementById('adminArea').style.display='block'">إظهار خيارات التاجر</button>
+        <button onclick="document.getElementById('adminArea').style.display='block'">إدارة المتجر</button>
         
         <div id="adminArea" style="display:none; margin-top:15px;">
-            <input type="password" id="adminPass" placeholder="كلمة المرور">
-            <button onclick="adminLogin()">دخول لوحة التحكم</button>
+            <input type="password" id="adminPass" placeholder="كلمة مرور المسؤول">
+            <button onclick="adminLogin()">دخول</button>
+            
             <div id="adminControls" style="display:none; margin-top:10px;">
                 <input id="pTitle" placeholder="اسم القطعة">
                 <input id="pPrice" placeholder="السعر">
@@ -52,31 +51,34 @@
     </div>
 
     <script>
-        // عرض المنتجات للجميع فوراً
+        // دالة عرض المنتجات (تشتغل فور تحميل الصفحة)
         onSnapshot(window.productsCol, (snap) => {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = "";
             snap.forEach(d => {
                 const p = d.data();
                 grid.innerHTML += `<div class="product-card">
-                    <h4>${p.title}</h4>
+                    <h3>${p.title}</h3>
                     <p>السعر: ${p.price}$</p>
                 </div>`;
             });
+            if (grid.innerHTML === "") grid.innerHTML = "لا توجد منتجات حالياً.";
         });
 
         function adminLogin() {
             if(document.getElementById('adminPass').value === "1234") {
                 document.getElementById('adminControls').style.display = "block";
-            } else { alert("كلمة السر خطأ"); }
+            } else { alert("كلمة السر خاطئة!"); }
         }
 
         async function addProduct() {
-            await addDoc(window.productsCol, { 
-                title: document.getElementById('pTitle').value, 
-                price: document.getElementById('pPrice').value 
-            });
-            alert("تم إضافة المنتج!");
+            try {
+                await addDoc(window.productsCol, { 
+                    title: document.getElementById('pTitle').value, 
+                    price: document.getElementById('pPrice').value 
+                });
+                alert("تم إضافة المنتج بنجاح!");
+            } catch(e) { alert("خطأ في الإضافة: " + e.message); }
         }
     </script>
 </body>
