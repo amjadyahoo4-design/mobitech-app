@@ -2,84 +2,83 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر Mobitech</title>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDyXyMSyLAIgyMUIjP6Is9zgxG3sJv0F5A",
-            authDomain: "mobitech-28b01.firebaseapp.com",
-            projectId: "mobitech-28b01",
-            storageBucket: "mobitech-28b01.firebasestorage.app",
-            messagingSenderId: "915272441391",
-            appId: "1:915272441391:web:8d9f2c8e897385226a30da"
-        };
-        const app = initializeApp(firebaseConfig);
-        window.db = getFirestore(app);
-        window.productsCol = collection(window.db, "mobitech");
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mobitech | المنصة الاحترافية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background: #0b0f19; color: #fff; font-family: sans-serif; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
-        .product-card { background: #151c2c; padding: 15px; border-radius: 12px; border: 1px solid #38bdf8; text-align: center; }
-        .merchant-section { background: #1e293b; padding: 20px; border-radius: 10px; margin-top: 40px; }
-        button { background: #38bdf8; color: #000; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        :root { --bg-color: #0b0f19; --card-bg: #151c2c; --accent-color: #38bdf8; --success-color: #10b981; --text-color: #f3f4f6; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding-bottom: 100px; }
+        .main-header { text-align: center; padding: 20px; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; padding: 20px; }
+        .card { background: var(--card-bg); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #334155; }
+        .btn { background: var(--accent-color); border: none; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; }
+        .admin-panel { background: #1e293b; padding: 20px; margin: 20px; border-radius: 12px; display: none; }
+        .cart-bar { position: fixed; bottom: 0; width: 100%; background: #151c2c; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-top: 2px solid var(--accent-color); }
     </style>
 </head>
 <body>
 
-    <h1 style="text-align:center;">منتجات Mobitech</h1>
-    
-    <div id="productGrid" class="grid">جاري تحميل المنتجات...</div>
+    <header class="main-header">
+        <h1>Mobitech</h1>
+        <button onclick="document.getElementById('adminPanel').style.display='block'">إدارة المتجر</button>
+    </header>
 
-    <div class="merchant-section">
-        <h3>هل أنت تاجر؟</h3>
-        <button onclick="document.getElementById('adminArea').style.display='block'">إدارة المتجر</button>
-        
-        <div id="adminArea" style="display:none; margin-top:15px;">
-            <input type="password" id="adminPass" placeholder="كلمة مرور المسؤول">
-            <button onclick="adminLogin()">دخول</button>
-            
-            <div id="adminControls" style="display:none; margin-top:10px;">
-                <input id="pTitle" placeholder="اسم القطعة">
-                <input id="pPrice" placeholder="السعر">
-                <button onclick="addProduct()">نشر المنتج</button>
-            </div>
-        </div>
+    <div id="adminPanel" class="admin-panel">
+        <h3>إضافة منتج جديد</h3>
+        <input type="text" id="pTitle" placeholder="اسم المنتج" style="width:100%; padding:8px; margin:5px 0;">
+        <input type="number" id="pPrice" placeholder="السعر" style="width:100%; padding:8px; margin:5px 0;">
+        <button class="btn" onclick="addProduct()">نشر المنتج</button>
+        <button onclick="document.getElementById('adminPanel').style.display='none'" style="background:none; color:white; border:none; margin-top:10px;">إغلاق</button>
+    </div>
+
+    <div id="productsGrid" class="grid-container"></div>
+
+    <div class="cart-bar" id="cartBar">
+        <span id="cartCount">0 منتج في السلة</span>
+        <button onclick="checkout()" style="background:var(--success-color); color:white; border:none; padding:10px 20px; border-radius:20px;">إرسال الطلب واتساب</button>
     </div>
 
     <script>
-        // دالة عرض المنتجات (تشتغل فور تحميل الصفحة)
-        onSnapshot(window.productsCol, (snap) => {
-            const grid = document.getElementById('productGrid');
-            grid.innerHTML = "";
-            snap.forEach(d => {
-                const p = d.data();
-                grid.innerHTML += `<div class="product-card">
+        let products = JSON.parse(localStorage.getItem('mb_products')) || [
+            { id: 1, title: "شاشة آيفون 13", price: 80 },
+            { id: 2, title: "بطارية سامسونج", price: 30 }
+        ];
+        let cart = [];
+
+        function renderStore() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(p => `
+                <div class="card">
                     <h3>${p.title}</h3>
-                    <p>السعر: ${p.price}$</p>
-                </div>`;
-            });
-            if (grid.innerHTML === "") grid.innerHTML = "لا توجد منتجات حالياً.";
-        });
-
-        function adminLogin() {
-            if(document.getElementById('adminPass').value === "1234") {
-                document.getElementById('adminControls').style.display = "block";
-            } else { alert("كلمة السر خاطئة!"); }
+                    <p>${p.price}$</p>
+                    <button class="btn" onclick="addToCart(${p.id})">إضافة للسلة</button>
+                </div>
+            `).join('');
         }
 
-        async function addProduct() {
-            try {
-                await addDoc(window.productsCol, { 
-                    title: document.getElementById('pTitle').value, 
-                    price: document.getElementById('pPrice').value 
-                });
-                alert("تم إضافة المنتج بنجاح!");
-            } catch(e) { alert("خطأ في الإضافة: " + e.message); }
+        function addProduct() {
+            const title = document.getElementById('pTitle').value;
+            const price = document.getElementById('pPrice').value;
+            products.push({ id: Date.now(), title, price });
+            localStorage.setItem('mb_products', JSON.stringify(products));
+            renderStore();
+            alert("تمت الإضافة!");
         }
+
+        function addToCart(id) {
+            const p = products.find(i => i.id === id);
+            cart.push(p);
+            document.getElementById('cartCount').innerText = cart.length + " منتج في السلة";
+        }
+
+        function checkout() {
+            let msg = "أريد طلب: " + cart.map(i => i.title).join(", ");
+            window.open("https://wa.me/96181157961?text=" + encodeURIComponent(msg));
+        }
+
+        renderStore();
     </script>
 </body>
 </html>
