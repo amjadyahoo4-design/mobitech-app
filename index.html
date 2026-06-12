@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobitech | متجر متعدد المستخدمين مع إشعارات فورية</title>
+    <title>Mobitech | المنصة الذكية</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -21,14 +20,23 @@
             --warning: #f59e0b;
         }
         body { background: linear-gradient(145deg, #0a0f1c, #0f172a); color: #f3f4f6; padding-bottom: 80px; }
-        .main-header { text-align: center; padding: 2rem; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); }
-        .main-header h1 { font-size: 2.5rem; background: linear-gradient(135deg, #38bdf8, #a855f7); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        nav { position: sticky; top: 0; background: rgba(17,24,39,0.95); backdrop-filter: blur(12px); padding: 12px 5%; z-index: 100; border-bottom: 1px solid rgba(56,189,248,0.3); }
+        .main-header { text-align: center; padding: 2rem 1rem; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); }
+        .main-header h1 { font-size: 2.5rem; background: linear-gradient(135deg, #38bdf8, #a855f7); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 8px; }
+        .main-header p { color: #94a3b8; font-size: 1rem; }
+        .quick-links { display: flex; justify-content: center; gap: 20px; margin: 20px 0; flex-wrap: wrap; }
+        .quick-link-btn { background: #1e293b; padding: 10px 20px; border-radius: 60px; text-decoration: none; color: white; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; transition: 0.2s; }
+        .quick-link-btn i { font-size: 1.2rem; }
+        .telegram { background: #0088cc; }
+        .whatsapp { background: #25D366; }
+        .admin-btn { background: #8b5cf6; }
+        .guest-btn { background: #334155; }
+        nav { background: rgba(17,24,39,0.95); backdrop-filter: blur(12px); padding: 12px 5%; border-bottom: 1px solid rgba(56,189,248,0.3); position: sticky; top: 0; z-index: 100; }
         .nav-container { max-width: 1400px; margin: auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; align-items: center; }
         .nav-links { display: flex; gap: 20px; list-style: none; flex-wrap: wrap; }
         .nav-links a { color: #f3f4f6; text-decoration: none; font-weight: bold; padding: 8px 16px; border-radius: 40px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
         .nav-links a:hover, .nav-links a.active { background: rgba(56,189,248,0.2); color: var(--accent); }
-        .user-controls { display: flex; gap: 10px; background: #1e293b; padding: 5px 15px; border-radius: 60px; }
+        .user-controls { display: flex; gap: 10px; background: #1e293b; padding: 5px 15px; border-radius: 60px; align-items: center; }
+        .user-controls span { margin-left: 10px; }
         .btn-logout, .btn-admin-logout { background: transparent; border: 1px solid var(--danger); color: #fca5a5; padding: 6px 12px; border-radius: 30px; cursor: pointer; }
         .search-bar { max-width: 600px; margin: 20px auto; padding: 0 5%; }
         .search-bar input { width: 100%; padding: 14px 20px; border-radius: 60px; border: none; background: #1e293b; color: white; text-align: center; }
@@ -39,7 +47,7 @@
         .card { background: var(--card); border-radius: 24px; padding: 18px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
         .card:hover { transform: translateY(-6px); border-color: var(--accent); }
         .card-img-holder { height: 160px; background: #090d16; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
-        .card-img-holder img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .card-img-holder img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; }
         .price-tag { color: var(--success); font-size: 1.5rem; font-weight: 900; margin: 8px 0; }
         .quantity-control { display: flex; align-items: center; justify-content: center; gap: 15px; background: #00000033; padding: 8px; border-radius: 60px; margin-top: 12px; }
         .qty-btn { width: 36px; height: 36px; border-radius: 50%; background: #2563eb; color: white; font-size: 1.2rem; border: none; cursor: pointer; }
@@ -56,22 +64,33 @@
         .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #1e293b; padding: 12px 24px; border-radius: 60px; opacity: 0; transition: 0.2s; pointer-events: none; border-right: 4px solid var(--accent); z-index: 2000; }
         .toast.show { opacity: 1; }
         .notification-badge { background: var(--danger); border-radius: 50%; padding: 2px 8px; font-size: 0.7rem; margin-right: 5px; }
+        .frp-card, .admin-gate-card { background: #111827; border-radius: 28px; padding: 20px; margin: 20px auto; max-width: 600px; text-align: center; }
+        footer { text-align: center; padding: 20px; color: #64748b; margin-top: 40px; border-top: 1px solid #1e293b; }
     </style>
 </head>
 <body>
 
 <header class="main-header">
-    <h1><i class="fas fa-cloud-upload-alt"></i> Mobitech Cloud</h1>
-    <p>متجر متعدد المستخدمين – إشعارات فورية – قاعدة بيانات سحابية</p>
+    <h1><i class="fas fa-microchip"></i> Mobitech</h1>
+    <p>منصة الذكية - المكتب والمنصة المتكاملة لصيانة الهواتف، الأجهزة الذكية، وتأمين قطع الغيار والأكسسوارات الاحترافية حيًا.</p>
 </header>
+
+<!-- أزرار سريعة كما في الصورة -->
+<div class="quick-links">
+    <a class="quick-link-btn guest-btn" onclick="switchTab('store')"><i class="fas fa-eye"></i> تصفح ضيف (عرض تفاعلي حي)</a>
+    <a class="quick-link-btn admin-btn" onclick="openAdminGate()"><i class="fas fa-user-shield"></i> لوحة المسؤول</a>
+    <a class="quick-link-btn" onclick="openAuthModal()"><i class="fas fa-user-plus"></i> دخول كزبون</a>
+    <a href="https://t.me/mobitech" target="_blank" class="quick-link-btn telegram"><i class="fab fa-telegram"></i> تليجرام مباشر</a>
+    <a href="https://wa.me/96181157961" target="_blank" class="quick-link-btn whatsapp"><i class="fab fa-whatsapp"></i> واتساب سريع</a>
+</div>
 
 <nav>
     <div class="nav-container">
         <ul class="nav-links">
             <li><a onclick="switchTab('store')" id="navStore" class="active"><i class="fas fa-store"></i> المتجر</a></li>
-            <li><a onclick="switchTab('frp')" id="navFrp"><i class="fas fa-unlock-alt"></i> FRP</a></li>
+            <li><a onclick="switchTab('frp')" id="navFrp"><i class="fas fa-unlock-alt"></i> خدمة FRP</a></li>
             <li><a onclick="openAddProduct()"><i class="fas fa-plus-circle"></i> إضافة سلعة</a></li>
-            <li><a onclick="openAdminGate()" id="navAdmin"><i class="fas fa-user-shield"></i> الإدارة</a></li>
+            <li><a onclick="openAdminGate()" id="navAdmin"><i class="fas fa-chalkboard-user"></i> لوحة المسؤول</a></li>
         </ul>
         <div class="user-controls">
             <span><i class="fas fa-user"></i> <span id="userNameLabel">زائر</span></span>
@@ -81,63 +100,96 @@
     </div>
 </nav>
 
-<!-- الأقسام الرئيسية -->
+<!-- قسم المتجر -->
 <div id="storeSection">
-    <div class="search-bar"><input type="text" id="searchInput" placeholder="🔍 بحث عن قطعة..."><div id="aiDemandBox" class="ai-demand-box" style="display:none; background:#1e1b4b; margin-top:10px; padding:12px; border-radius:20px;"><p>❌ غير متوفرة حالياً</p><button class="cat-btn" onclick="reportMissing()" style="background:var(--accent);">طلب توفير القطعة</button></div></div>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="ابحث عن منتج...">
+        <div id="aiDemandBox" style="display:none; background:#1e1b4b; margin-top:10px; padding:12px; border-radius:20px;">
+            <p>❌ القطعة غير متوفرة حالياً</p>
+            <button class="cat-btn" onclick="reportMissing()" style="background:var(--accent);">طلب توفير القطعة</button>
+        </div>
+    </div>
     <div class="categories-bar" id="categoriesBar"></div>
     <div class="grid-container" id="productsContainer"></div>
 </div>
 
-<div id="frpSection" style="display:none; padding:40px 5%; text-align:center;"><div class="modal-card" style="margin:auto; max-width:600px;"><h2><i class="fas fa-shield-alt"></i> خدمة FRP الاحترافية</h2><p>فك حماية Google lock لجميع الأجهزة مع إثبات ملكية</p><button class="cat-btn" onclick="openFrpModal()" style="background:#8b5cf6; margin-top:20px;">تقديم طلب FRP</button></div></div>
-
-<div id="adminSection" style="display:none; padding:20px 5%;">
-    <div style="display:flex; justify-content:space-between;"><h2>لوحة الإدارة</h2><button class="cat-btn" onclick="switchTab('store')">العودة</button></div>
-    <div style="background:#0f172a; padding:15px; border-radius:24px; margin:20px 0;"><h3>⚙️ إعدادات المسؤول</h3><div style="display:flex; gap:10px;"><input type="text" id="adminWhatsAppInput" placeholder="رقم واتساب المسؤول"><button onclick="setAdminWhatsApp()" class="cat-btn">حفظ</button><span id="currentAdminWhatsApp"></span></div></div>
-    <div style="background:#0f172a; padding:15px; border-radius:24px; margin:20px 0;"><h3><i class="fas fa-file-alt"></i> طلبات FRP <span id="frpNewBadge" class="notification-badge" style="display:none;">جديد</span></h3><table class="admin-table"><thead><tr><th>الاسم</th><th>الهاتف</th><th>الوثيقة</th><th>إجراء</th></tr></thead><tbody id="frpRequestsTable"></tbody></table></div>
-    <div style="background:#0f172a; padding:15px; border-radius:24px; margin:20px 0;"><h3><i class="fas fa-box-open"></i> طلبات النواقص <span id="missingNewBadge" class="notification-badge" style="display:none;">جديد</span></h3><table class="admin-table"><thead><tr><th>القطعة</th><th>الزبون</th><th>الهاتف</th><th>إجراء</th></tr></thead><tbody id="missingRequestsTable"></tbody></table></div>
-    <div style="background:#0f172a; padding:15px; border-radius:24px;"><h3>إدارة المنتجات</h3><div class="grid-container" id="adminProductsGrid"></div></div>
+<!-- قسم FRP كما في الصورة -->
+<div id="frpSection" style="display:none; padding:40px 5%;">
+    <div class="frp-card">
+        <h2><i class="fas fa-shield-alt"></i> تقييم طلب تخطي حماية FRP وعزل الهوية</h2>
+        <p style="margin: 15px 0;">يجب رفع الوثيقة المطلوبة لضمان ملكية الجهاز وحمايتك قانونياً</p>
+        <button class="cat-btn" onclick="openFrpModal()" style="background:#8b5cf6; margin-top: 10px;">تقديم طلب FRP</button>
+    </div>
 </div>
 
-<!-- النوافذ المنبثقة -->
-<div id="authModal" class="modal"><div class="modal-card"><h3>تسجيل الدخول السريع</h3><form onsubmit="authUser(event)"><div class="form-group"><label>الاسم</label><input type="text" id="authName" required></div><div class="form-group"><label>رقم واتساب</label><input type="tel" id="authPhone" required></div><button type="submit" class="cat-btn" style="background:var(--success); width:100%;">دخول</button></form></div></div>
+<!-- لوحة الإدارة المخفية -->
+<div id="adminSection" style="display:none; padding:20px 5%;">
+    <h2>لوحة المسؤول</h2>
+    <div style="background:#0f172a; padding:15px; border-radius:24px; margin:20px 0;">
+        <h3>⚙️ إعدادات واتساب المسؤول</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <input type="text" id="adminWhatsAppInput" placeholder="رقم واتساب المسؤول">
+            <button onclick="setAdminWhatsApp()" class="cat-btn">حفظ</button>
+            <span id="currentAdminWhatsApp"></span>
+        </div>
+    </div>
+    <div style="background:#0f172a; padding:15px; border-radius:24px; margin:20px 0;">
+        <h3><i class="fas fa-file-alt"></i> طلبات FRP <span id="frpNewBadge" class="notification-badge" style="display:none;">جديد</span></h3>
+        <table class="admin-table"><thead><tr><th>الاسم</th><th>الهاتف</th><th>الوثيقة</th><th>إجراء</th></tr></thead><tbody id="frpRequestsTable"></tbody></table>
+    </div>
+    <div style="background:#0f172a; padding:15px; border-radius:24px; margin:20px 0;">
+        <h3><i class="fas fa-box-open"></i> طلبات النواقص <span id="missingNewBadge" class="notification-badge" style="display:none;">جديد</span></h3>
+        <table class="admin-table"><thead><tr><th>القطعة</th><th>الزبون</th><th>الهاتف</th><th>إجراء</th></tr></thead><tbody id="missingRequestsTable"></tbody></table>
+    </div>
+    <div style="background:#0f172a; padding:15px; border-radius:24px;">
+        <h3>إدارة المنتجات</h3>
+        <div class="grid-container" id="adminProductsGrid"></div>
+    </div>
+</div>
 
-<div id="addProductModal" class="modal"><div class="modal-card"><h3>➕ إضافة منتج</h3><form onsubmit="submitNewProduct(event)"><div class="form-group"><label>الاسم</label><input type="text" id="prodTitle" required></div><div class="form-group"><label>القسم</label><select id="prodCategory"><option>شاشات</option><option>بطاريات</option><option>أكسسوارات</option><option>قطع</option><option>هواتف مستعملة</option></select></div><div class="form-group"><label>السعر $</label><input type="number" id="prodPrice" required></div><div class="form-group"><label>الوصف</label><textarea id="prodDesc" rows="2"></textarea></div><div class="form-group"><label>الصورة</label><input type="file" id="prodImage" accept="image/*"></div><button type="submit" class="cat-btn" style="background:var(--accent); width:100%;">إضافة</button><button type="button" class="btn-logout" onclick="closeModal('addProductModal')">إلغاء</button></form></div></div>
+<!-- جميع النوافذ المنبثقة -->
+<div id="authModal" class="modal"><div class="modal-card"><h3>تسجيل الدخول السريع (زبون)</h3><form onsubmit="authUser(event)"><div class="form-group"><label>الاسم الكامل</label><input type="text" id="authName" required></div><div class="form-group"><label>رقم واتساب</label><input type="tel" id="authPhone" required></div><button type="submit" class="cat-btn" style="background:var(--success); width:100%;">دخول كزبون</button></form></div></div>
 
-<div id="frpModal" class="modal"><div class="modal-card"><h3>طلب FRP</h3><form onsubmit="submitFrpRequest(event)"><div class="form-group"><label>الاسم</label><input type="text" id="frpName" required></div><div class="form-group"><label>رقم الواتساب</label><input type="tel" id="frpPhone" required></div><div class="form-group"><label>صورة الإثبات</label><input type="file" id="frpDocFile" accept="image/*" required></div><button type="submit" class="cat-btn" style="background:#8b5cf6; width:100%;">إرسال</button><button type="button" class="btn-logout" onclick="closeModal('frpModal')">إلغاء</button></form></div></div>
+<div id="addProductModal" class="modal"><div class="modal-card"><h3>➕ إضافة سلعة للبيع</h3><form onsubmit="submitNewProduct(event)"><div class="form-group"><label>اسم ومواصفات السلعة</label><input type="text" id="prodTitle" required></div><div class="form-group"><label>التصنيف</label><select id="prodCategory"><option>شاشات</option><option>بطاريات</option><option>كفرات</option><option>سيبيكرات</option><option>أكسسوارات</option></select></div><div class="form-group"><label>السعر $</label><input type="number" id="prodPrice" required></div><div class="form-group"><label>الوصف</label><textarea id="prodDesc" rows="2"></textarea></div><div class="form-group"><label>الصورة</label><input type="file" id="prodImage" accept="image/*"></div><button type="submit" class="cat-btn" style="background:var(--accent); width:100%;">إضافة السلعة</button><button type="button" class="btn-logout" onclick="closeModal('addProductModal')">إلغاء</button></form></div></div>
 
-<div id="cartModal" class="modal"><div class="modal-card"><h3><i class="fas fa-shopping-cart"></i> سلة المشتريات</h3><div id="cartItemsList" class="cart-items-list"></div><div style="display:flex; gap:10px;"><button class="cat-btn" onclick="clearCart()" style="background:var(--danger);">مسح الكل</button><button class="cat-btn" onclick="closeModal('cartModal')">إغلاق</button></div><button class="cat-btn" onclick="checkoutWithStamp()" style="background:var(--success); width:100%; margin-top:15px;">إتمام الطلب بختم الموقع</button></div></div>
+<div id="frpModal" class="modal"><div class="modal-card"><h3>طلب تخطي FRP</h3><form onsubmit="submitFrpRequest(event)"><div class="form-group"><label>الاسم الكامل</label><input type="text" id="frpName" required></div><div class="form-group"><label>رقم الواتساب للمتابعة</label><input type="tel" id="frpPhone" required></div><div class="form-group"><label>صورة علبة الهاتف أو هوية المالك</label><input type="file" id="frpDocFile" accept="image/*" required></div><button type="submit" class="cat-btn" style="background:#8b5cf6; width:100%;">إرسال المستندات بأمان للمسؤول</button><button type="button" class="btn-logout" onclick="closeModal('frpModal')">إلغاء</button></form></div></div>
+
+<div id="cartModal" class="modal"><div class="modal-card"><h3>🛒 سلة المشتريات</h3><div id="cartItemsList" class="cart-items-list"></div><div style="display:flex; gap:10px; justify-content: center;"><button class="cat-btn" onclick="clearCart()" style="background:var(--danger);">مسح السلة</button><button class="cat-btn" onclick="closeModal('cartModal')">إغلاق</button></div><button class="cat-btn" onclick="checkoutWithStamp()" style="background:var(--success); width:100%; margin-top:15px;">إتمام الطلب بختم الموقع</button></div></div>
 
 <div id="adminGateModal" class="modal"><div class="modal-card"><h3>كلمة مرور المسؤول</h3><input type="password" id="adminPassword" style="width:100%; padding:10px; margin:15px 0;"><button class="cat-btn" onclick="verifyAdmin()" style="background:var(--success);">دخول</button><button class="btn-logout" onclick="closeModal('adminGateModal')">إلغاء</button></div></div>
 
-<div id="editProductModal" class="modal"><div class="modal-card"><h3>تعديل المنتج</h3><form onsubmit="saveProductEdit(event)"><input type="hidden" id="editId"><div class="form-group"><label>الاسم</label><input type="text" id="editTitle" required></div><div class="form-group"><label>القسم</label><select id="editCategory"></select></div><div class="form-group"><label>السعر</label><input type="number" id="editPrice" required></div><div class="form-group"><label>الوصف</label><textarea id="editDesc" rows="2"></textarea></div><button type="submit" class="cat-btn" style="background:var(--accent);">حفظ</button><button type="button" class="btn-logout" onclick="closeModal('editProductModal')">إلغاء</button></form></div></div>
+<div id="editProductModal" class="modal"><div class="modal-card"><h3>تعديل المنتج</h3><form onsubmit="saveProductEdit(event)"><input type="hidden" id="editId"><div class="form-group"><label>الاسم</label><input type="text" id="editTitle" required></div><div class="form-group"><label>القسم</label><select id="editCategory"></select></div><div class="form-group"><label>السعر</label><input type="number" id="editPrice" required></div><div class="form-group"><label>الوصف</label><textarea id="editDesc" rows="2"></textarea></div><button type="submit" class="cat-btn">حفظ التعديل</button><button type="button" class="btn-logout" onclick="closeModal('editProductModal')">إلغاء</button></form></div></div>
 
 <div id="toastMessage" class="toast"></div>
 
 <script>
-    // 🔥 استبدل هذا الكائن بإعدادات مشروع Firebase الخاص بك
+    // 🔥 🔥 🔥 قم باستبدال هذا الكائن بإعدادات مشروع Firebase الخاص بك (من console.firebase.google.com) 🔥 🔥 🔥
     const firebaseConfig = {
         apiKey: "YOUR_API_KEY",
         authDomain: "YOUR_PROJECT.firebaseapp.com",
-        databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+        databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
         projectId: "YOUR_PROJECT",
         storageBucket: "YOUR_PROJECT.appspot.com",
         messagingSenderId: "SENDER_ID",
         appId: "APP_ID"
     };
+    // ------------------------------
+    
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
 
-    let currentUser = null;       // { name, phone, uid }
+    let currentUser = null;
     let isAdmin = false;
     let adminWhatsApp = localStorage.getItem("adminWhatsApp") || "96181157961";
-    let cart = {};                // productId -> quantity (محلي لكل مستخدم)
+    let cart = {};
     let currentFilter = "الكل";
     let searchText = "";
     let tempImageBase64 = "";
     let tempFrpDocBase64 = "";
+    let allProducts = [];
 
-    // مساعدات
+    // Helper functions
     function showToast(msg, err=false) {
         let t = document.getElementById("toastMessage");
         t.innerText = msg;
@@ -147,6 +199,7 @@
     }
     function closeModal(id) { document.getElementById(id).style.display = "none"; }
     function openModal(id) { document.getElementById(id).style.display = "flex"; }
+    function openAuthModal() { openModal("authModal"); }
     function compressImage(file, callback) {
         let reader = new FileReader();
         reader.readAsDataURL(file);
@@ -166,7 +219,7 @@
         };
     }
 
-    // 🔐 المصادقة – تسجيل دخول مجهول + ربط بالبيانات
+    // المصادقة
     function authUser(e) {
         e.preventDefault();
         let name = document.getElementById("authName").value.trim();
@@ -204,10 +257,9 @@
         }
         document.getElementById("adminLogoutBtn").style.display = isAdmin ? "inline-block" : "none";
     }
-
     function adminLogout() { isAdmin = false; sessionStorage.removeItem("isAdmin"); updateUI(); if(document.getElementById("adminSection").style.display==="block") switchTab("store"); showToast("خروج من الإدارة"); }
 
-    // 🌐 Firebase Realtime Database – الاستماع المباشر للمنتجات والطلبات
+    // Firebase listeners
     let productsRef = db.ref("products");
     let frpRef = db.ref("frpRequests");
     let missingRef = db.ref("missingItems");
@@ -215,27 +267,26 @@
     function loadProducts() {
         productsRef.on("value", snapshot => {
             let data = snapshot.val();
-            window.allProducts = data ? Object.entries(data).map(([id,val])=>({id, ...val})) : [];
+            allProducts = data ? Object.entries(data).map(([id,val])=>({id, ...val})) : [];
             renderStore();
             if(isAdmin) renderAdminPanel();
         });
     }
 
     function renderStore() {
-        if(!window.allProducts) return;
         let container = document.getElementById("productsContainer");
-        let filtered = window.allProducts.filter(p => p.status === "approved" &&
+        let filtered = allProducts.filter(p => p.status === "approved" &&
             (currentFilter === "الكل" || p.category === currentFilter) &&
-            (searchText === "" || p.title.includes(searchText) || p.desc.includes(searchText))
+            (searchText === "" || p.title.includes(searchText) || (p.desc && p.desc.includes(searchText)))
         );
         let html = "";
         filtered.forEach(p => {
             let qty = cart[p.id] || 0;
             html += `<div class="card">
-                <div class="card-img-holder"><img src="${p.img}" loading="lazy"></div>
+                <div class="card-img-holder"><img src="${p.img || 'https://via.placeholder.com/150?text=No+Image'}" loading="lazy"></div>
                 <h3>${escapeHtml(p.title)}</h3>
                 <span class="price-tag">$${p.price}</span>
-                <p style="font-size:0.8rem;">${escapeHtml(p.desc)}</p>
+                <p style="font-size:0.8rem;">${escapeHtml(p.desc || '')}</p>
                 <div class="quantity-control">
                     <button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button>
                     <span>${qty}</span>
@@ -243,7 +294,7 @@
                 </div>
             </div>`;
         });
-        container.innerHTML = html || "<p style='text-align:center;'>لا توجد منتجات</p>";
+        container.innerHTML = html || "<p style='text-align:center;'>لا توجد منتجات متاحة حالياً</p>";
         updateCartBar();
     }
 
@@ -255,17 +306,13 @@
         saveUserCart();
         renderStore();
     }
-
-    function saveUserCart() {
-        if(currentUser) localStorage.setItem(`cart_${currentUser.uid}`, JSON.stringify(cart));
-    }
+    function saveUserCart() { if(currentUser) localStorage.setItem(`cart_${currentUser.uid}`, JSON.stringify(cart)); }
     function loadUserCart() {
         let saved = localStorage.getItem(`cart_${currentUser?.uid}`);
         if(saved) cart = JSON.parse(saved);
         else cart = {};
         renderStore();
     }
-
     function updateCartBar() {
         let bar = document.getElementById("cartBar");
         if(!bar) {
@@ -274,24 +321,24 @@
             newBar.className = "cart-bar";
             newBar.innerHTML = `<span id="cartSummary"></span><button class="cat-btn" onclick="openCartModal()"><i class="fas fa-shopping-bag"></i> عرض السلة</button>`;
             document.body.appendChild(newBar);
+            bar = newBar;
         }
         let totalCount = Object.values(cart).reduce((a,b)=>a+b,0);
         if(totalCount>0) {
-            document.getElementById("cartBar").style.display = "flex";
+            bar.style.display = "flex";
             let totalPrice = 0;
             for(let id in cart) {
-                let p = window.allProducts?.find(x=>x.id===id);
+                let p = allProducts.find(x=>x.id===id);
                 if(p) totalPrice += p.price * cart[id];
             }
             document.getElementById("cartSummary").innerText = `🛒 ${totalCount} منتج - $${totalPrice}`;
-        } else document.getElementById("cartBar").style.display = "none";
+        } else bar.style.display = "none";
     }
-
     function openCartModal() {
         let listDiv = document.getElementById("cartItemsList");
         let html = "";
         for(let id in cart) {
-            let p = window.allProducts?.find(x=>x.id===id);
+            let p = allProducts.find(x=>x.id===id);
             if(p) {
                 html += `<div class="cart-item"><div><strong>${escapeHtml(p.title)}</strong> x${cart[id]} = $${p.price*cart[id]}</div><button class="btn-remove-item" onclick="removeCartItem('${id}')">🗑️ إزالة</button></div>`;
             }
@@ -303,7 +350,6 @@
     function removeCartItem(id) { delete cart[id]; saveUserCart(); renderStore(); openCartModal(); showToast("تمت الإزالة"); }
     function clearCart() { cart = {}; saveUserCart(); renderStore(); closeModal("cartModal"); showToast("تم تفريغ السلة"); }
 
-    // الفاتورة مع ختم الموقع
     function checkoutWithStamp() {
         if(!currentUser) { openModal("authModal"); return; }
         if(Object.keys(cart).length === 0) { showToast("السلة فارغة", true); return; }
@@ -312,7 +358,7 @@
         let msg = `🏷️ *Mobitech - المتجر الاحترافي*\n📅 التاريخ: ${dateStr}\n👤 العميل: ${currentUser.name}\n📞 واتساب: ${currentUser.phone}\n\n🛍️ *الفواتير*\n`;
         let total = 0;
         for(let id in cart) {
-            let p = window.allProducts?.find(x=>x.id===id);
+            let p = allProducts.find(x=>x.id===id);
             if(p) {
                 msg += `• ${p.title} × ${cart[id]} = $${p.price * cart[id]}\n`;
                 total += p.price * cart[id];
@@ -320,11 +366,9 @@
         }
         msg += `\n💰 *الإجمالي:* $${total}\n🔒 *ختم الموقع:* معتمد من Mobitech\nشكراً لتسوقك معنا 🤝`;
         window.open(`https://wa.me/${adminWhatsApp}?text=${encodeURIComponent(msg)}`, "_blank");
-        // بعد الإرسال، يمكن تفريغ السلة أو لا حسب الرغبة
-        // clearCart(); // اختياري
     }
 
-    // إضافة منتج جديد (لكل المستخدمين)
+    // إضافة منتج
     function submitNewProduct(e) {
         e.preventDefault();
         if(!currentUser) { openModal("authModal"); return; }
@@ -343,14 +387,14 @@
             closeModal("addProductModal");
             document.getElementById("prodTitle").value = "";
             tempImageBase64 = "";
-            showToast("تم إضافة المنتج بنجاح، سيراه الجميع");
+            showToast("تم إضافة المنتج بنجاح، سيراه الجميع بعد الموافقة");
         });
     }
     document.getElementById("prodImage")?.addEventListener("change", e => {
         if(e.target.files[0]) compressImage(e.target.files[0], base64 => tempImageBase64 = base64);
     });
 
-    // طلبات FRP
+    // FRP
     function submitFrpRequest(e) {
         e.preventDefault();
         if(!currentUser) { openModal("authModal"); return; }
@@ -373,7 +417,6 @@
         if(e.target.files[0]) compressImage(e.target.files[0], base64 => tempFrpDocBase64 = base64);
     });
 
-    // طلب قطعة ناقصة
     function reportMissing() {
         if(!currentUser) { openModal("authModal"); return; }
         let item = document.getElementById("searchInput").value.trim();
@@ -390,11 +433,10 @@
         });
     }
 
-    // لوحة الإدارة مع الإشعارات الفورية
+    // لوحة الإدارة
     function renderAdminPanel() {
         if(!isAdmin) return;
-        document.getElementById("currentAdminWhatsApp").innerText = `+${adminWhatsApp}`;
-        // عرض طلبات FRP
+        document.getElementById("currentAdminWhatsApp").innerHTML = `+${adminWhatsApp}`;
         frpRef.on("value", snap => {
             let data = snap.val();
             let requests = data ? Object.entries(data).map(([k,v])=>({key:k,...v})) : [];
@@ -403,16 +445,13 @@
                 <tr>
                     <td>${escapeHtml(r.name)}</td>
                     <td>${r.phone}</td>
-                    <td><img src="${r.doc}" style="max-width:50px; border-radius:8px;" onclick="window.open('${r.doc}')" style="cursor:pointer"></td>
+                    <td><img src="${r.doc}" style="max-width:50px; border-radius:8px; cursor:pointer;" onclick="window.open('${r.doc}')"></td>
                     <td><button class="cat-btn" onclick="window.open('https://wa.me/${r.phone}?text=مرحباً طلب FRP قيد المعالجة')">واتساب</button>
                     <button class="cat-btn" onclick="deleteFrp('${r.key}')" style="background:var(--danger);">حذف</button></td>
                 </tr>
             `).join("");
-            // إظهار إشعار جديد
-            if(requests.length > 0) document.getElementById("frpNewBadge").style.display = "inline-block";
-            else document.getElementById("frpNewBadge").style.display = "none";
+            document.getElementById("frpNewBadge").style.display = requests.length ? "inline-block" : "none";
         });
-        // طلبات النواقص
         missingRef.on("value", snap => {
             let data = snap.val();
             let items = data ? Object.entries(data).map(([k,v])=>({key:k,...v})) : [];
@@ -426,10 +465,8 @@
                     <button class="cat-btn" onclick="deleteMissing('${m.key}')" style="background:var(--danger);">حذف</button></td>
                 </tr>
             `).join("");
-            if(items.length > 0) document.getElementById("missingNewBadge").style.display = "inline-block";
-            else document.getElementById("missingNewBadge").style.display = "none";
+            document.getElementById("missingNewBadge").style.display = items.length ? "inline-block" : "none";
         });
-        // المنتجات
         productsRef.on("value", snap => {
             let data = snap.val();
             let prods = data ? Object.entries(data).map(([id,val])=>({id,...val})) : [];
@@ -449,13 +486,12 @@
             `).join("");
         });
     }
-
     function deleteFrp(key) { frpRef.child(key).remove(); showToast("تم حذف طلب FRP"); }
     function deleteMissing(key) { missingRef.child(key).remove(); showToast("تم حذف طلب النقص"); }
     function approveProduct(id) { productsRef.child(id).update({ status: "approved" }); showToast("تم نشر المنتج"); }
     function deleteProduct(id) { productsRef.child(id).remove(); showToast("تم حذف المنتج"); }
     function openEditProduct(id) {
-        let prod = window.allProducts.find(p=>p.id===id);
+        let prod = allProducts.find(p=>p.id===id);
         if(!prod) return;
         document.getElementById("editId").value = id;
         document.getElementById("editTitle").value = prod.title;
@@ -494,7 +530,7 @@
         else showToast("أدخل أرقام فقط", true);
     }
 
-    // التبويبات
+    // التبويبات والفلاتر
     function switchTab(tab) {
         document.getElementById("storeSection").style.display = tab==="store"?"block":"none";
         document.getElementById("frpSection").style.display = tab==="frp"?"block":"none";
@@ -508,16 +544,15 @@
     function openFrpModal() { if(!currentUser) openModal("authModal"); else openModal("frpModal"); }
     function openAdminGate() { if(isAdmin) switchTab("admin"); else openModal("adminGateModal"); }
 
-    // الفلاتر والبحث
     function buildCategories() {
-        let cats = ["الكل","شاشات","بطاريات","أكسسوارات","قطع","هواتف مستعملة"];
+        let cats = ["الكل","شاشات","بطاريات","كفرات","سيبيكرات","أكسسوارات"];
         let bar = document.getElementById("categoriesBar");
         bar.innerHTML = cats.map(c => `<button class="cat-btn ${c===currentFilter?'active':''}" onclick="setFilter('${c}')">${c}</button>`).join("");
     }
     function setFilter(cat) { currentFilter = cat; renderStore(); }
     document.getElementById("searchInput").addEventListener("input", e => {
         searchText = e.target.value.toLowerCase();
-        let exists = window.allProducts?.some(p => p.status==="approved" && p.title.includes(searchText));
+        let exists = allProducts.some(p => p.status==="approved" && p.title.includes(searchText));
         document.getElementById("aiDemandBox").style.display = (searchText.length>2 && !exists)?"block":"none";
         renderStore();
     });
@@ -532,7 +567,6 @@
             updateUI();
             loadUserCart();
         } else if(user && !stored) {
-            // مستخدم مجهول جديد – نطلب تسجيل بياناته
             openModal("authModal");
         } else if(!user) {
             auth.signInAnonymously().catch(console.error);
@@ -544,5 +578,8 @@
         if(isAdmin && document.getElementById("adminSection").style.display==="block") renderAdminPanel();
     });
 </script>
+<footer>
+    <p>جميع الحقوق محفوظة لمنصة Mobitech © 2026</p>
+</footer>
 </body>
 </html>
