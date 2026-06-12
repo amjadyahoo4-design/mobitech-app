@@ -3,40 +3,546 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobitech | المنصة الذكية</title>
-    <link rel="stylesheet" href="style.css"> </head>
+    <title>Mobitech | متجر متعدد المستخدمين مع إشعارات فورية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        :root {
+            --bg: #0a0f1c;
+            --card: #111827;
+            --accent: #38bdf8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+        body { background: linear-gradient(145deg, #0a0f1c, #0f172a); color: #f3f4f6; padding-bottom: 80px; }
+        .main-header { text-align: center; padding: 2rem; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); }
+        .main-header h1 { font-size: 2.5rem; background: linear-gradient(135deg, #38bdf8, #a855f7); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        nav { position: sticky; top: 0; background: rgba(17,24,39,0.95); backdrop-filter: blur(12px); padding: 12px 5%; z-index: 100; border-bottom: 1px solid rgba(56,189,248,0.3); }
+        .nav-container { max-width: 1400px; margin: auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; align-items: center; }
+        .nav-links { display: flex; gap: 20px; list-style: none; flex-wrap: wrap; }
+        .nav-links a { color: #f3f4f6; text-decoration: none; font-weight: bold; padding: 8px 16px; border-radius: 40px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+        .nav-links a:hover, .nav-links a.active { background: rgba(56,189,248,0.2); color: var(--accent); }
+        .user-controls { display: flex; gap: 10px; background: #1e293b; padding: 5px 15px; border-radius: 60px; }
+        .btn-logout, .btn-admin-logout { background: transparent; border: 1px solid var(--danger); color: #fca5a5; padding: 6px 12px; border-radius: 30px; cursor: pointer; }
+        .search-bar { max-width: 600px; margin: 20px auto; padding: 0 5%; }
+        .search-bar input { width: 100%; padding: 14px 20px; border-radius: 60px; border: none; background: #1e293b; color: white; text-align: center; }
+        .categories-bar { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
+        .cat-btn { background: #1e293b; border: none; padding: 8px 20px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .cat-btn.active, .cat-btn:hover { background: #2563eb; transform: translateY(-2px); }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 25px; padding: 20px 5%; max-width: 1400px; margin: 0 auto; }
+        .card { background: var(--card); border-radius: 24px; padding: 18px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .card:hover { transform: translateY(-6px); border-color: var(--accent); }
+        .card-img-holder { height: 160px; background: #090d16; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+        .card-img-holder img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .price-tag { color: var(--success); font-size: 1.5rem; font-weight: 900; margin: 8px 0; }
+        .quantity-control { display: flex; align-items: center; justify-content: center; gap: 15px; background: #00000033; padding: 8px; border-radius: 60px; margin-top: 12px; }
+        .qty-btn { width: 36px; height: 36px; border-radius: 50%; background: #2563eb; color: white; font-size: 1.2rem; border: none; cursor: pointer; }
+        .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; border-top: 3px solid var(--accent); padding: 12px 5%; display: none; justify-content: space-between; z-index: 200; flex-wrap: wrap; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-card { background: #111827; border-radius: 32px; padding: 25px; max-width: 500px; width: 90%; border: 2px solid var(--accent); }
+        .form-group { margin-bottom: 18px; display: flex; flex-direction: column; text-align: right; }
+        .form-group input, .form-group textarea, .form-group select { padding: 12px; border-radius: 12px; background: #0f172a; border: 1px solid #2d3a5e; color: white; }
+        .admin-table { width: 100%; border-collapse: collapse; background: #0f172a; border-radius: 20px; overflow: hidden; }
+        .admin-table th, .admin-table td { padding: 12px; text-align: right; border-bottom: 1px solid #1e293b; }
+        .cart-items-list { max-height: 400px; overflow-y: auto; margin: 15px 0; }
+        .cart-item { display: flex; justify-content: space-between; background: #0f172a; padding: 12px; border-radius: 16px; margin-bottom: 10px; }
+        .btn-remove-item { background: var(--danger); border: none; color: white; padding: 6px 12px; border-radius: 30px; cursor: pointer; }
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #1e293b; padding: 12px 24px; border-radius: 60px; opacity: 0; transition: 0.2s; pointer-events: none; border-right: 4px solid var(--accent); z-index: 2000; }
+        .toast.show { opacity: 1; }
+        .notification-badge { background: var(--danger); border-radius: 50%; padding: 2px 8px; font-size: 0.7rem; margin-right: 5px; }
+    </style>
+</head>
 <body>
 
-    <nav class="navbar">
-        <div class="logo">Mobitech 📱</div>
-        <div class="menu">
-            <a href="#">المتجر</a>
-            <a href="#">خدمة FRP</a>
-            <a href="#">إضافة سلعة</a>
+<header class="main-header">
+    <h1><i class="fas fa-cloud-upload-alt"></i> Mobitech Cloud</h1>
+    <p>متجر متعدد المستخدمين – إشعارات فورية – قاعدة بيانات سحابية</p>
+</header>
+
+<nav>
+    <div class="nav-container">
+        <ul class="nav-links">
+            <li><a onclick="switchTab('store')" id="navStore" class="active"><i class="fas fa-store"></i> المتجر</a></li>
+            <li><a onclick="switchTab('frp')" id="navFrp"><i class="fas fa-unlock-alt"></i> FRP</a></li>
+            <li><a onclick="openAddProduct()"><i class="fas fa-plus-circle"></i> إضافة سلعة</a></li>
+            <li><a onclick="openAdminGate()" id="navAdmin"><i class="fas fa-user-shield"></i> الإدارة</a></li>
+        </ul>
+        <div class="user-controls">
+            <span><i class="fas fa-user"></i> <span id="userNameLabel">زائر</span></span>
+            <button class="btn-logout" id="logoutBtn" onclick="logout()" style="display:none;">خروج</button>
+            <button class="btn-admin-logout" id="adminLogoutBtn" onclick="adminLogout()" style="display:none;">إنهاء الإدارة</button>
         </div>
-    </nav>
-
-    <header class="hero">
-        <h1>منصة Mobitech الذكية</h1>
-        <p>المكتب والمنصة المتكاملة لصيانة الهواتف والأجهزة الذكية.</p>
-        <div class="hero-buttons">
-            <button class="btn-admin">لوحة المسؤول</button>
-            <button class="btn-login">دخول زبون</button>
-        </div>
-    </header>
-
-    <section class="store-section">
-        <h3>📦 تصفح معروضات المتجر المتوفرة حياً</h3>
-        <input type="text" placeholder="ابحث عن منتج..." class="search-bar">
-        <div id="productsGrid" class="grid-container">
-            </div>
-    </section>
-
-    <div class="cart-bar">
-        <span>0 منتج في السلة</span>
-        <button class="btn-order">إرسال الطلب واتساب</button>
     </div>
+</nav>
 
+<!-- الأقسام الرئيسية -->
+<div id="storeSection">
+    <div class="search-bar"><input type="text" id="searchInput" placeholder="🔍 بحث عن قطعة..."><div id="aiDemandBox" class="ai-demand-box" style="display:none; background:#1e1b4b; margin-top:10px; padding:12px; border-radius:20px;"><p>❌ غير متوفرة حالياً</p><button class="cat-btn" onclick="reportMissing()" style="background:var(--accent);">طلب توفير القطعة</button></div></div>
+    <div class="categories-bar" id="categoriesBar"></div>
+    <div class="grid-container" id="productsContainer"></div>
+</div>
+
+<div id="frpSection" style="display:none; padding:40px 5%; text-align:center;"><div class="modal-card" style="margin:auto; max-width:600px;"><h2><i class="fas fa-shield-alt"></i> خدمة FRP الاحترافية</h2><p>فك حماية Google lock لجميع الأجهزة مع إثبات ملكية</p><button class="cat-btn" onclick="openFrpModal()" style="background:#8b5cf6; margin-top:20px;">تقديم طلب FRP</button></div></div>
+
+<div id="adminSection" style="display:none; padding:20px 5%;">
+    <div style="display:flex; justify-content:space-between;"><h2>لوحة الإدارة</h2><button class="cat-btn" onclick="switchTab('store')">العودة</button></div>
+    <div style="background:#0f172a; padding:15px; border-radius:24px; margin:20px 0;"><h3>⚙️ إعدادات المسؤول</h3><div style="display:flex; gap:10px;"><input type="text" id="adminWhatsAppInput" placeholder="رقم واتساب المسؤول"><button onclick="setAdminWhatsApp()" class="cat-btn">حفظ</button><span id="currentAdminWhatsApp"></span></div></div>
+    <div style="background:#0f172a; padding:15px; border-radius:24px; margin:20px 0;"><h3><i class="fas fa-file-alt"></i> طلبات FRP <span id="frpNewBadge" class="notification-badge" style="display:none;">جديد</span></h3><table class="admin-table"><thead><tr><th>الاسم</th><th>الهاتف</th><th>الوثيقة</th><th>إجراء</th></tr></thead><tbody id="frpRequestsTable"></tbody></table></div>
+    <div style="background:#0f172a; padding:15px; border-radius:24px; margin:20px 0;"><h3><i class="fas fa-box-open"></i> طلبات النواقص <span id="missingNewBadge" class="notification-badge" style="display:none;">جديد</span></h3><table class="admin-table"><thead><tr><th>القطعة</th><th>الزبون</th><th>الهاتف</th><th>إجراء</th></tr></thead><tbody id="missingRequestsTable"></tbody></table></div>
+    <div style="background:#0f172a; padding:15px; border-radius:24px;"><h3>إدارة المنتجات</h3><div class="grid-container" id="adminProductsGrid"></div></div>
+</div>
+
+<!-- النوافذ المنبثقة -->
+<div id="authModal" class="modal"><div class="modal-card"><h3>تسجيل الدخول السريع</h3><form onsubmit="authUser(event)"><div class="form-group"><label>الاسم</label><input type="text" id="authName" required></div><div class="form-group"><label>رقم واتساب</label><input type="tel" id="authPhone" required></div><button type="submit" class="cat-btn" style="background:var(--success); width:100%;">دخول</button></form></div></div>
+
+<div id="addProductModal" class="modal"><div class="modal-card"><h3>➕ إضافة منتج</h3><form onsubmit="submitNewProduct(event)"><div class="form-group"><label>الاسم</label><input type="text" id="prodTitle" required></div><div class="form-group"><label>القسم</label><select id="prodCategory"><option>شاشات</option><option>بطاريات</option><option>أكسسوارات</option><option>قطع</option><option>هواتف مستعملة</option></select></div><div class="form-group"><label>السعر $</label><input type="number" id="prodPrice" required></div><div class="form-group"><label>الوصف</label><textarea id="prodDesc" rows="2"></textarea></div><div class="form-group"><label>الصورة</label><input type="file" id="prodImage" accept="image/*"></div><button type="submit" class="cat-btn" style="background:var(--accent); width:100%;">إضافة</button><button type="button" class="btn-logout" onclick="closeModal('addProductModal')">إلغاء</button></form></div></div>
+
+<div id="frpModal" class="modal"><div class="modal-card"><h3>طلب FRP</h3><form onsubmit="submitFrpRequest(event)"><div class="form-group"><label>الاسم</label><input type="text" id="frpName" required></div><div class="form-group"><label>رقم الواتساب</label><input type="tel" id="frpPhone" required></div><div class="form-group"><label>صورة الإثبات</label><input type="file" id="frpDocFile" accept="image/*" required></div><button type="submit" class="cat-btn" style="background:#8b5cf6; width:100%;">إرسال</button><button type="button" class="btn-logout" onclick="closeModal('frpModal')">إلغاء</button></form></div></div>
+
+<div id="cartModal" class="modal"><div class="modal-card"><h3><i class="fas fa-shopping-cart"></i> سلة المشتريات</h3><div id="cartItemsList" class="cart-items-list"></div><div style="display:flex; gap:10px;"><button class="cat-btn" onclick="clearCart()" style="background:var(--danger);">مسح الكل</button><button class="cat-btn" onclick="closeModal('cartModal')">إغلاق</button></div><button class="cat-btn" onclick="checkoutWithStamp()" style="background:var(--success); width:100%; margin-top:15px;">إتمام الطلب بختم الموقع</button></div></div>
+
+<div id="adminGateModal" class="modal"><div class="modal-card"><h3>كلمة مرور المسؤول</h3><input type="password" id="adminPassword" style="width:100%; padding:10px; margin:15px 0;"><button class="cat-btn" onclick="verifyAdmin()" style="background:var(--success);">دخول</button><button class="btn-logout" onclick="closeModal('adminGateModal')">إلغاء</button></div></div>
+
+<div id="editProductModal" class="modal"><div class="modal-card"><h3>تعديل المنتج</h3><form onsubmit="saveProductEdit(event)"><input type="hidden" id="editId"><div class="form-group"><label>الاسم</label><input type="text" id="editTitle" required></div><div class="form-group"><label>القسم</label><select id="editCategory"></select></div><div class="form-group"><label>السعر</label><input type="number" id="editPrice" required></div><div class="form-group"><label>الوصف</label><textarea id="editDesc" rows="2"></textarea></div><button type="submit" class="cat-btn" style="background:var(--accent);">حفظ</button><button type="button" class="btn-logout" onclick="closeModal('editProductModal')">إلغاء</button></form></div></div>
+
+<div id="toastMessage" class="toast"></div>
+
+<script>
+    // 🔥 استبدل هذا الكائن بإعدادات مشروع Firebase الخاص بك
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT.firebaseapp.com",
+        databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+        projectId: "YOUR_PROJECT",
+        storageBucket: "YOUR_PROJECT.appspot.com",
+        messagingSenderId: "SENDER_ID",
+        appId: "APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const auth = firebase.auth();
+
+    let currentUser = null;       // { name, phone, uid }
+    let isAdmin = false;
+    let adminWhatsApp = localStorage.getItem("adminWhatsApp") || "96181157961";
+    let cart = {};                // productId -> quantity (محلي لكل مستخدم)
+    let currentFilter = "الكل";
+    let searchText = "";
+    let tempImageBase64 = "";
+    let tempFrpDocBase64 = "";
+
+    // مساعدات
+    function showToast(msg, err=false) {
+        let t = document.getElementById("toastMessage");
+        t.innerText = msg;
+        t.style.borderRightColor = err ? "#ef4444" : "#38bdf8";
+        t.classList.add("show");
+        setTimeout(()=>t.classList.remove("show"),2500);
+    }
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
+    function openModal(id) { document.getElementById(id).style.display = "flex"; }
+    function compressImage(file, callback) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+            let img = new Image();
+            img.src = e.target.result;
+            img.onload = () => {
+                let canvas = document.createElement("canvas");
+                let maxSize = 500;
+                let w = img.width, h = img.height;
+                if(w>h && w>maxSize) { h *= maxSize/w; w = maxSize; }
+                if(h>w && h>maxSize) { w *= maxSize/h; h = maxSize; }
+                canvas.width = w; canvas.height = h;
+                canvas.getContext("2d").drawImage(img,0,0,w,h);
+                callback(canvas.toDataURL("image/jpeg",0.7));
+            };
+        };
+    }
+
+    // 🔐 المصادقة – تسجيل دخول مجهول + ربط بالبيانات
+    function authUser(e) {
+        e.preventDefault();
+        let name = document.getElementById("authName").value.trim();
+        let phone = document.getElementById("authPhone").value.trim();
+        auth.signInAnonymously().then(userCred => {
+            let uid = userCred.user.uid;
+            currentUser = { uid, name, phone };
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+            document.getElementById("authModal").style.display = "none";
+            updateUI();
+            loadUserCart();
+            showToast(`مرحباً ${name}`);
+        }).catch(err => showToast("خطأ في الاتصال", true));
+    }
+
+    function logout() {
+        auth.signOut().then(() => {
+            currentUser = null;
+            localStorage.removeItem("currentUser");
+            cart = {};
+            updateUI();
+            renderStore();
+            showToast("تم الخروج");
+        });
+    }
+
+    function updateUI() {
+        let stored = localStorage.getItem("currentUser");
+        if(stored && !currentUser) currentUser = JSON.parse(stored);
+        document.getElementById("userNameLabel").innerText = currentUser ? currentUser.name : "زائر";
+        document.getElementById("logoutBtn").style.display = currentUser ? "inline-block" : "none";
+        if(currentUser) {
+            if(document.getElementById("frpName")) document.getElementById("frpName").value = currentUser.name;
+            if(document.getElementById("frpPhone")) document.getElementById("frpPhone").value = currentUser.phone;
+        }
+        document.getElementById("adminLogoutBtn").style.display = isAdmin ? "inline-block" : "none";
+    }
+
+    function adminLogout() { isAdmin = false; sessionStorage.removeItem("isAdmin"); updateUI(); if(document.getElementById("adminSection").style.display==="block") switchTab("store"); showToast("خروج من الإدارة"); }
+
+    // 🌐 Firebase Realtime Database – الاستماع المباشر للمنتجات والطلبات
+    let productsRef = db.ref("products");
+    let frpRef = db.ref("frpRequests");
+    let missingRef = db.ref("missingItems");
+
+    function loadProducts() {
+        productsRef.on("value", snapshot => {
+            let data = snapshot.val();
+            window.allProducts = data ? Object.entries(data).map(([id,val])=>({id, ...val})) : [];
+            renderStore();
+            if(isAdmin) renderAdminPanel();
+        });
+    }
+
+    function renderStore() {
+        if(!window.allProducts) return;
+        let container = document.getElementById("productsContainer");
+        let filtered = window.allProducts.filter(p => p.status === "approved" &&
+            (currentFilter === "الكل" || p.category === currentFilter) &&
+            (searchText === "" || p.title.includes(searchText) || p.desc.includes(searchText))
+        );
+        let html = "";
+        filtered.forEach(p => {
+            let qty = cart[p.id] || 0;
+            html += `<div class="card">
+                <div class="card-img-holder"><img src="${p.img}" loading="lazy"></div>
+                <h3>${escapeHtml(p.title)}</h3>
+                <span class="price-tag">$${p.price}</span>
+                <p style="font-size:0.8rem;">${escapeHtml(p.desc)}</p>
+                <div class="quantity-control">
+                    <button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button>
+                    <span>${qty}</span>
+                    <button class="qty-btn" onclick="changeQty('${p.id}',-1)">-</button>
+                </div>
+            </div>`;
+        });
+        container.innerHTML = html || "<p style='text-align:center;'>لا توجد منتجات</p>";
+        updateCartBar();
+    }
+
+    function changeQty(id, delta) {
+        if(!currentUser) { openModal("authModal"); return; }
+        let newQty = (cart[id] || 0) + delta;
+        if(newQty <= 0) delete cart[id];
+        else cart[id] = newQty;
+        saveUserCart();
+        renderStore();
+    }
+
+    function saveUserCart() {
+        if(currentUser) localStorage.setItem(`cart_${currentUser.uid}`, JSON.stringify(cart));
+    }
+    function loadUserCart() {
+        let saved = localStorage.getItem(`cart_${currentUser?.uid}`);
+        if(saved) cart = JSON.parse(saved);
+        else cart = {};
+        renderStore();
+    }
+
+    function updateCartBar() {
+        let bar = document.getElementById("cartBar");
+        if(!bar) {
+            let newBar = document.createElement("div");
+            newBar.id = "cartBar";
+            newBar.className = "cart-bar";
+            newBar.innerHTML = `<span id="cartSummary"></span><button class="cat-btn" onclick="openCartModal()"><i class="fas fa-shopping-bag"></i> عرض السلة</button>`;
+            document.body.appendChild(newBar);
+        }
+        let totalCount = Object.values(cart).reduce((a,b)=>a+b,0);
+        if(totalCount>0) {
+            document.getElementById("cartBar").style.display = "flex";
+            let totalPrice = 0;
+            for(let id in cart) {
+                let p = window.allProducts?.find(x=>x.id===id);
+                if(p) totalPrice += p.price * cart[id];
+            }
+            document.getElementById("cartSummary").innerText = `🛒 ${totalCount} منتج - $${totalPrice}`;
+        } else document.getElementById("cartBar").style.display = "none";
+    }
+
+    function openCartModal() {
+        let listDiv = document.getElementById("cartItemsList");
+        let html = "";
+        for(let id in cart) {
+            let p = window.allProducts?.find(x=>x.id===id);
+            if(p) {
+                html += `<div class="cart-item"><div><strong>${escapeHtml(p.title)}</strong> x${cart[id]} = $${p.price*cart[id]}</div><button class="btn-remove-item" onclick="removeCartItem('${id}')">🗑️ إزالة</button></div>`;
+            }
+        }
+        if(!html) html = "<p>السلة فارغة</p>";
+        listDiv.innerHTML = html;
+        openModal("cartModal");
+    }
+    function removeCartItem(id) { delete cart[id]; saveUserCart(); renderStore(); openCartModal(); showToast("تمت الإزالة"); }
+    function clearCart() { cart = {}; saveUserCart(); renderStore(); closeModal("cartModal"); showToast("تم تفريغ السلة"); }
+
+    // الفاتورة مع ختم الموقع
+    function checkoutWithStamp() {
+        if(!currentUser) { openModal("authModal"); return; }
+        if(Object.keys(cart).length === 0) { showToast("السلة فارغة", true); return; }
+        let now = new Date();
+        let dateStr = `${now.toLocaleDateString('ar-EG')} - ${now.toLocaleTimeString('ar-EG')}`;
+        let msg = `🏷️ *Mobitech - المتجر الاحترافي*\n📅 التاريخ: ${dateStr}\n👤 العميل: ${currentUser.name}\n📞 واتساب: ${currentUser.phone}\n\n🛍️ *الفواتير*\n`;
+        let total = 0;
+        for(let id in cart) {
+            let p = window.allProducts?.find(x=>x.id===id);
+            if(p) {
+                msg += `• ${p.title} × ${cart[id]} = $${p.price * cart[id]}\n`;
+                total += p.price * cart[id];
+            }
+        }
+        msg += `\n💰 *الإجمالي:* $${total}\n🔒 *ختم الموقع:* معتمد من Mobitech\nشكراً لتسوقك معنا 🤝`;
+        window.open(`https://wa.me/${adminWhatsApp}?text=${encodeURIComponent(msg)}`, "_blank");
+        // بعد الإرسال، يمكن تفريغ السلة أو لا حسب الرغبة
+        // clearCart(); // اختياري
+    }
+
+    // إضافة منتج جديد (لكل المستخدمين)
+    function submitNewProduct(e) {
+        e.preventDefault();
+        if(!currentUser) { openModal("authModal"); return; }
+        let newId = Date.now().toString();
+        let newProduct = {
+            title: document.getElementById("prodTitle").value.trim(),
+            category: document.getElementById("prodCategory").value,
+            price: parseFloat(document.getElementById("prodPrice").value),
+            desc: document.getElementById("prodDesc").value.trim(),
+            img: tempImageBase64 || "https://images.unsplash.com/photo-1595556621984-6c0f9f44c648?w=500",
+            status: isAdmin ? "approved" : "pending",
+            addedBy: currentUser.name,
+            addedAt: Date.now()
+        };
+        productsRef.child(newId).set(newProduct).then(() => {
+            closeModal("addProductModal");
+            document.getElementById("prodTitle").value = "";
+            tempImageBase64 = "";
+            showToast("تم إضافة المنتج بنجاح، سيراه الجميع");
+        });
+    }
+    document.getElementById("prodImage")?.addEventListener("change", e => {
+        if(e.target.files[0]) compressImage(e.target.files[0], base64 => tempImageBase64 = base64);
+    });
+
+    // طلبات FRP
+    function submitFrpRequest(e) {
+        e.preventDefault();
+        if(!currentUser) { openModal("authModal"); return; }
+        if(!tempFrpDocBase64) { showToast("يرجى رفع صورة الإثبات", true); return; }
+        let newFrp = {
+            name: document.getElementById("frpName").value.trim(),
+            phone: document.getElementById("frpPhone").value.trim(),
+            doc: tempFrpDocBase64,
+            userId: currentUser.uid,
+            timestamp: Date.now()
+        };
+        frpRef.push(newFrp).then(() => {
+            closeModal("frpModal");
+            document.getElementById("frpDocFile").value = "";
+            tempFrpDocBase64 = "";
+            showToast("تم إرسال طلب FRP للإدارة");
+        });
+    }
+    document.getElementById("frpDocFile")?.addEventListener("change", e => {
+        if(e.target.files[0]) compressImage(e.target.files[0], base64 => tempFrpDocBase64 = base64);
+    });
+
+    // طلب قطعة ناقصة
+    function reportMissing() {
+        if(!currentUser) { openModal("authModal"); return; }
+        let item = document.getElementById("searchInput").value.trim();
+        if(!item) return;
+        missingRef.push({
+            item: item,
+            userName: currentUser.name,
+            userPhone: currentUser.phone,
+            userId: currentUser.uid,
+            timestamp: Date.now()
+        }).then(() => {
+            document.getElementById("aiDemandBox").style.display = "none";
+            showToast("تم إبلاغ الإدارة لتوفير القطعة");
+        });
+    }
+
+    // لوحة الإدارة مع الإشعارات الفورية
+    function renderAdminPanel() {
+        if(!isAdmin) return;
+        document.getElementById("currentAdminWhatsApp").innerText = `+${adminWhatsApp}`;
+        // عرض طلبات FRP
+        frpRef.on("value", snap => {
+            let data = snap.val();
+            let requests = data ? Object.entries(data).map(([k,v])=>({key:k,...v})) : [];
+            let tbody = document.getElementById("frpRequestsTable");
+            tbody.innerHTML = requests.map(r => `
+                <tr>
+                    <td>${escapeHtml(r.name)}</td>
+                    <td>${r.phone}</td>
+                    <td><img src="${r.doc}" style="max-width:50px; border-radius:8px;" onclick="window.open('${r.doc}')" style="cursor:pointer"></td>
+                    <td><button class="cat-btn" onclick="window.open('https://wa.me/${r.phone}?text=مرحباً طلب FRP قيد المعالجة')">واتساب</button>
+                    <button class="cat-btn" onclick="deleteFrp('${r.key}')" style="background:var(--danger);">حذف</button></td>
+                </tr>
+            `).join("");
+            // إظهار إشعار جديد
+            if(requests.length > 0) document.getElementById("frpNewBadge").style.display = "inline-block";
+            else document.getElementById("frpNewBadge").style.display = "none";
+        });
+        // طلبات النواقص
+        missingRef.on("value", snap => {
+            let data = snap.val();
+            let items = data ? Object.entries(data).map(([k,v])=>({key:k,...v})) : [];
+            let tbody = document.getElementById("missingRequestsTable");
+            tbody.innerHTML = items.map(m => `
+                <tr>
+                    <td>${escapeHtml(m.item)}</td>
+                    <td>${escapeHtml(m.userName)}</td>
+                    <td>${m.userPhone}</td>
+                    <td><button class="cat-btn" onclick="window.open('https://wa.me/${m.userPhone}?text=تم توفير القطعة ${encodeURIComponent(m.item)}')">إبلاغ</button>
+                    <button class="cat-btn" onclick="deleteMissing('${m.key}')" style="background:var(--danger);">حذف</button></td>
+                </tr>
+            `).join("");
+            if(items.length > 0) document.getElementById("missingNewBadge").style.display = "inline-block";
+            else document.getElementById("missingNewBadge").style.display = "none";
+        });
+        // المنتجات
+        productsRef.on("value", snap => {
+            let data = snap.val();
+            let prods = data ? Object.entries(data).map(([id,val])=>({id,...val})) : [];
+            let grid = document.getElementById("adminProductsGrid");
+            grid.innerHTML = prods.map(p => `
+                <div class="card">
+                    <div class="card-img-holder"><img src="${p.img}"></div>
+                    <h3>${escapeHtml(p.title)}</h3>
+                    <span>$${p.price}</span>
+                    <p>${p.status === "pending" ? "⏳ معلق" : "✅ منشور"}</p>
+                    <div style="display:flex; gap:5px;">
+                        ${p.status === "pending" ? `<button class="cat-btn" onclick="approveProduct('${p.id}')" style="background:var(--success);">نشر</button>` : ""}
+                        <button class="cat-btn" onclick="openEditProduct('${p.id}')" style="background:var(--warning);">تعديل</button>
+                        <button class="cat-btn" onclick="deleteProduct('${p.id}')" style="background:var(--danger);">حذف</button>
+                    </div>
+                </div>
+            `).join("");
+        });
+    }
+
+    function deleteFrp(key) { frpRef.child(key).remove(); showToast("تم حذف طلب FRP"); }
+    function deleteMissing(key) { missingRef.child(key).remove(); showToast("تم حذف طلب النقص"); }
+    function approveProduct(id) { productsRef.child(id).update({ status: "approved" }); showToast("تم نشر المنتج"); }
+    function deleteProduct(id) { productsRef.child(id).remove(); showToast("تم حذف المنتج"); }
+    function openEditProduct(id) {
+        let prod = window.allProducts.find(p=>p.id===id);
+        if(!prod) return;
+        document.getElementById("editId").value = id;
+        document.getElementById("editTitle").value = prod.title;
+        document.getElementById("editCategory").value = prod.category;
+        document.getElementById("editPrice").value = prod.price;
+        document.getElementById("editDesc").value = prod.desc;
+        openModal("editProductModal");
+    }
+    function saveProductEdit(e) {
+        e.preventDefault();
+        let id = document.getElementById("editId").value;
+        let updates = {
+            title: document.getElementById("editTitle").value,
+            category: document.getElementById("editCategory").value,
+            price: parseFloat(document.getElementById("editPrice").value),
+            desc: document.getElementById("editDesc").value
+        };
+        productsRef.child(id).update(updates).then(() => { closeModal("editProductModal"); showToast("تم التحديث"); });
+    }
+
+    // إدارة المسؤول
+    function verifyAdmin() {
+        let pass = document.getElementById("adminPassword").value;
+        if(btoa(pass) === btoa("admin123")) {
+            isAdmin = true;
+            sessionStorage.setItem("isAdmin","true");
+            closeModal("adminGateModal");
+            switchTab("admin");
+            renderAdminPanel();
+            showToast("أهلاً أيها المسؤول");
+        } else showToast("كلمة المرور خاطئة", true);
+    }
+    function setAdminWhatsApp() {
+        let newNum = document.getElementById("adminWhatsAppInput").value.trim();
+        if(newNum && /^\d+$/.test(newNum)) { adminWhatsApp = newNum; localStorage.setItem("adminWhatsApp",adminWhatsApp); showToast("تم تحديث رقم واتساب المسؤول"); }
+        else showToast("أدخل أرقام فقط", true);
+    }
+
+    // التبويبات
+    function switchTab(tab) {
+        document.getElementById("storeSection").style.display = tab==="store"?"block":"none";
+        document.getElementById("frpSection").style.display = tab==="frp"?"block":"none";
+        document.getElementById("adminSection").style.display = tab==="admin"?"block":"none";
+        document.querySelectorAll(".nav-links a").forEach(a=>a.classList.remove("active"));
+        if(tab==="store") document.getElementById("navStore").classList.add("active");
+        if(tab==="frp") document.getElementById("navFrp").classList.add("active");
+        if(tab==="admin" && isAdmin) renderAdminPanel();
+    }
+    function openAddProduct() { if(!currentUser) openModal("authModal"); else openModal("addProductModal"); }
+    function openFrpModal() { if(!currentUser) openModal("authModal"); else openModal("frpModal"); }
+    function openAdminGate() { if(isAdmin) switchTab("admin"); else openModal("adminGateModal"); }
+
+    // الفلاتر والبحث
+    function buildCategories() {
+        let cats = ["الكل","شاشات","بطاريات","أكسسوارات","قطع","هواتف مستعملة"];
+        let bar = document.getElementById("categoriesBar");
+        bar.innerHTML = cats.map(c => `<button class="cat-btn ${c===currentFilter?'active':''}" onclick="setFilter('${c}')">${c}</button>`).join("");
+    }
+    function setFilter(cat) { currentFilter = cat; renderStore(); }
+    document.getElementById("searchInput").addEventListener("input", e => {
+        searchText = e.target.value.toLowerCase();
+        let exists = window.allProducts?.some(p => p.status==="approved" && p.title.includes(searchText));
+        document.getElementById("aiDemandBox").style.display = (searchText.length>2 && !exists)?"block":"none";
+        renderStore();
+    });
+    function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+
+    // بدء التشغيل
+    auth.onAuthStateChanged(user => {
+        let stored = localStorage.getItem("currentUser");
+        if(user && stored) {
+            currentUser = JSON.parse(stored);
+            if(currentUser.uid !== user.uid) currentUser.uid = user.uid;
+            updateUI();
+            loadUserCart();
+        } else if(user && !stored) {
+            // مستخدم مجهول جديد – نطلب تسجيل بياناته
+            openModal("authModal");
+        } else if(!user) {
+            auth.signInAnonymously().catch(console.error);
+        }
+        loadProducts();
+        buildCategories();
+        if(sessionStorage.getItem("isAdmin")==="true") isAdmin=true;
+        updateUI();
+        if(isAdmin && document.getElementById("adminSection").style.display==="block") renderAdminPanel();
+    });
+</script>
 </body>
 </html>
-
